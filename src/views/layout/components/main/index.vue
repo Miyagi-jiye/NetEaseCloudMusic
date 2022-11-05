@@ -24,10 +24,10 @@ import discoverSkeleton from "./skeleton/discover.vue";// 发现页骨架屏
 </script>
 
 <style scoped lang="less">
-.main {
-  height: calc(100vh - 50px - 46px); // 50px是头部高度，46px是底部高度
-  width: 100%;
-  background-color: var(--van-search-content-background);
-  overflow-y: scroll;
-}
+// .main {
+//   height: calc(100vh - 50px - 46px); // 50px是头部高度，46px是底部高度
+//   width: 100%;
+//   background-color: var(--van-search-content-background);
+//   overflow-y: scroll;
+// }
 </style>

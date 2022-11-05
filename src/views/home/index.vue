@@ -1,12 +1,14 @@
 <template>
-  <van-pull-refresh v-model="isLoading" success-text="刷新成功" @refresh="onRefresh">
-    <div class="home">
-      <UserInfoCard :config="userData.detail" />
-      <FunctionCard />
-      <MyLikeMusicCard :config="userData.playlist" />
-      <MySonglistCard :config="userData.playlist" />
-    </div>
-  </van-pull-refresh>
+  <div class="home">
+    <van-pull-refresh v-model="isLoading" success-text="刷新成功" @refresh="onRefresh">
+      <div class="home__item">
+        <UserInfoCard :config="userData.detail" />
+        <FunctionCard />
+        <MyLikeMusicCard :config="userData.playlist" />
+        <MySonglistCard :config="userData.playlist" />
+      </div>
+    </van-pull-refresh>
+  </div>
 </template>
 
 <script setup>
@@ -51,6 +53,10 @@ if (isLogin.value === true) {
 
 <style scoped lang="less">
 .home {
+  height: 100%;
+}
+
+.home__item {
   height: auto;
   width: 100%;
   background: var(--van-search-content-background);

@@ -1,6 +1,6 @@
 <template>
   <div class="recommentNewAlbum">
-    <van-swipe :loop="false" :height="240" :show-indicators="false">
+    <van-swipe :autoplay="3000" :height="240" :show-indicators="false">
       <van-swipe-item v-for="item in newAlbumSlice">
         <div class="card">
           <AlbumCard v-for="item1 in item" :config="item1" />
@@ -40,6 +40,9 @@ const newAlbumSlice = computed(() => {
 
 <style scoped lang="less">
 .recommentNewAlbum {
+  height: auto;
+  width: 100%;
+
   .card {
     margin-left: 16px;
     // background-color: white;

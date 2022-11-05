@@ -1,22 +1,22 @@
 <template>
-  <van-pull-refresh v-model="isLoading" success-text="刷新成功" @refresh="onRefresh">
-    <div class="discover">
-      <Banner />
-      <Menu />
-      <Title title="最新专辑" />
-      <RecommentNewAlbum />
-      <Title title="推荐歌单" />
-      <RecommendSongList />
-      <Title title="新歌速递" />
-      <RecommendNewSong />
-    </div>
-  </van-pull-refresh>
+
+  <div class="discover">
+    <Banner />
+    <Menu />
+    <Title title="最新专辑" />
+    <RecommentNewAlbum />
+    <Title title="推荐歌单" />
+    <RecommendSongList />
+    <Title title="新歌速递" />
+    <RecommendNewSong />
+  </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { defineAsyncComponent } from 'vue'
 import Title from '@/components/Title/index.vue'//标题
+// import Banner from "@/views/discover/components/banner/index.vue"
 
 // 异步懒加载组件
 const Banner = defineAsyncComponent(() => import('./components/banner/index.vue'))//轮播图
@@ -36,5 +36,7 @@ function onRefresh() {
 </script>
 
 <style scoped>
-
+.discover {
+  height: 100%;
+}
 </style>

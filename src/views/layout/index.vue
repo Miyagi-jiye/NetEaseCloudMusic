@@ -16,5 +16,20 @@ import Footer from "@/views//layout/components/footer/index.vue"
 .layout {
   display: flex;
   flex-direction: column;
+  height: 100vh;
+
+  .header {
+    height: 46px;
+  }
+
+  .main {
+    flex: 1;
+    overflow-y: scroll;
+    background-color: var(--van-search-content-background);
+  }
+
+  .footer {
+    height: 50px;
+  }
 }
 </style>
