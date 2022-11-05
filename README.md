@@ -1,6 +1,6 @@
-# vue3-template
+# vue3-网易云移动端
 
-This template should help get you started developing with Vue 3 in Vite.
+web 移动端网易云音乐
 
 ## Recommended IDE Setup
 

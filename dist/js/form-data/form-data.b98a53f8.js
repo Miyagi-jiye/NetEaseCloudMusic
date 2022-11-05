@@ -1,0 +1,1 @@
+var e="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{},o="object"==typeof self?self.FormData:window.FormData;export{o as b,e as c};
