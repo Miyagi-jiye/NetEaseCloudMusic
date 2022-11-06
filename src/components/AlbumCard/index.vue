@@ -136,6 +136,7 @@ const props = defineProps({
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: flex-start;
     gap: 4px;
     height: 100%;
 

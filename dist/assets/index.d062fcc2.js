@@ -1,1 +1,0 @@
-import{ai as t,aj as e}from"./index.759799fd.js";import{a as s}from"./login.cf82dd5e.js";let r=0;function u(){const n=t(),{name:o="unknown"}=(n==null?void 0:n.type)||{};return`${o}-${++r}`}const{isLogin:c}=e(s());export{c as i,u};

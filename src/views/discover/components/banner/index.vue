@@ -1,41 +1,57 @@
 <template>
-  <div class="banner">
-    <van-swipe :autoplay="3000" lazy-render style="height: 100%;font-size: 0;border-radius: 8px;">
-      <van-swipe-item v-for="item in banners" :key="item.imageUrl">
-        <img v-lazy="item.imageUrl" style="width: 100%;height: 100%;aspect-ratio: 2.7 / 1;" />
-        <van-tag type="primary" color="#ffffffcc" text-color="#3b3b3bcc"
-          style="border-radius:4px;padding: 2px 4px;font-weight: bold;font-size: 12px;">{{ item.typeTitle }}
-        </van-tag>
-      </van-swipe-item>
-    </van-swipe>
-  </div>
+  <swiper :pagination="true" :modules="modules" class="mySwiper">
+    <swiper-slide>Slide 1</swiper-slide>
+    <swiper-slide>Slide 2</swiper-slide>
+    <swiper-slide>Slide 3</swiper-slide>
+    <swiper-slide>Slide 4</swiper-slide>
+    <swiper-slide>Slide 5</swiper-slide>
+    <swiper-slide>Slide 6</swiper-slide>
+    <swiper-slide>Slide 7</swiper-slide>
+    <swiper-slide>Slide 8</swiper-slide>
+    <swiper-slide>Slide 9</swiper-slide>
+  </swiper>
 </template>
-
 <script setup>
-import { storeToRefs } from 'pinia';// 解决响应式丢失问题
-import { useDiscoverStore } from "@/stores/discover.js"
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from "swiper/vue";
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+// import required modules
+import { Pagination } from "swiper";
 
-const { banners } = storeToRefs(useDiscoverStore())
-const { getbanners } = useDiscoverStore()
-
-await getbanners()
-
-// const props = defineProps({
-//   banners: {
-//     type: Array,
-//     default: () => []
-//   }
-// })
+const modules = [Pagination]
 </script>
 
-<style scoped>
-.banner {
-  padding: 8px 16px 0px 16px;
+<style lang="less" scoped>
+.swiper {
+  width: 100%;
+  height: 100%;
 }
 
-:deep(.van-tag) {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>
