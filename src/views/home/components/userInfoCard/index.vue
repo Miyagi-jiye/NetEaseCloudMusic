@@ -24,7 +24,7 @@
     </div>
     <div class="userInfoCard__info nowrap">
       <div class="userInfoCard__info__name" @click="$router.push('/login')">
-        点击登录
+        立即登录
         <van-icon name="arrow" />
       </div>
       <div style="display:flex;align-items:center;color:var(--font-color-4);font-size: 14px;">

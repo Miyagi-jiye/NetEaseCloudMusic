@@ -124,6 +124,8 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     gap: 16px;
+    font-size: 16px;
+    font-weight: bold;
   }
 
   .content {

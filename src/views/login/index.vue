@@ -11,12 +11,12 @@
     </div>
     <div class="login__content">
       <div class="login__content__mode">
-        <div class="phone" @click="$router.push('/login/phone')">手机号登录</div>
-        <div class="password" @click="$router.push('/login/password')">密码登录</div>
-        <div class="QRcode" @click="$router.push('/login/QRCode')">扫码登录</div>
+        <div class="phone" @click="routerPush('/login/phone')">手机号登录</div>
+        <div class="password" @click="routerPush('/login/password')">密码登录</div>
+        <div class="QRcode" @click="routerPush('/login/QRCode')">扫码登录</div>
       </div>
       <div class="login__content__clause">
-        <van-checkbox v-model="checked" shape="square" icon-size="14px"></van-checkbox>
+        <van-checkbox v-model="isChecked" shape="square" icon-size="14px"></van-checkbox>
         <span>《用户服务协议》</span>
         <span>《隐私政策》</span>
       </div>
@@ -34,7 +34,7 @@
         登录遇到问题？
       </div>
     </div>
-    <div class="noLogin" @click="$router.push('/')">
+    <div class="noLogin" @click="routerPush('/')">
       游客访问
     </div>
   </div>
@@ -42,12 +42,22 @@
 </template>
 
 <script setup>
-import logo from "@/assets/icons/fbs.png"
-import { ref } from 'vue'
-import { useRoute } from "vue-router";
+import logo from "@/assets/icons/fbs.png";
+import { useRoute, useRouter } from "vue-router";
+import { useLoginStore } from "@/stores/login.js";
+import { storeToRefs } from "pinia";
+import { showToast } from 'vant';//居中轻提示
 
-const checked = ref(false)// 协议勾选
+const { isChecked } = storeToRefs(useLoginStore())//协议选中
 const route = useRoute()
+const router = useRouter()
+
+// 路由跳转
+function routerPush(path) {
+  if (path == '/') router.push(path)
+  else if (isChecked.value) router.push(path)
+  else showToast({ message: '请先阅读并同意用户服务协议和隐私协议', position: 'middle' })
+}
 </script>
 
 <style scoped lang="less">

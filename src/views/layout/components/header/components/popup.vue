@@ -110,7 +110,7 @@ const actions = [
   {
     name: '关闭云音乐',
     callback: () => {
-      console.log('关闭云音乐', isLogin.value)
+      console.log('登录状态', !isLogin.value)
       isLogin.value = !isLogin.value
     }
   },

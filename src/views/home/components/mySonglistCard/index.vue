@@ -296,6 +296,7 @@ const props = defineProps({
         height: auto;
         font-size: 14px;
         color: var(--font-color-4);
+        height: 60px;
       }
     }
   }

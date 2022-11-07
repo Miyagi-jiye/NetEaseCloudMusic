@@ -4,6 +4,9 @@ import {
   qrKey,
   qrCreate,
   qrCheck,
+  loginByCaptcha,
+  loginByPhone,
+  sendCaptcha,
 } from "@/api"
 
 
@@ -19,8 +22,20 @@ export const useLoginStore = defineStore('login', () => {
       cookie: ''
     }
   })
+  // 验证码登录数据
+  const captchaLogin = reactive({
+    phone: '',// 手机号码
+    captcha: '',// 验证码
+  })
+  // 密码登陆数据
+  const passwordLogin = reactive({
+    phone: '',// 手机号码
+    password: '',// 密码
+  })
   // 登录状态
   const isLogin = ref(false)
+  // 勾选协议
+  const isChecked = ref(false)
 
   /* getters */
   const test = computed(() => {
@@ -46,13 +61,37 @@ export const useLoginStore = defineStore('login', () => {
     QRCode.status = res
     console.log('检查二维码', res)
   }
+  // 发送验证码
+  async function getSendCaptcha() {
+    const res = await sendCaptcha(captchaLogin.phone)
+    console.log('发送验证码', res)
+    return res
+  }
+  // 验证码登录
+  async function getLoginByCaptcha() {
+    const res = await loginByCaptcha(captchaLogin.phone, captchaLogin.captcha)
+    console.log('验证码登录', res)
+    return res
+  }
+  // 密码登录
+  async function getLoginByPassword() {
+    const res = await loginByPhone(passwordLogin.phone, passwordLogin.password)
+    console.log('密码登录', res)
+    return res
+  }
 
 
   return {
     QRCode,
+    captchaLogin,
+    passwordLogin,
     isLogin,
+    isChecked,
     getQrKey,
     getQrCreate,
     getQrCheck,
+    getSendCaptcha,
+    getLoginByCaptcha,
+    getLoginByPassword,
   }
 })

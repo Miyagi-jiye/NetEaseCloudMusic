@@ -68,10 +68,10 @@ const newAlbumSlice = computed(() => {
 //   width: 90%;
 // }
 
-// .swiper-slide.swiper-slide-active {
-//   // width: 90%;
-//   // margin-right: -10px;
-// }
+.swiper-slide.swiper-slide-active {
+  // width: 90%;
+  margin-right: -10%;
+}
 
 // .swiper-slide.swiper-slide-next {
 //   // width: 90%;

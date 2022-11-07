@@ -36,6 +36,31 @@ export async function loginByPhone(phone, password) {
   });
   return data;
 }
+export async function loginByCaptcha(phone, captcha) {
+  const { data } = await request({
+    url: '/login/cellphone',
+    method: 'post',
+    data: {
+      phone,
+      captcha,
+    },
+  });
+  return data;
+}
+// 发送手机验证码
+// 接口地址 : /captcha/sent
+// 调用例子 : /captcha/sent?phone=xxx
+export async function sendCaptcha(phone) {
+  const { data } = await request({
+    url: '/captcha/sent',
+    method: 'post',
+    data: {
+      phone,
+      timestamp: Date.now(),// 防止缓存
+    },
+  });
+  return data;
+}
 // 2. 邮箱登录
 // 必选参数 :
 // email: 163 网易邮箱

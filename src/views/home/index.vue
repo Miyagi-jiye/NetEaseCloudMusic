@@ -1,13 +1,9 @@
 <template>
   <div class="home">
-    <van-pull-refresh v-model="isLoading" success-text="刷新成功" @refresh="onRefresh">
-      <div class="home__item">
-        <UserInfoCard :config="userData.detail" />
-        <FunctionCard />
-        <MyLikeMusicCard :config="userData.playlist" />
-        <MySonglistCard :config="userData.playlist" />
-      </div>
-    </van-pull-refresh>
+    <UserInfoCard :config="userData.detail" />
+    <FunctionCard />
+    <MyLikeMusicCard :config="userData.playlist" />
+    <MySonglistCard :config="userData.playlist" />
   </div>
 </template>
 
@@ -16,12 +12,11 @@ import MySonglistCard from './components/mySonglistCard/index.vue'
 import MyLikeMusicCard from './components/myLikeMusicCard/index.vue'
 import UserInfoCard from "./components/userInfoCard/index.vue"
 import FunctionCard from "./components/functionCard/index.vue"
-import { ref } from 'vue'
 import { useUserStore } from "@/stores/user.js"
 import { storeToRefs } from "pinia"
-import { isLogin } from "@/hooks/index.js"
+import { watch } from 'vue'
+import { isLogin } from "@/hooks/index.js"//判断是否登录
 
-const isLoading = ref(false)
 const {
   userData,
   getUserDetail,
@@ -29,13 +24,6 @@ const {
   getUserAccount,
   getUserPlaylist
 } = useUserStore()
-
-// 下拉刷新
-function onRefresh() {
-  setTimeout(() => {
-    isLoading.value = false
-  }, 1000)
-}
 
 async function init() {
   await getUserAccount()//用cookie先拿到用户id
@@ -45,18 +33,18 @@ async function init() {
   console.log(userData)
 }
 
-// 如果是登录状态就获取用户信息
-if (isLogin.value === true) {
-  init()
-}
+// 判断是否登录
+if (isLogin.value) init()
+
+// 持续监听当前页面登录状态
+watch(isLogin, (val) => {
+  if (val) init()
+})
+
 </script>
 
 <style scoped lang="less">
 .home {
-  height: 100%;
-}
-
-.home__item {
   height: auto;
   width: 100%;
   background: var(--van-search-content-background);

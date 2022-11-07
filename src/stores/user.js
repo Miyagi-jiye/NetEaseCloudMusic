@@ -11,8 +11,8 @@ import { filterMyPlaylist } from "@/utils/useFilter.js"
 
 export const useUserStore = defineStore('user', () => {
   /* state */
-  const userData = reactive({})//用户数据
   const uid = ref(null)//用户id
+  const userData = reactive({})//用户数据
   const playlistParams = reactive({//用户歌单参数
     limit: 100,
     offset: 1
@@ -51,6 +51,7 @@ export const useUserStore = defineStore('user', () => {
 
   return {
     userData,//用户信息
+    uid,//用户id
     test,
     getUserDetail,//获取用户详情
     getUserSubcount,//获取用户收藏
