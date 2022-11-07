@@ -60,7 +60,6 @@ function init() {
 // 激活路由跳转
 function activeToRouter(e) {
   active.value = e
-  console.log(e)
   switch (e) {
     case 0:
       router.push({ path: "/discover" })

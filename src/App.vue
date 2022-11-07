@@ -16,7 +16,14 @@ onMounted(() => {
   if (window.location.protocol === 'https:') {
     showConfirmDialog({
       title: '注意！！',
-      message: '该demo使用"http协议"进行网络连接,请切换到http协议进行访问',
+      message: `
+      该demo使用<span style="color:red">http</span>协议进行网络连接
+      检测到您当前网络协议为<span style="color:red">https</span>
+      是否立即切换？
+      
+      😀如果切换失败请自行百度浏览器设置
+      `,
+      allowHtml: true,
     })
       .then(() => {
         // on confirm 确认切换网络协议
@@ -24,19 +31,17 @@ onMounted(() => {
       })
       .catch(() => {
         // on cancel 取消切换网络协议
-        alert(`当前网络协议为：==> ${window.location.protocol} <==，请切换到http协议`)
+        console.log(
+          `当前网络协议为：==>%c${window.location.protocol}`,
+          'color: #fff;background: #000;padding: 2px 8px;border-radius: 5px;',
+          '<==请切换到http协议'
+        )
       });
   } else {
-    showConfirmDialog({
-      title: '注意！！',
-      message: '该demo使用 "http" 协议进行网络连接,您当前网络协议为http,请继续访问',
-    })
-      .then(() => {
-        // on confirm 确认
-      })
-      .catch(() => {
-        // on cancel 取消
-      });
+    console.log(
+      `当前网络协议为：==> %c${window.location.protocol}`,
+      'color: #fff;background: #000;padding: 2px 8px;border-radius: 5px; font-weight: bold;',
+    )
   }
 })
 

@@ -69,12 +69,9 @@ const newAlbumSlice = computed(() => {
     object-fit: cover;
   }
 
-  .swiper-slide.swiper-slide-active {
-    width: 90%;
-  }
-
-  .swiper-slide:last-child {
-    width: 100%;
-  }
+  // .swiper-slide.swiper-slide-active {
+  //   width: 90% !important;
+  //   margin-right: -10% !important;
+  // }
 }
 </style>

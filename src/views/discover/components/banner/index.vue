@@ -1,15 +1,15 @@
 <template>
-  <swiper :pagination="true" :modules="modules" class="mySwiper">
-    <swiper-slide>Slide 1</swiper-slide>
-    <swiper-slide>Slide 2</swiper-slide>
-    <swiper-slide>Slide 3</swiper-slide>
-    <swiper-slide>Slide 4</swiper-slide>
-    <swiper-slide>Slide 5</swiper-slide>
-    <swiper-slide>Slide 6</swiper-slide>
-    <swiper-slide>Slide 7</swiper-slide>
-    <swiper-slide>Slide 8</swiper-slide>
-    <swiper-slide>Slide 9</swiper-slide>
-  </swiper>
+  <div class="banner">
+    <swiper :modules="modules" :autoplay="{ delay: 1500, disableOnInteraction: false, }" :loop="true"
+      :pagination="{ dynamicBullets: true }" :spaceBetween="30" class="mySwiper">
+      <swiper-slide v-for="item in banners" :key="item.imageUrl">
+        <img v-lazy="item.imageUrl" style="width: 100%;height: 100%;aspect-ratio: 2.7 / 1;" />
+        <van-tag type="primary" color="#ffffffcc" text-color="#3b3b3bcc"
+          style="border-radius:4px;padding: 2px 4px;font-weight: bold;font-size: 12px;">{{ item.typeTitle }}
+        </van-tag>
+      </swiper-slide>
+    </swiper>
+  </div>
 </template>
 <script setup>
 // Import Swiper Vue.js components
@@ -18,34 +18,48 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/pagination";
 // import required modules
-import { Pagination } from "swiper";
+import { Pagination,Autoplay } from "swiper";
 
-const modules = [Pagination]
+import { storeToRefs } from 'pinia';// 解决响应式丢失问题
+import { useDiscoverStore } from "@/stores/discover.js"
+
+const modules = [Pagination, Autoplay]// swiper功能模块
+
+const { banners } = storeToRefs(useDiscoverStore())
+const { getbanners } = useDiscoverStore()
+
+await getbanners()
 </script>
 
 <style lang="less" scoped>
+:deep(.van-tag) {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+}
+
+.banner {
+  padding-top: 8px;
+}
+
+:deep(.swiper-pagination-bullets-dynamic) {
+  left: 60px !important;
+
+  span {
+    background-color: #ffffffcc;
+  }
+}
+
 .swiper {
   width: 100%;
-  height: 100%;
+  height: auto;
+  padding: 0 16px;
+  box-sizing: border-box;
 }
 
 .swiper-slide {
-  text-align: center;
-  font-size: 18px;
-  background: #fff;
-  /* Center slide text vertically */
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  align-items: center;
+  overflow: hidden;
+  display: block;
 }
 
 .swiper-slide img {
@@ -53,5 +67,6 @@ const modules = [Pagination]
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 8px;
 }
 </style>

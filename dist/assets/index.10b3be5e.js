@@ -1,1 +1,0 @@
-import{ak as t,al as e}from"./index.78acaec7.js";import{u as s}from"./login.8d671706.js";let r=0;function i(){const n=t(),{name:o="unknown"}=(n==null?void 0:n.type)||{};return`${o}-${++r}`}const{isLogin:c}=e(s());export{c as i,i as u};

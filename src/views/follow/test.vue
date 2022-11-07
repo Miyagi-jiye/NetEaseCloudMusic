@@ -64,11 +64,22 @@ const newAlbumSlice = computed(() => {
   object-fit: cover;
 }
 
-.swiper-slide.swiper-slide-active {
-  width: 90%;
-}
+// .swiper-slide.swiper-slide-prev {
+//   width: 90%;
+// }
 
-.swiper-slide:last-child {
-  width: 100%;
-}
+// .swiper-slide.swiper-slide-active {
+//   // width: 90%;
+//   // margin-right: -10px;
+// }
+
+// .swiper-slide.swiper-slide-next {
+//   // width: 90%;
+//   // margin-left: -10%;
+// }
+
+// .swiper-slide:last-child {
+//   // width: 100%;
+//   // margin-left: -10%;
+// }
 </style>
