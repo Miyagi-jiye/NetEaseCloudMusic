@@ -102,22 +102,25 @@
 import logo from '@/assets/icons/fbs.png'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { isLogin } from "@/hooks/index.js"
+import { storeToRefs } from "pinia"
+import { useLoginStore } from '@/stores/login.js'
 
+const { isLogin } = storeToRefs(useLoginStore())//登录状态
 const router = useRouter()
 const show = ref(false);//退出弹框
 const actions = [
   {
     name: '关闭云音乐',
     callback: () => {
-      console.log('登录状态', !isLogin.value)
+      // 改变登录状态
       isLogin.value = !isLogin.value
+      // log
+      console.log('登录状态', isLogin.value)
     }
   },
   {
     name: '退出登录',
     callback: () => {
-      console.log('退出登录')
       // 清空缓存数据
       localStorage.clear()
       // 移除cookie
@@ -126,6 +129,8 @@ const actions = [
       isLogin.value = false
       // 跳转到登录页面
       router.push('/login')
+      // log
+      console.log('退出登录', isLogin.value)
     }
   },
 ];

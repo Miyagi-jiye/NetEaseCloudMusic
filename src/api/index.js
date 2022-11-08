@@ -1,4 +1,7 @@
 import request from '@/axios';
+import { useCookie } from '@/hooks/index.js';
+
+const myCookie = JSON.stringify(useCookie());
 
 // 1. 手机登录
 // 必选参数 :
@@ -28,8 +31,8 @@ import request from '@/axios';
 export async function loginByPhone(phone, password) {
   const { data } = await request({
     url: '/login/cellphone',
-    method: 'post',
-    data: {
+    method: 'get',
+    params: {
       phone,
       password,
     },
@@ -39,8 +42,8 @@ export async function loginByPhone(phone, password) {
 export async function loginByCaptcha(phone, captcha) {
   const { data } = await request({
     url: '/login/cellphone',
-    method: 'post',
-    data: {
+    method: 'get',
+    params: {
       phone,
       captcha,
     },
@@ -244,6 +247,10 @@ export async function userAccount() {
   const { data } = await request({
     url: '/user/account',
     method: 'get',
+    params: {
+      timestamp: Date.now(), //防止缓存
+      cookie: myCookie,//cookie请求头
+    }
   });
   return data;
 }

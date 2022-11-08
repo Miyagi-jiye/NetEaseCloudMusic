@@ -40,7 +40,10 @@
 
 <script setup>
 import DefaultImg from "@/assets/icons/fbs.png"// 默认头像
-import { isLogin } from "@/hooks/index.js"
+import { storeToRefs } from "pinia"
+import { useLoginStore } from '@/stores/login.js'
+
+const { isLogin } = storeToRefs(useLoginStore())//登录状态
 
 const props = defineProps({
   config: Object,

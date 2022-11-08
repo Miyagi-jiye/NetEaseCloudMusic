@@ -3,6 +3,7 @@ import { showNotify } from 'vant';// 引入vant的提示框
 
 const request = axios.create({
   baseURL: import.meta.env.DEV ? '/api' : 'http://guowei.fun:3000',
+  // baseURL: import.meta.env.DEV ? 'http://guowei.fun:3000' : '/api',
 });
 
 // 添加请求拦截器
@@ -45,6 +46,9 @@ request.interceptors.response.use(
         break;
       case 404:
         showNotify({ type: 'danger', message: error.response.data.message ?? error.response.data.msg ?? "请求地址出错" });
+        break;
+      case 501:
+        showNotify({ type: 'danger', message: error.response.data.message ?? error.response.data.msg ?? "账号错误" });
         break;
       case 503:
         showNotify({ type: 'danger', message: error.response.data.message ?? error.response.data.msg ?? "验证码错误" });

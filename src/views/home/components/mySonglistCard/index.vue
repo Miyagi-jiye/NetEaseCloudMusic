@@ -139,7 +139,10 @@
 <script setup>
 import ImgCard from "@/components/ImgCard/index.vue";
 import { ref } from 'vue'
-import { isLogin } from "@/hooks/index.js"
+import { storeToRefs } from "pinia"
+import { useLoginStore } from '@/stores/login.js'
+
+const { isLogin } = storeToRefs(useLoginStore())//登录状态
 
 const active = ref(0)
 

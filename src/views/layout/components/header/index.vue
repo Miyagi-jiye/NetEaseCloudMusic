@@ -42,5 +42,21 @@ function wapNavClick() {
 
 :deep(.van-search__field) {
   height: 28px;
+  padding: 0;
+}
+
+:deep(.van-nav-bar__title) {
+  flex: 1;
+}
+
+:deep(.van-cell) {
+  /* padding: 0; */
+  background: none;
+}
+
+:deep(.van-search__content) {
+  /* padding-left: var(--van-padding-sm);
+  padding-right: var(--van-padding-sm); */
+  padding: 0 var(--van-padding-sm);
 }
 </style>

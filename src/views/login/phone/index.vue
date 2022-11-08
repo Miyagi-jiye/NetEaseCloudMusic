@@ -33,15 +33,19 @@
 
 <script setup>
 import { ref } from "vue"
-import { useLoginStore } from "@/stores/login.js"
 import { showNotify } from 'vant';
 import { useRouter } from "vue-router";
-import { isLogin } from "@/hooks/index.js"
+import { useCookie } from "@/hooks/index.js"//自定义hooks
+import { storeToRefs } from "pinia"
+import { useLoginStore } from '@/stores/login.js'
+
 
 const disabled = ref(false)// 是否禁用获取验证码按钮
 const time = ref(60 * 1000)// 60s倒计时
 const router = useRouter()
+const { isLogin } = storeToRefs(useLoginStore())//登录状态
 const { captchaLogin, getSendCaptcha, getLoginByCaptcha } = useLoginStore()
+
 
 // 表单提交,登录
 async function onSubmit() {
@@ -49,11 +53,18 @@ async function onSubmit() {
   const res = await getLoginByCaptcha()//登录
   if (res.code == 200) {
     showNotify({ type: 'success', message: '登录成功' });
+    useCookie(res.cookie)//保存cookie
     isLogin.value = true//改变登录状态
+    // 清空表单
+    captchaLogin.phone = ''
+    captchaLogin.captcha = ''
+    // 跳转到首页
     setTimeout(() => {
       router.push({ path: '/home' })
     }, 1000)
   } else {
+    // 清空表单
+    captchaLogin.captcha = ''
     showNotify({ type: 'danger', message: res.msg ?? res.message ?? '登录失败' });
   }
 }

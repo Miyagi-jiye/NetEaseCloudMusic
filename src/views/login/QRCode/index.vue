@@ -18,22 +18,20 @@
 <script setup>
 import { ref, onUnmounted } from 'vue'
 import QrcodeVue from 'qrcode.vue'// 引入二维码组件(https://github.com/scopewu/qrcode.vue/blob/HEAD/README-zh_cn.md)
-import { useLoginStore } from '@/stores/login.js';
 import { showNotify } from 'vant';
 import { useRouter } from "vue-router"
+import { useCookie } from "@/hooks/index.js"//自定义hooks
+import { storeToRefs } from "pinia"
+import { useLoginStore } from '@/stores/login.js'
+
 
 let size = ref(200)//二维码画布大小
 let timer = null// 轮询定时器
 let loading = ref(false)//按钮加载动画
-
 const router = useRouter()
-const {
-  QRCode,
-  isLogin,
-  getQrKey,
-  getQrCreate,
-  getQrCheck
-} = useLoginStore()
+const { isLogin } = storeToRefs(useLoginStore())//登录状态
+const { QRCode, getQrKey, getQrCreate, getQrCheck } = useLoginStore()
+
 
 // 初始执行
 async function init() {
@@ -41,7 +39,6 @@ async function init() {
   await getQrCreate()
   polling()// 轮询检测二维码状态
 }
-
 // 轮询
 function polling() {
   // 设置定时器
@@ -64,14 +61,8 @@ function polling() {
         console.log("登录成功")
         clearInterval(timer)// 清除定时器
         isLogin.value = true//改变登录状态
-        console.log("登录状态", isLogin.value)
-        showNotify({
-          message: '登录成功',
-          color: '#ffffff',
-          background: '#F9343D',
-          position: 'top',
-          duration: 2000,
-        });
+        useCookie(res.cookie)//保存cookie
+        showNotify({ type: 'danger', message: '登录成功' });
         // 跳转到首页
         router.push({ name: 'home', params: { cookie: QRCode.status.cookie } })
         break;
@@ -81,7 +72,6 @@ function polling() {
     }
   }, 1000)
 }
-
 // 刷新二维码
 function refreshQRCode() {
   loading.value = true//开始加载动画

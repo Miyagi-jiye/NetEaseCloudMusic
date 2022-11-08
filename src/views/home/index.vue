@@ -12,18 +12,15 @@ import MySonglistCard from './components/mySonglistCard/index.vue'
 import MyLikeMusicCard from './components/myLikeMusicCard/index.vue'
 import UserInfoCard from "./components/userInfoCard/index.vue"
 import FunctionCard from "./components/functionCard/index.vue"
-import { useUserStore } from "@/stores/user.js"
+import { watch } from "vue"
 import { storeToRefs } from "pinia"
-import { watch } from 'vue'
-import { isLogin } from "@/hooks/index.js"//判断是否登录
+import { useUserStore } from "@/stores/user.js"
+import { useLoginStore } from '@/stores/login.js'
 
-const {
-  userData,
-  getUserDetail,
-  getUserSubcount,
-  getUserAccount,
-  getUserPlaylist
-} = useUserStore()
+
+const { isLogin } = storeToRefs(useLoginStore())//登录状态
+const { userData, getUserDetail, getUserSubcount, getUserAccount, getUserPlaylist } = useUserStore()
+
 
 async function init() {
   await getUserAccount()//用cookie先拿到用户id
@@ -36,11 +33,10 @@ async function init() {
 // 判断是否登录
 if (isLogin.value) init()
 
-// 持续监听当前页面登录状态
+// 监听登录状态
 watch(isLogin, (val) => {
   if (val) init()
 })
-
 </script>
 
 <style scoped lang="less">

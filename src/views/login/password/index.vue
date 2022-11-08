@@ -25,11 +25,14 @@
 </template>
 
 <script setup>
-import { useLoginStore } from '@/stores/login.js';
 import { showNotify } from 'vant';
-import { isLogin } from '@/hooks/index.js';
 import { useRouter } from "vue-router";
+import { useCookie } from "@/hooks/index.js"//自定义hooks
+import { storeToRefs } from "pinia"
+import { useLoginStore } from '@/stores/login.js'
 
+
+const { isLogin } = storeToRefs(useLoginStore())//登录状态
 const { passwordLogin, getLoginByPassword } = useLoginStore()
 const router = useRouter()
 
@@ -38,13 +41,21 @@ async function onSubmit() {
   console.log("表单验证通过")
   const res = await getLoginByPassword()//登录
   if (res.code == 200) {
-    showNotify({ type: 'success', message: '登录成功' });
+    showNotify({ type: 'success', message: '登录成功' });//提示
+    useCookie(res.cookie)//保存cookie
     isLogin.value = true//改变登录状态
+    // 清空表单
+    passwordLogin.phone = ''
+    passwordLogin.password = ''
+    // 跳转到首页
     setTimeout(() => {
       router.push({ path: '/home' })
     }, 1000)
   } else {
-    showNotify({ type: 'danger', message: res.msg ?? res.message ?? '登录失败' });
+    // 清空表单
+    passwordLogin.phone = ''
+    passwordLogin.password = ''
+    showNotify({ type: 'danger', message: res.msg ?? res.message ?? '登录失败' });//提示
   }
 }
 </script>
