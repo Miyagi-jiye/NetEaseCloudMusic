@@ -82,7 +82,7 @@ const props = defineProps({
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 14px;
     padding: 38px 16px 16px 16px;
     box-sizing: border-box;
     overflow: hidden;

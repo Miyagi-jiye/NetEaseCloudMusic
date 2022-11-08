@@ -33,7 +33,7 @@ async function init() {
 // 判断是否登录
 if (isLogin.value) init()
 
-// 监听登录状态
+// 监听登录状态(测试用)
 watch(isLogin, (val) => {
   if (val) init()
 })

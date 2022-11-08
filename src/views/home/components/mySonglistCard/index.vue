@@ -120,10 +120,33 @@
           <div class="helper">
             <div class="helper__title">你可以从歌单中筛选出</div>
             <div class="helper__swiper">
-              <div class="helper__swiper__item" v-for="item in 4">
-                <van-tag color="#ffe1e1" text-color="#ad0000">最近一年</van-tag>
-                发布的
-                <van-tag color="#ffe1e1" text-color="#bd0cc0">二次元</van-tag>
+              <div class="helper__swiper__item" v-for="item in 5" :style="{ '--delay': item - 2 }">
+                <div v-if="item == 1">
+                  <van-tag :type="tagType[item - 1]">最近收藏</van-tag>
+                  的
+                  <van-tag :type="tagType[item - 2]">二次元</van-tag>
+                </div>
+                <div v-if="item == 2">
+                  <van-tag :type="tagType[item - 1]">80年代</van-tag>
+                  <van-tag :type="tagType[item - 2]">华语</van-tag>
+                  老歌
+                </div>
+                <div v-if="item == 3">
+                  <van-tag :type="tagType[item - 1]">最近一年收藏</van-tag>
+                  的
+                  <van-tag :type="tagType[item - 2]">日语</van-tag>
+                </div>
+                <div v-if="item == 4">
+                  适合
+                  <van-tag :type="tagType[item - 1]">夜晚</van-tag>
+                  听的
+                  <van-tag :type="tagType[item - 2]">日语</van-tag>
+                </div>
+                <div v-if="item == 5">
+                  <van-tag :type="tagType[item - 1]">最近一年</van-tag>
+                  发布的
+                  <van-tag :type="tagType[item - 2]">二次元</van-tag>
+                </div>
               </div>
             </div>
           </div>
@@ -138,12 +161,14 @@
 
 <script setup>
 import ImgCard from "@/components/ImgCard/index.vue";
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { storeToRefs } from "pinia"
 import { useLoginStore } from '@/stores/login.js'
 
-const { isLogin } = storeToRefs(useLoginStore())//登录状态
+// 定义tag随机类型
+const tagType = ['primary', 'success', 'danger', 'warning']
 
+const { isLogin } = storeToRefs(useLoginStore())//登录状态
 const active = ref(0)
 
 const props = defineProps({
@@ -165,6 +190,10 @@ const props = defineProps({
 
 :deep(.van-swipe-item) {
   margin-top: 16px;
+}
+
+:deep(.vant-tag) {
+  margin: 0 4px;
 }
 
 .mySonglistCard {
@@ -253,17 +282,62 @@ const props = defineProps({
 
     &__swiper {
       width: 100%;
-      height: 100%;
+      // height: 100%;
+      height: 60px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 16px;
+      overflow: hidden;
+      position: relative;
+      line-height: 2;
 
-      .helper__swiper__item {
+      &__item {
+        position: absolute;
         display: flex;
         flex-direction: row;
         align-items: center;
         gap: 8px;
+        opacity: 0;
+        animation: animate 10s linear infinite;
+        animation-delay: calc(2s * var(--delay));
+      }
+
+      &__item:last-child {
+        animation-delay: calc(2s * var(--delay));
+      }
+
+      @keyframes animate {
+        0% {
+          opacity: 0;
+          transform: translateY(100%) scale(0.5);
+        }
+
+        5%,
+        20% {
+          opacity: 0.4;
+          transform: translateY(100%) scale(0.7);
+        }
+
+        25%,
+        40% {
+          opacity: 1;
+          pointer-events: auto;
+          transform: translateY(0%) scale(1);
+        }
+
+        45%,
+        60% {
+          opacity: 0.4;
+          transform: translateY(-100%) scale(0.7);
+        }
+
+        65%,
+        100% {
+          opacity: 0;
+          transform: translateY(-100%) scale(0.5);
+        }
       }
     }
   }
