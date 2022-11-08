@@ -122,30 +122,30 @@
             <div class="helper__swiper">
               <div class="helper__swiper__item" v-for="item in 5" :style="{ '--delay': item - 2 }">
                 <div v-if="item == 1">
-                  <van-tag :type="tagType[item - 1]">最近收藏</van-tag>
+                  <van-tag :type="tagType[item - 1]" size="medium">最近收藏</van-tag>
                   的
-                  <van-tag :type="tagType[item - 2]">二次元</van-tag>
+                  <van-tag :type="tagType[item - 2]" size="medium">二次元</van-tag>
                 </div>
                 <div v-if="item == 2">
-                  <van-tag :type="tagType[item - 1]">80年代</van-tag>
-                  <van-tag :type="tagType[item - 2]">华语</van-tag>
+                  <van-tag :type="tagType[item - 1]" size="medium">80年代</van-tag>
+                  <van-tag :type="tagType[item - 2]" size="medium">华语</van-tag>
                   老歌
                 </div>
                 <div v-if="item == 3">
-                  <van-tag :type="tagType[item - 1]">最近一年收藏</van-tag>
+                  <van-tag :type="tagType[item - 1]" size="medium">最近一年收藏</van-tag>
                   的
-                  <van-tag :type="tagType[item - 2]">日语</van-tag>
+                  <van-tag :type="tagType[item - 2]" size="medium">日语</van-tag>
                 </div>
                 <div v-if="item == 4">
                   适合
-                  <van-tag :type="tagType[item - 1]">夜晚</van-tag>
+                  <van-tag :type="tagType[item - 1]" size="medium">夜晚</van-tag>
                   听的
-                  <van-tag :type="tagType[item - 2]">日语</van-tag>
+                  <van-tag :type="tagType[item - 2]" size="medium">日语</van-tag>
                 </div>
                 <div v-if="item == 5">
-                  <van-tag :type="tagType[item - 1]">最近一年</van-tag>
+                  <van-tag :type="tagType[item - 1]" size="medium">最近一年</van-tag>
                   发布的
-                  <van-tag :type="tagType[item - 2]">二次元</van-tag>
+                  <van-tag :type="tagType[item - 2]" size="medium">二次元</van-tag>
                 </div>
               </div>
             </div>
@@ -192,7 +192,7 @@ const props = defineProps({
   margin-top: 16px;
 }
 
-:deep(.vant-tag) {
+:deep(.van-tag) {
   margin: 0 4px;
 }
 
@@ -283,7 +283,7 @@ const props = defineProps({
     &__swiper {
       width: 100%;
       // height: 100%;
-      height: 60px;
+      height: 80px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -291,7 +291,7 @@ const props = defineProps({
       gap: 16px;
       overflow: hidden;
       position: relative;
-      line-height: 2;
+      line-height: 2.4;
 
       &__item {
         position: absolute;
