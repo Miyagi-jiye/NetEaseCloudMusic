@@ -5,6 +5,7 @@ import 'nprogress/nprogress.css'
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
+    // 主页
     {
       path: '/',
       name: 'layout',
@@ -26,8 +27,14 @@ const router = createRouter({
           name: 'home',
           component: () => import('@/views/home/index.vue')
         },
+        {
+          path: '/songListDetail',//vue-router 4.0,name+params形式传参需要添加冒号声明参数
+          name: 'songListDetail',
+          component: () => import('@/views/songListDetail/index.vue')
+        },
       ]
     },
+    // 登录页
     {
       path: '/login',
       name: 'login',
@@ -49,6 +56,12 @@ const router = createRouter({
           component: () => import('@/views/login/QRCode/index.vue')
         },
       ]
+    },
+    // 404页
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'notFound',
+      component: () => import('@/views/notFound/index.vue')
     }
   ]
 })

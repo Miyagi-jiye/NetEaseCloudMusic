@@ -4,8 +4,8 @@ import App from './App.vue'
 import router from './router'
 import './assets/styles/reset.css'// 重置全局样式
 import './assets/styles/root.css'// 根样式
-// import '@vant/touch-emulator';// 桌面端适配点击
-import { Lazyload } from 'vant';// vant 懒加载指令(采用的是 https://github.com/hilongjw/vue-lazyload)
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'//pinia数据持久化插件
+import { Lazyload } from 'vant';// vant 懒加载指令(其采用的是 https://github.com/hilongjw/vue-lazyload)
 
 // Vant 中有个别组件是以函数的形式提供的，包括 Toast，Dialog，Notify 和 ImagePreview 组件。
 // 在使用函数组件时，unplugin-vue-components 无法自动引入对应的样式，因此需要手动引入样式。
@@ -24,16 +24,17 @@ import 'vant/es/image-preview/style';
 
 import loadingImg from '@/assets/images/loading.gif'// 加载图片
 
-console.log("环境变量", import.meta.env)
+// console.log("环境变量", import.meta.env)
 
 const app = createApp(App)
+const pinia = createPinia();//创建pinia实例
 
-app.use(createPinia())
+pinia.use(piniaPluginPersistedstate)//给pinia实例挂载持久化插件
+app.use(pinia)
 app.use(router)
 app.use(Lazyload, {
   lazyComponent: false,
   loading: loadingImg,//加载图片
   error: loadingImg,//错误图片
 });
-
 app.mount('#app')

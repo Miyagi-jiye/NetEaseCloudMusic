@@ -1,6 +1,16 @@
 <template>
   <div class="popup nowrap">
-    <div class="header">
+    <!-- 已经登录 -->
+    <div class="header" v-if="isLogin">
+      <img :src="userData.detail.profile.avatarUrl + '?param=50y50'" alt="头像" class="header__left">
+      <div class="header__center" @click="$router.push('/login')">
+        <span>{{ userData.detail.profile.nickname }}</span>
+        <van-icon name="arrow" />
+      </div>
+      <van-icon name="scan" class="header__right" />
+    </div>
+    <!-- 没有登录 -->
+    <div class="header" v-else>
       <img :src="logo" alt="" class="header__left">
       <div class="header__center" @click="$router.push('/login')">
         <span>立即登录</span>
@@ -25,7 +35,7 @@
       </div>
       <div class="content__settingCard">
         <van-cell-group inset>
-          <van-cell title="我的消息" is-link icon="envelop-o" />
+          <van-cell title="我的消息" is-link icon="envelop-o" @click="settingItemClick('我的消息')" />
           <van-cell title="设置" is-link icon="setting-o" />
           <van-cell title="深色模式" is-link>
             <template #icon>
@@ -108,8 +118,10 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from "pinia"
 import { useLoginStore } from '@/stores/login.js'
+import { useUserStore } from '@/stores/user.js'
 
 const { isLogin } = storeToRefs(useLoginStore())//登录状态
+const { userData } = useUserStore()//用户信息
 const router = useRouter()
 const show = ref(false);//退出弹框
 const actions = [
@@ -138,6 +150,10 @@ const actions = [
     }
   },
 ];
+
+function settingItemClick(e) {
+  console.log(e)
+}
 </script>
 
 <style scoped lang="less">
@@ -183,6 +199,7 @@ const actions = [
       width: 24px;
       height: 24px;
       margin-right: 16px;
+      border-radius: 50%;
     }
 
     .header__center {

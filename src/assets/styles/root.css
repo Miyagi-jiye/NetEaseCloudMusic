@@ -26,6 +26,9 @@
   /* 底部tabbar高度(--van-tabbar-height) */
   --tabbar-height: 50px;
   --background-color: var(--van-search-content-background);
+  /* 收藏，评论，分享 */
+  --subCard-background-color: #ffffff;
+  --subCard--color: #000000;
 }
 
 .van-theme-dark body {
@@ -41,14 +44,16 @@
   --tag-background-color-1: #000000;
   /* 卡片颜色 */
   --card-background-color: #1c1c1e;
+  /* 收藏，评论，分享 */
+  --subCard-background-color: #3a393e;
+  --subCard--color: #ebebec;
 }
 
-/* 竖直分割线 */  
+/* 竖直分割线 */
 .my-line {
   width: 1px;
   height: 1rem;
   background-color: #e5e5e5;
-  margin: 0 8vw;
 }
 
 /* 不换行溢出显示省略号 */
@@ -61,6 +66,10 @@
 /* 全局省略号图标旋转90度 */
 i.van-badge__wrapper.van-icon.van-icon-ellipsis {
   transform: rotate(90deg);
+}
+
+.van-icon {
+  cursor: pointer;
 }
 
 /* .van-tab {

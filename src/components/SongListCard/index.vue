@@ -1,7 +1,7 @@
 <template>
   <div class="SongListCard">
     <div class="card">
-      <img v-lazy="config.imageUrl" alt="歌单封面">
+      <img v-lazy="config.imageUrl + '?param=200y200'" alt="歌单封面">
       <img :src="wyyIcon" alt="网易云图标" class="wyyIcon">
       <img :src="filledPlayIcon" alt="点击播放" class="playIcon">
       <div class="trackCount">

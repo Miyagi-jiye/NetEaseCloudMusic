@@ -1,7 +1,7 @@
 <template>
   <div class="ImgCard" :style="{ height: height, width: width }">
     <!-- 有图片地址 -->
-    <img v-if="imgUrl" v-lazy="imgUrl" alt="" class="ImgCard__img">
+    <img v-if="imgUrl" v-lazy="imgUrl + '?param=200y200'" alt="" class="ImgCard__img">
     <!-- 没有图片地址 -->
     <div v-else class="ImgCard__img"></div>
     <!-- 背景 -->
@@ -41,6 +41,7 @@ const props = defineProps({
   border-radius: 8px;
   position: relative;
   z-index: 1;
+  // cursor: pointer;
 
   &__img {
     width: 100%;

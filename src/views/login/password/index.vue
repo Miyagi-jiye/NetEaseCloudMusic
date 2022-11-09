@@ -48,9 +48,7 @@ async function onSubmit() {
     passwordLogin.phone = ''
     passwordLogin.password = ''
     // 跳转到首页
-    setTimeout(() => {
-      router.push({ path: '/home' })
-    }, 1000)
+    router.push({ path: '/home' })
   } else {
     // 清空表单
     passwordLogin.phone = ''

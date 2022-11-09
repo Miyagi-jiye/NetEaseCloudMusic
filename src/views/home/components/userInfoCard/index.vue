@@ -87,6 +87,10 @@ const props = defineProps({
     box-sizing: border-box;
     overflow: hidden;
 
+    .my-line {
+      margin: 0 8vw;
+    }
+
     &__name {
       color: var(--text-color);
       font-size: 18px;

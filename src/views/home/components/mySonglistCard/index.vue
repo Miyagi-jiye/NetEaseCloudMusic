@@ -13,7 +13,8 @@
             </div>
           </div>
           <div class="content">
-            <div class="content__item" v-for="item in config.createPlaylist">
+            <div class="content__item" v-for="item in config.createPlaylist"
+              @click="routerPush('/songListDetail', { id: item.id })">
               <ImgCard class="content__item__img" :imgUrl="item.coverImgUrl" />
               <div class="content__item__info">
                 <span>{{ item.name }}</span>
@@ -58,10 +59,33 @@
           <div class="helper">
             <div class="helper__title">你可以从歌单中筛选出</div>
             <div class="helper__swiper">
-              <div class="helper__swiper__item" v-for="item in 4">
-                <van-tag color="#ffe1e1" text-color="#ad0000">最近一年</van-tag>
-                发布的
-                <van-tag color="#ffe1e1" text-color="#bd0cc0">二次元</van-tag>
+              <div class="helper__swiper__item" v-for="item in 5" :style="{ '--delay': item - 2 }">
+                <div v-if="item == 1">
+                  <van-tag :type="tagType[item - 1]">最近收藏</van-tag>
+                  的
+                  <van-tag :type="tagType[item - 2]">二次元</van-tag>
+                </div>
+                <div v-if="item == 2">
+                  <van-tag :type="tagType[item - 1]">80年代</van-tag>
+                  <van-tag :type="tagType[item - 2]">华语</van-tag>
+                  老歌
+                </div>
+                <div v-if="item == 3">
+                  <van-tag :type="tagType[item - 1]">最近一年收藏</van-tag>
+                  的
+                  <van-tag :type="tagType[item - 2]">日语</van-tag>
+                </div>
+                <div v-if="item == 4">
+                  适合
+                  <van-tag :type="tagType[item - 1]">夜晚</van-tag>
+                  听的
+                  <van-tag :type="tagType[item - 2]">日语</van-tag>
+                </div>
+                <div v-if="item == 5">
+                  <van-tag :type="tagType[item - 1]">最近一年</van-tag>
+                  发布的
+                  <van-tag :type="tagType[item - 2]">二次元</van-tag>
+                </div>
               </div>
             </div>
           </div>
@@ -161,19 +185,27 @@
 
 <script setup>
 import ImgCard from "@/components/ImgCard/index.vue";
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import { storeToRefs } from "pinia"
 import { useLoginStore } from '@/stores/login.js'
+import { useRouter } from "vue-router";
 
-// 定义tag随机类型
-const tagType = ['primary', 'success', 'danger', 'warning']
 
+const tagType = ['primary', 'success', 'danger', 'warning']// 定义歌单助手tag随机类型
 const { isLogin } = storeToRefs(useLoginStore())//登录状态
-const active = ref(0)
-
+const active = ref(0)//tab切换
+const router = useRouter()//路由
 const props = defineProps({
   config: Object,
 })
+
+
+//跳转到歌单详情
+function routerPush(name, params) {
+  console.log('跳转', name, params)
+  // router.push({ name, params })
+  router.push({ path: name, query: params })
+}
 </script>
 
 <style scoped lang="less">

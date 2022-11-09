@@ -1,7 +1,7 @@
 <template>
   <div class="SongCard">
     <div class="SongCard__image">
-      <img v-lazy="config.imageUrl" alt="歌曲封面" class="cover" />
+      <img v-lazy="config.imageUrl+ '?param=200y200'" alt="歌曲封面" class="cover" />
     </div>
     <div class="SongCard__info">
       <h3 class="name">{{ config.name }}</h3>

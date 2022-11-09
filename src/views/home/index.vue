@@ -27,7 +27,7 @@ async function init() {
   await getUserDetail()//再获取用户详情
   await getUserSubcount()//用户收藏
   await getUserPlaylist()//用户歌单
-  console.log(userData)
+  // console.log(userData)
 }
 
 // 判断是否登录
