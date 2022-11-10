@@ -1,7 +1,7 @@
 <template>
   <div class="phone">
     <div class="top" @click="$router.back()">
-      <van-icon name="arrow-left" />
+      <van-icon name="arrow-left"  size="23"/>
       <span>手机号登录</span>
     </div>
     <div class="content">

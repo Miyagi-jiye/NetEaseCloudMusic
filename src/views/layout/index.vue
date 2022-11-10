@@ -16,7 +16,7 @@ import { onBeforeUpdate } from "vue";// #backTop 滚动条回到顶部
 // 判断是否隐藏头部和底部
 const isHide = useHideHeaderFooter()
 
-// 数据更新前执行，用于切换页面滚动条回到顶部
+// 数据更新前执行，用于切换页面滚动条自动回到顶部
 onBeforeUpdate(() => {
   document.querySelector('#backTop').scrollTop = 0;
 });

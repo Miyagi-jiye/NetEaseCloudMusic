@@ -1,7 +1,7 @@
 <template>
   <div class="password">
     <div class="top" @click="$router.back()">
-      <van-icon name="arrow-left" />
+      <van-icon name="arrow-left" size="23" />
       <span>密码登录</span>
     </div>
     <div class="content">

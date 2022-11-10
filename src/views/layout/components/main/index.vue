@@ -3,7 +3,7 @@
     <!-- <router-view /> -->
     <RouterView v-slot="{ Component, route }">
       <template v-if="Component">
-        <Transition mode="out-in">
+        <Transition>
           <KeepAlive>
             <Suspense>
               <component :is="Component"></component>
@@ -24,10 +24,26 @@ import discoverSkeleton from "./skeleton/discover.vue";// 发现页骨架屏
 </script>
 
 <style scoped lang="less">
-// .main {
-//   height: calc(100vh - 50px - 46px); // 50px是头部高度，46px是底部高度
-//   width: 100%;
-//   background-color: var(--van-search-content-background);
-//   overflow-y: scroll;
-// }
+// 定义过渡动画
+.bounce-enter-active {
+  animation: bounce-in 0.5s;
+}
+
+.bounce-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(1.25);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
 </style>

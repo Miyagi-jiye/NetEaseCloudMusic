@@ -4,7 +4,7 @@
     <div class="myLikeMusicCard__left">
       <ImgCard :imgUrl="config.myLikeMusic[0].coverImgUrl" />
     </div>
-    <div class="myLikeMusicCard__center">
+    <div class="myLikeMusicCard__center" @click="routerPush('/songListDetail', { id: config.myLikeMusic[0].id })">
       <div class="myLikeMusicCard__center__title">我喜欢的音乐</div>
       <div class="myLikeMusicCard__center__count">{{ config.myLikeMusic[0].trackCount }}首</div>
     </div>
@@ -33,12 +33,20 @@
 import ImgCard from "@/components/ImgCard/index.vue";
 import { storeToRefs } from "pinia"
 import { useLoginStore } from '@/stores/login.js'
+import { useRouter } from "vue-router";
 
+const router = useRouter()//路由
 const { isLogin } = storeToRefs(useLoginStore())//登录状态
-
 const props = defineProps({
   config: Object
 })
+
+//跳转到歌单详情
+function routerPush(name, params) {
+  console.log('跳转', name, params)
+  // router.push({ name, params })
+  router.push({ path: name, query: params })
+}
 </script>
 
 <style scoped lang="less">

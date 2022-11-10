@@ -37,7 +37,8 @@
             </div>
           </div>
           <div class="content">
-            <div class="content__item" v-for="item in config.collectPlaylist">
+            <div class="content__item" v-for="item in config.collectPlaylist"
+              @click="routerPush('/songListDetail', { id: item.id })">
               <ImgCard class="content__item__img" :imgUrl="item.coverImgUrl" />
               <div class="content__item__info">
                 <span>{{ item.name }}</span>
@@ -190,7 +191,6 @@ import { storeToRefs } from "pinia"
 import { useLoginStore } from '@/stores/login.js'
 import { useRouter } from "vue-router";
 
-
 const tagType = ['primary', 'success', 'danger', 'warning']// 定义歌单助手tag随机类型
 const { isLogin } = storeToRefs(useLoginStore())//登录状态
 const active = ref(0)//tab切换
@@ -202,8 +202,6 @@ const props = defineProps({
 
 //跳转到歌单详情
 function routerPush(name, params) {
-  console.log('跳转', name, params)
-  // router.push({ name, params })
   router.push({ path: name, query: params })
 }
 </script>
@@ -266,7 +264,7 @@ function routerPush(name, params) {
   .content {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
 
     &__item {
       display: flex;

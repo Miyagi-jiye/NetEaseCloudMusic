@@ -1,7 +1,7 @@
 <template>
   <div class="QRCode">
     <div class="top" @click="$router.back()">
-      <van-icon name="arrow-left" />
+      <van-icon name="arrow-left" size="23" />
       <span>二维码登录</span>
     </div>
     <div class="content">

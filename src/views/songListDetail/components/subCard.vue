@@ -42,7 +42,7 @@ const props = defineProps({
   align-items: center;
   border-radius: 25px;
   background-color: var(--subCard-background-color);
-  box-shadow: rgb(149 157 165 / 20%) 0px 3px 12px 2px;
+  box-shadow: var(--song-list-box-shadow);
   z-index: 10;
 
   .subscribedCount,

@@ -29,6 +29,14 @@
   /* 收藏，评论，分享 */
   --subCard-background-color: #ffffff;
   --subCard--color: #000000;
+  /* 歌曲列表颜色 */
+  --song-list-background-color: #ffffff;
+  --song-list-color: #000000;
+  --song-list-box-shadow: rgb(149 157 165 / 20%) 0px 3px 12px 2px;
+  --song-list-hover: #f1f1f1;
+  /* tags颜色 */
+  --tags-border-color: #ff00004d;
+  --tags-text-color: #ff0000b3;
 }
 
 .van-theme-dark body {
@@ -47,6 +55,16 @@
   /* 收藏，评论，分享 */
   --subCard-background-color: #3a393e;
   --subCard--color: #ebebec;
+  /* 歌曲列表颜色 */
+  --song-list-background-color: #000000;
+  --song-list-color: #ffffff;
+  --song-list-box-shadow: none;
+  --song-list-hover: #3a3a3a;
+  /* tags颜色 */
+  --tags-border-color: #ff00007a;
+  --tags-text-color: #ff0000;
+  /* 整体变暗滤镜 */
+  filter: brightness(80%);
 }
 
 /* 竖直分割线 */
@@ -63,13 +81,18 @@
   text-overflow: ellipsis;
 }
 
-/* 全局省略号图标旋转90度 */
+/* 全局vant省略号图标旋转90度 */
 i.van-badge__wrapper.van-icon.van-icon-ellipsis {
   transform: rotate(90deg);
 }
 
 .van-icon {
   cursor: pointer;
+}
+
+/* 空心tag背景透明 */
+.van-tag--plain {
+  background: transparent !important;
 }
 
 /* .van-tab {
