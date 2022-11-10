@@ -27,7 +27,6 @@
 <script setup>
 import { showNotify } from 'vant';
 import { useRouter } from "vue-router";
-import { useCookie } from "@/hooks/index.js"//自定义hooks
 import { storeToRefs } from "pinia"
 import { useLoginStore } from '@/stores/login.js'
 
@@ -42,7 +41,6 @@ async function onSubmit() {
   const res = await getLoginByPassword()//登录
   if (res.code == 200) {
     showNotify({ type: 'success', message: '登录成功' });//提示
-    useCookie(res.cookie)//保存cookie
     isLogin.value = true//改变登录状态
     // 清空表单
     passwordLogin.phone = ''

@@ -20,7 +20,6 @@ import { ref, onUnmounted } from 'vue'
 import QrcodeVue from 'qrcode.vue'// 引入二维码组件(https://github.com/scopewu/qrcode.vue/blob/HEAD/README-zh_cn.md)
 import { showNotify } from 'vant';
 import { useRouter } from "vue-router"
-import { useCookie } from "@/hooks/index.js"//自定义hooks
 import { storeToRefs } from "pinia"
 import { useLoginStore } from '@/stores/login.js'
 
@@ -61,10 +60,9 @@ function polling() {
         console.log("登录成功")
         clearInterval(timer)// 清除定时器
         isLogin.value = true//改变登录状态
-        useCookie(QRCode.status.cookie)//保存cookie
         showNotify({ type: 'danger', message: '登录成功' });
         // 跳转到首页
-        router.push({ name: 'home', params: { cookie: QRCode.status.cookie } })
+        router.push({ name: 'home' })
         break;
       default:
         console.log("状态码错误", QRCode.status.code)

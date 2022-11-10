@@ -1,7 +1,6 @@
 import request from '@/axios';
-import { useCookie } from '@/hooks/index.js';
-
-const myCookie = JSON.stringify(useCookie());
+import { useLoginStore } from '@/stores/login.js';
+import { storeToRefs } from 'pinia';
 
 // 1. 手机登录
 // 必选参数 :
@@ -244,12 +243,13 @@ export async function userDetail(uid) {
  * 3. account：账号信息
  */
 export async function userAccount() {
+  const { cookie } = storeToRefs(useLoginStore());// 获取cookie
   const { data } = await request({
     url: '/user/account',
     method: 'get',
     params: {
       timestamp: Date.now(), //防止缓存
-      cookie: myCookie,//cookie请求头
+      cookie: JSON.stringify(cookie),//cookie请求头
     }
   });
   return data;

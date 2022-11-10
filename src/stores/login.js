@@ -38,6 +38,8 @@ export const useLoginStore = defineStore(
     const isLogin = ref(false)
     // 勾选协议
     const isChecked = ref(false)
+    // cookie
+    const cookie = ref('')
 
     /* getters */
     const test = computed(() => {
@@ -61,6 +63,7 @@ export const useLoginStore = defineStore(
     async function getQrCheck() {
       const res = await qrCheck(QRCode.key)
       QRCode.status = res
+      cookie.value = res.cookie// 更新cookie
       console.log('检查二维码', res)
       return res
     }
@@ -73,12 +76,14 @@ export const useLoginStore = defineStore(
     // 验证码登录
     async function getLoginByCaptcha() {
       const res = await loginByCaptcha(captchaLogin.phone, captchaLogin.captcha)
+      cookie.value = res.cookie// 更新cookie
       console.log('验证码登录', res)
       return res
     }
     // 密码登录
     async function getLoginByPassword() {
       const res = await loginByPhone(passwordLogin.phone, passwordLogin.password)
+      cookie.value = res.cookie// 更新cookie
       console.log('密码登录', res)
       return res
     }
@@ -89,6 +94,7 @@ export const useLoginStore = defineStore(
       passwordLogin,
       isLogin,
       isChecked,
+      cookie,
       getQrKey,
       getQrCreate,
       getQrCheck,
@@ -104,7 +110,7 @@ export const useLoginStore = defineStore(
     persist: {
       // key: 'storekey',
       // storage: window.sessionStorage,
-      paths: ['isLogin'],//选择你要存储的数据 
+      paths: ['isLogin', 'cookie'],//选择你要存储的数据 
     }
   }
 )

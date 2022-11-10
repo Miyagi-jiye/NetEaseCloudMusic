@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { showNotify } from 'vant';// 引入vant的提示框
+import { useLoginStore } from '@/stores/login.js'
+import { storeToRefs } from 'pinia'
 
 const request = axios.create({
   baseURL: import.meta.env.DEV ? '/api' : 'http://guowei.fun:3000',
@@ -28,6 +30,8 @@ request.interceptors.response.use(
   function (error) {
     // 超出 2xx 范围的状态码都会触发该函数。
     // 对响应错误做点什么
+    const { isLogin, cookie } = storeToRefs(useLoginStore())//登录状态
+
 
     // 1. 匹配常见错误，错误提示
     switch (error.response.status) {

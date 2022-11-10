@@ -1,17 +1,5 @@
-import { ref, watch, onMounted, onBeforeMount } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
-
-// 存取cookie
-export const useCookie = (cookie) => {
-  const myCookie = ref(JSON.parse(localStorage.getItem('cookie')) || false)
-  // 判断是否有传cookie过来，有的话就存入localStorage，更新myCookie
-  if (cookie) {
-    myCookie.value = cookie
-    localStorage.setItem('cookie', JSON.stringify(cookie))
-  }
-  // console.log('cookie钩子', myCookie)
-  return myCookie
-}
 
 // 是否隐藏header和footer
 export const useHideHeaderFooter = () => {
