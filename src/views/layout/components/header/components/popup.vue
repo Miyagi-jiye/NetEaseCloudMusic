@@ -35,6 +35,7 @@
       </div>
       <div class="content__settingCard">
         <van-cell-group inset>
+          <van-cell title="清空缓存" is-link icon="setting-o" @click="settingItemClick('清空缓存')" />
           <van-cell title="我的消息" is-link icon="envelop-o" @click="settingItemClick('我的消息')" />
           <van-cell title="设置" is-link icon="setting-o" />
           <van-cell title="深色模式" is-link>
@@ -153,6 +154,11 @@ const actions = [
 
 function settingItemClick(e) {
   console.log(e)
+  if (e == '清空缓存') {
+    localStorage.clear()
+    sessionStorage.clear()
+    alert('缓存清除成功')
+  }
 }
 </script>
 

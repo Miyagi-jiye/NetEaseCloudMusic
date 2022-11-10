@@ -64,7 +64,7 @@
   --tags-border-color: #ff00007a;
   --tags-text-color: #ff0000;
   /* 整体变暗滤镜 */
-  filter: brightness(80%);
+  filter: brightness(90%);
 }
 
 /* 竖直分割线 */
@@ -93,6 +93,11 @@ i.van-badge__wrapper.van-icon.van-icon-ellipsis {
 /* 空心tag背景透明 */
 .van-tag--plain {
   background: transparent !important;
+}
+
+/* 隐藏进度条圈圈 */
+#nprogress .spinner {
+  display: none;
 }
 
 /* .van-tab {

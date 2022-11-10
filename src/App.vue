@@ -7,6 +7,7 @@
 <script setup>
 import { ref, provide, onMounted } from 'vue';
 import { showConfirmDialog } from 'vant';
+import musicIcon from "@/assets/icons/c3u_3b.png"
 
 const theme = ref('light')
 provide('theme', theme)
@@ -39,8 +40,12 @@ onMounted(() => {
       });
   } else {
     console.log(
-      `当前网络协议为：==> %c${window.location.protocol}`,
-      'color: #fff;background: #000;padding: 2px 8px;border-radius: 5px; font-weight: bold;',
+      `%c当前网络协议为%c|%c${window.location.protocol}%c|%c${new Date().toLocaleString()}`,
+      'color: #08d9d6;background: #000;padding: 4px 0 4px 8px;border-radius:4px 0 0 4px;font-weight:bold;',
+      'color: #eaeaea;background: #000;padding: 4px 4px; font-weight: bold;',
+      'color: #ff2e63;background: #000;padding: 4px 8px 4px 0;font-weight: bold;',
+      'color: #eaeaea;background: #000;padding: 4px 4px; font-weight: bold;',
+      'color: #f9ed69;background: #000;padding: 4px 8px 4px 0;border-radius:0 4px 4px 0; font-weight: bold;',
     )
   }
 })

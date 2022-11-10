@@ -3,7 +3,7 @@
 
     <van-tag v-if="config.pc" plain color="var(--tags-border-color)" text-color="var(--tags-text-color)">云盘</van-tag>
     <van-tag v-if="config.originCoverType == 1" plain color="var(--tags-border-color)"
-      text-color="var(--tags-text-color)">原曲</van-tag>
+      text-color="var(--tags-text-color)">原唱</van-tag>
     <van-tag v-if="config.originCoverType == 2" plain color="var(--tags-border-color)"
       text-color="var(--tags-text-color)">翻唱</van-tag>
     <van-tag v-if="config.hr" plain color="var(--tags-border-color)" text-color="var(--tags-text-color)">Hi-Res

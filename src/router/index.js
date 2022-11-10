@@ -20,7 +20,7 @@ const router = createRouter({
         {
           path: '/follow',
           name: 'follow',
-          component: () => import('@/views/follow/test.vue')
+          component: () => import('@/views/follow/index.vue')
         },
         {
           path: '/home',

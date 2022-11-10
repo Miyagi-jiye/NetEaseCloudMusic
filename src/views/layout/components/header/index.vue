@@ -24,7 +24,7 @@ import { ref, inject } from "vue"
 import Popup from "./components/popup.vue"
 
 const searchKey = ref('')
-const show = ref(false)
+const show = ref(false)//popup显示状态
 const theme = inject('theme')// 获取根节点组件传递的值
 
 function settingClick() {

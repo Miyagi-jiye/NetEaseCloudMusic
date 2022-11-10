@@ -1,5 +1,6 @@
 <template>
-  <div class="songListDetail">
+  <LoadingPage v-if="loading" />
+  <div class="songListDetail" v-else>
     <div class="background"
       :style="{ backgroundImage: 'url(' + songListDetail.playlist.coverImgUrl + '?param=10y10)' }">
       <div class="filter">
@@ -18,7 +19,9 @@
           <div class="right nowrap">
             <div class="name nowrap">{{ songListDetail.playlist.name }}</div>
             <div class="tags" v-if="songListDetail.playlist.tags">
-              <van-tag color="#ffffff4a" round v-for="item in songListDetail.playlist.tags">{{ item }}</van-tag>
+              <van-tag color="#ffffff4a" round v-for="item in songListDetail.playlist.tags">
+                {{ item }}
+              </van-tag>
             </div>
             <div class="creator">
               <img class="creator__avatarUrl" v-lazy="songListDetail.playlist.creator.avatarUrl + '?param=20y20'"
@@ -56,7 +59,7 @@
                   {{ item.name }}<span v-for="alia in item.alia">({{ alia }})</span>
                 </div>
                 <div class="bottom">
-                  <Tags :config="item" />
+                  <Tags :config="item" style="margin-right: 4px;float: left;" />
                   <span v-for="ar in item.ar">{{ ar.name }}</span>
                   - {{ item.al.name }}
                 </div>
@@ -81,6 +84,7 @@
 </template>
 
 <script setup>
+import LoadingPage from '@/components/LoadingPage/index.vue'// 加载中
 import Description from './components/description.vue'// 描述组件
 import ImgCard from '@/components/imgCard/index.vue'// 引入图片组件
 import SubCard from './components/subCard.vue'// 引入收藏，评论，分享组件
@@ -90,9 +94,9 @@ import { useSongListDetailStore } from '@/stores/songListDetail.js';
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 
 const route = useRoute();
+const loading = ref(true);
 const { songListDetail, getPlaylistDetail } = useSongListDetailStore();
 const header = ref(null)
-const detail = ref(null)
 let main = null
 
 
@@ -106,20 +110,21 @@ watch(() => route.query.id, (newId) => {
 });
 
 onMounted(() => {
-  main = document.querySelector('.main')
-  main.addEventListener('scroll', (e) => {
-    // console.log("距离顶部", e.target.scrollTop)
-    // 改变 header 的背景颜色透明度
-    if (e.target.scrollTop > 0) {
-      header.value.style.background = `rgba(0 0 0 / ${e.target.scrollTop / 1}%)`
-    } else {
-      header.value.style.background = 'transparent'
-    }
-  })
+  loading.value = false;
+
+  // main = document.querySelector('.main')
+  // main.addEventListener('scroll', (e) => {
+  //   // console.log("距离顶部", e.target.scrollTop)
+  //   // 改变 header 的背景颜色透明度
+  //   if (e.target.scrollTop > 0) {
+  //     header.value.style.background = `rgba(0 0 0 / ${e.target.scrollTop / 1}%)`
+  //   } else {
+  //     header.value.style.background = 'transparent'
+  //   }
+  // })
 })
 onUnmounted(() => {
-  // 移除监听(失效)
-  main.removeEventListener('scroll', () => { console.log("移除") })
+  loading.value = true;
 })
 </script>
 
@@ -165,8 +170,8 @@ onUnmounted(() => {
     gap: 16px;
     // 透明背景
     background: transparent;
-    position: sticky;
-    top: 0;
+    // position: sticky;
+    // top: 0;
     z-index: 11;
     transition: all .3s;
 
@@ -240,6 +245,7 @@ onUnmounted(() => {
 
   &__content {
     height: 100%;
+    min-height: 100vh;
     position: relative;
     padding-top: 32px;
     background-color: var(--card-background-color);
@@ -261,7 +267,8 @@ onUnmounted(() => {
       align-items: center;
       box-sizing: border-box;
       position: sticky;
-      top: 46px;
+      // top: 46px;
+      top: 0;
       color: var(--song-list-color);
       background-color: var(--card-background-color);
       z-index: 1;
@@ -341,13 +348,17 @@ onUnmounted(() => {
           .bottom {
             font-size: 14px;
             color: #999999;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            // flex布局文本溢出省略号会失效
+            // display: flex;
+            // align-items: center;
 
             span:not(:last-child)::after {
               content: "/";
-              margin: 0 2px;
+              margin: 0 4px;
+            }
+
+            span:last-child {
+              margin-right: 4px;
             }
           }
         }
