@@ -29,6 +29,7 @@ await getpersonalized()
   overflow-x: scroll;
   gap: 12px;
   padding: 0 16px;
+  scrollbar-width: none; // firefox浏览器隐藏滚动条
 
   &::-webkit-scrollbar {
     display: none; //隐藏滚动条

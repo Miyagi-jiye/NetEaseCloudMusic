@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { showNotify } from 'vant';// 引入vant的提示框
-import { useLoginStore } from '@/stores/login.js'
-import { storeToRefs } from 'pinia'
+// import { useLoginStore } from '@/stores/login.js'
+// import { storeToRefs } from 'pinia'
 
 const request = axios.create({
   baseURL: import.meta.env.DEV ? '/api' : 'http://guowei.fun:3000',
@@ -12,6 +12,11 @@ const request = axios.create({
 request.interceptors.request.use(
   function (config) {
     // 在发送请求之前做些什么
+    // console.log(
+    //   `%c${config.baseURL}%c${config.url}`,
+    //   'color: #eaeaea;background: #000;padding: 4px 0 4px 8px;border-radius:4px 0 0 4px;font-weight:bold;',
+    //   'color: #08d9d6;background: #000;padding: 4px 8px 4px 0;border-radius:0 4px 4px 0;font-weight: bold;',
+    // );
     return config;
   },
   function (error) {
@@ -25,6 +30,11 @@ request.interceptors.response.use(
   function (response) {
     // 2xx 范围内的状态码都会触发该函数。
     // 对响应数据做点什么
+    // 拦截响应成功返回的cookie，存入本地
+    const cookie = response.data.cookie;
+    if (cookie) {
+      console.log("拦截到响应头cookie===>", cookie)
+    }
     return response;
   },
   function (error) {
@@ -40,10 +50,6 @@ request.interceptors.response.use(
         break;
       case 401:
         showNotify({ type: 'danger', message: error.response.data.message ?? error.response.data.msg ?? "登录过期，请重新登录" });
-        // 清除token
-        // localStorage.removeItem("token");
-        // 跳转到登录页面
-        // router.push("/login");
         break;
       case 403:
         showNotify({ type: 'danger', message: error.response.data.message ?? error.response.data.msg ?? "拒绝访问" });

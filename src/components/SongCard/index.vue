@@ -1,7 +1,7 @@
 <template>
   <div class="SongCard">
     <div class="SongCard__image">
-      <img v-lazy="config.imageUrl+ '?param=200y200'" alt="歌曲封面" class="cover" />
+      <img v-lazy="config.imageUrl + '?param=200y200'" alt="歌曲封面" class="cover" />
     </div>
     <div class="SongCard__info">
       <h3 class="name">{{ config.name }}</h3>
@@ -20,10 +20,14 @@
         <van-tag type="warning" plain v-if="config.fee == 1">会员</van-tag>
       </div>
     </div>
+    <div class="SongCard__right">
+      <MVIcon v-if="config.mv" :mvid="config.mv" />
+    </div>
   </div>
 </template>
 
 <script setup>
+import MVIcon from '@/components/MVIcon/index.vue'// MV图标组件
 import { formatDuration } from '@/utils/useFilter.js'
 
 const props = defineProps({
@@ -67,6 +71,7 @@ const props = defineProps({
     justify-content: center;
     gap: 4px;
     height: 100%;
+    flex: 1;
 
     .name {
       font-size: 14px;

@@ -11,12 +11,10 @@
 </template>
 
 <script setup>
-// Import Swiper Vue.js components
-import { Swiper, SwiperSlide } from "swiper/vue";
-// Import Swiper styles
-import "swiper/css";
-
 import AlbumCard from '@/components/AlbumCard/index.vue'//专辑卡片
+// Import Swiper Vue.js components and styles
+import { Swiper, SwiperSlide } from "swiper/vue";
+import "swiper/css";
 import { computed } from 'vue';
 import { storeToRefs } from 'pinia';// 解决响应式丢失问题
 import { useDiscoverStore } from "@/stores/discover.js"
@@ -69,9 +67,18 @@ const newAlbumSlice = computed(() => {
     object-fit: cover;
   }
 
-  // .swiper-slide.swiper-slide-active {
-  //   width: 90% !important;
-  //   margin-right: -10% !important;
-  // }
+  @media (min-width: 600px) {
+    .swiper-slide {
+      width: 50% !important;
+    }
+  }
+
+  .swiper-slide {
+    width: 90%;
+  }
+
+  .swiper-slide:last-child {
+    width: 100%;
+  }
 }
 </style>

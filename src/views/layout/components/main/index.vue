@@ -3,17 +3,17 @@
     <!-- <router-view /> -->
     <RouterView v-slot="{ Component, route }">
       <template v-if="Component">
-        <Transition name="bounce">
-          <!-- <KeepAlive> -->
-          <Suspense>
-            <component :is="Component"></component>
-            <template #fallback>
-              <DiscoverSkeleton v-if="route.name == 'discover'" />
-              <SongListDetailSkeleton v-else-if="route.name == 'songListDetail'" />
-              <div v-else>没有骨架屏====>{{ route.name }}</div>
-            </template>
-          </Suspense>
-          <!-- </KeepAlive> -->
+        <Transition>
+          <KeepAlive :exclude="['home']">
+            <Suspense>
+              <component :is="Component"></component>
+              <template #fallback>
+                <DiscoverSkeleton v-if="route.name == 'discover'" />
+                <SongListDetailSkeleton v-else-if="route.name == 'songListDetail'" />
+                <div v-else>没有骨架屏====>{{ route.name }}</div>
+              </template>
+            </Suspense>
+          </KeepAlive>
         </Transition>
       </template>
     </RouterView>

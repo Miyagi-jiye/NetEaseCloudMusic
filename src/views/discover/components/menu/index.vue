@@ -33,6 +33,7 @@ const today = new Date().getDate();
   padding: 0 8px;
   overflow-x: scroll;
   gap: 10px;
+  scrollbar-width: none; // firefox浏览器隐藏滚动条
 
   &-item {
     display: flex;

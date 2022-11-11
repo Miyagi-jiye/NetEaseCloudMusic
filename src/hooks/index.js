@@ -1,4 +1,4 @@
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted, nextTick, onUpdated } from 'vue'
 import { useRoute } from 'vue-router'
 
 // 是否隐藏header和footer
@@ -21,6 +21,5 @@ export const useHideHeaderFooter = () => {
       hideHeaderFooter.value = false
     }
   })
-  console.log('路由钩子', route.name)
   return hideHeaderFooter
 }

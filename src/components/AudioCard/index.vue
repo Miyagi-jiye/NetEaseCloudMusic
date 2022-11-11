@@ -1,0 +1,172 @@
+<template>
+  <div class="Audio">
+    <div class="left">
+      <div class="play">
+        <img :src="disc" alt="唱片" class="discImg">
+        <img :src="audioData.song.al.picUrl" alt="图片" class="songImg">
+      </div>
+    </div>
+    <div class="center nowrap">
+      {{ audioData.song.name }}<span class="alia" v-if="audioData.song.alia[0]">（{{ audioData.song.alia[0] }}）</span>
+    </div>
+    <div class="right">
+      <!-- 暂停 -->
+      <svg v-if="audioData.isPlay == false" t="1668172936808" class="icon" viewBox="0 0 1024 1024" version="1.1"
+        xmlns="http://www.w3.org/2000/svg" p-id="5876" width="20" height="20" @click="play">
+        <path
+          d="M870.2 466.333333l-618.666667-373.28a53.333333 53.333333 0 0 0-80.866666 45.666667v746.56a53.206667 53.206667 0 0 0 80.886666 45.666667l618.666667-373.28a53.333333 53.333333 0 0 0 0-91.333334z"
+          fill="var(--font-color-5)" p-id="5877"></path>
+      </svg>
+      <!-- 播放 -->
+      <svg v-else t="1668173002562" class="icon" viewBox="0 0 1024 1024" version="1.1"
+        xmlns="http://www.w3.org/2000/svg" p-id="6132" width="20" height="20" @click="play">
+        <path
+          d="M426.666667 138.666667v746.666666a53.393333 53.393333 0 0 1-53.333334 53.333334H266.666667a53.393333 53.393333 0 0 1-53.333334-53.333334V138.666667a53.393333 53.393333 0 0 1 53.333334-53.333334h106.666666a53.393333 53.393333 0 0 1 53.333334 53.333334z m330.666666-53.333334H650.666667a53.393333 53.393333 0 0 0-53.333334 53.333334v746.666666a53.393333 53.393333 0 0 0 53.333334 53.333334h106.666666a53.393333 53.393333 0 0 0 53.333334-53.333334V138.666667a53.393333 53.393333 0 0 0-53.333334-53.333334z"
+          fill="var(--font-color-5)" p-id="6133"></path>
+      </svg>
+      <!-- 播放列表 -->
+      <svg t="1668173044430" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+        p-id="7833" width="22" height="22">
+        <path
+          d="M138.666667 91.733333C115.2 74.666667 85.333333 93.866667 85.333333 123.733333v179.2c0 29.866667 29.866667 49.066667 53.333334 34.133334l140.8-89.6c23.466667-14.933333 23.466667-51.2 0-66.133334L138.666667 91.733333zM426.666667 170.666667c-23.466667 0-42.666667 19.2-42.666667 42.666666s19.2 42.666667 42.666667 42.666667h490.666666c23.466667 0 42.666667-19.2 42.666667-42.666667s-19.2-42.666667-42.666667-42.666666H426.666667zM64 512c0 23.466667 19.2 42.666667 42.666667 42.666667h810.666666c23.466667 0 42.666667-19.2 42.666667-42.666667s-19.2-42.666667-42.666667-42.666667H106.666667c-23.466667 0-42.666667 19.2-42.666667 42.666667M106.666667 853.333333h810.666666c23.466667 0 42.666667-19.2 42.666667-42.666666s-19.2-42.666667-42.666667-42.666667H106.666667c-23.466667 0-42.666667 19.2-42.666667 42.666667s19.2 42.666667 42.666667 42.666666"
+          fill="var(--font-color-5)" p-id="7834"></path>
+      </svg>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { useAudioStore } from '@/stores/Audio.js';
+import disc from "@/assets/icons/ewj.png";// 唱片
+import { onMounted } from 'vue';
+
+const { audioData } = useAudioStore();
+
+// 点击播放
+function play() {
+  audioData.isPlay = !audioData.isPlay;
+  isAnimation();
+}
+
+// 判断是否播放动画
+function isAnimation() {
+  if (audioData.isPlay) {
+    document.querySelector('.play').style.animationPlayState = 'running';
+  } else {
+    document.querySelector('.play').style.animationPlayState = 'paused';
+  }
+}
+
+onMounted(() => {
+  isAnimation();
+});
+</script>
+
+<style scoped lang="less">
+// 定义唱片旋转动画
+@keyframes discRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+svg.icon {
+  cursor: pointer;
+}
+
+.Audio {
+  height: 44px;
+  width: 100%;
+  background: var(--van-nav-bar-background);
+  padding: 0 16px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+
+  .left {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    margin-right: 10px;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .play {
+      height: 100%;
+      width: 100%;
+      animation: discRotate 20s linear infinite;
+      // 暂停唱片动画
+      animation-play-state: paused;
+    }
+
+    // 唱片
+    .discImg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    // 封面
+    .songImg {
+      height: 70%;
+      width: 70%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 2;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  .center {
+    flex: 1;
+    color: var(--font-color-dark);
+    font-size: 14px;
+  }
+
+  .right {
+    width: auto;
+    height: 100%;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .playIcon {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      // 改变图片颜色
+      background-color: var(--font-color-5);
+      mask-image: url("@/assets/icons/icon-play-square.png"); // 播放按钮
+      mask-size: 100%;
+      // 兼容谷歌浏览器
+      -webkit-mask-image: url("@/assets/icons/icon-play-square.png");
+      -webkit-mask-size: 100%;
+    }
+
+    .listIcon {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      // 改变图片颜色
+      background-color: var(--font-color-5);
+      mask-image: url("@/assets/icons/eys.png"); // 播放列表
+      mask-size: 100%;
+      // 兼容谷歌浏览器
+      -webkit-mask-image: url("@/assets/icons/eys.png");
+      -webkit-mask-size: 100%;
+    }
+  }
+}
+</style>

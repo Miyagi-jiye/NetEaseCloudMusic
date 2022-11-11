@@ -1,6 +1,6 @@
 <template>
   <div class="banner">
-    <swiper :modules="modules" :autoplay="{ delay: 1500, disableOnInteraction: false, }" :loop="true"
+    <swiper :modules="modules" :autoplay="{ delay: 3000, disableOnInteraction: false, }" :loop="true"
       :pagination="{ dynamicBullets: true }" :spaceBetween="30" class="mySwiper">
       <swiper-slide v-for="item in banners" :key="item.imageUrl">
         <img v-lazy="item.imageUrl" style="width: 100%;height: 100%;aspect-ratio: 2.7 / 1;" />
@@ -18,7 +18,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/pagination";
 // import required modules
-import { Pagination,Autoplay } from "swiper";
+import { Pagination, Autoplay } from "swiper";
 
 import { storeToRefs } from 'pinia';// 解决响应式丢失问题
 import { useDiscoverStore } from "@/stores/discover.js"

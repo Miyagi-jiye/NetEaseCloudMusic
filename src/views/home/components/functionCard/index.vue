@@ -34,7 +34,8 @@
   height: auto;
   width: 100%;
   background-color: var(--card-background-color);
-  border-radius: 16px;
+  border-radius: 12px;
+  box-shadow: rgb(0 0 0 / 5%) 0px 0px 20px;
 
   &__top {
     display: flex;

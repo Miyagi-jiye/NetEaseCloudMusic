@@ -17,8 +17,8 @@
               @click="routerPush('/songListDetail', { id: item.id })">
               <ImgCard class="content__item__img" :imgUrl="item.coverImgUrl" />
               <div class="content__item__info">
-                <span>{{ item.name }}</span>
-                <span>{{ item.trackCount }}首</span>
+                <span class="nowrap">{{ item.name }}</span>
+                <span class="nowrap">{{ item.trackCount }}首</span>
               </div>
               <div class="content__item__setting">
                 <van-icon name="ellipsis" />
@@ -41,8 +41,8 @@
               @click="routerPush('/songListDetail', { id: item.id })">
               <ImgCard class="content__item__img" :imgUrl="item.coverImgUrl" />
               <div class="content__item__info">
-                <span>{{ item.name }}</span>
-                <span>{{ item.trackCount }}首</span>
+                <span class="nowrap">{{ item.name }}</span>
+                <span class="nowrap">{{ item.trackCount }}首</span>
               </div>
               <div class="content__item__setting">
                 <van-icon name="ellipsis" />
@@ -209,7 +209,7 @@ function routerPush(name, params) {
 <style scoped lang="less">
 :deep(.van-sticky--fixed) {
   background-color: var(--card-background-color) !important;
-  top: 46px !important;
+  top: 45px !important; // 顶部导航栏高度再减1px，解决缝隙问题
   width: 100% !important;
   margin-left: -16px !important;
 }
@@ -237,10 +237,11 @@ function routerPush(name, params) {
     width: 100%;
     height: auto;
     background-color: var(--card-background-color);
-    border-radius: 8px;
     padding: 16px;
     box-sizing: border-box;
     margin-top: 16px;
+    border-radius: 12px;
+    box-shadow: rgb(0 0 0 / 5%) 0px 0px 20px;
   }
 
   .header {
@@ -280,6 +281,7 @@ function routerPush(name, params) {
         flex-direction: column;
         flex: 1;
         gap: 8px;
+        overflow: hidden;
 
         span:nth-child(1) {
           font-size: 14px;

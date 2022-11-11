@@ -96,9 +96,9 @@ i.van-badge__wrapper.van-icon.van-icon-ellipsis {
 }
 
 /* 隐藏进度条圈圈 */
-#nprogress .spinner {
+/* #nprogress .spinner {
   display: none;
-}
+} */
 
 /* .van-tab {
   font-size: 14px !important;

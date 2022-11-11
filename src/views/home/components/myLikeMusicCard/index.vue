@@ -5,8 +5,8 @@
       <ImgCard :imgUrl="config.myLikeMusic[0].coverImgUrl" />
     </div>
     <div class="myLikeMusicCard__center" @click="routerPush('/songListDetail', { id: config.myLikeMusic[0].id })">
-      <div class="myLikeMusicCard__center__title">我喜欢的音乐</div>
-      <div class="myLikeMusicCard__center__count">{{ config.myLikeMusic[0].trackCount }}首</div>
+      <span class="myLikeMusicCard__center__title nowrap">我喜欢的音乐</span>
+      <span class="myLikeMusicCard__center__count nowrap">{{ config.myLikeMusic[0].trackCount }}首</span>
     </div>
     <div class="myLikeMusicCard__right">
       <van-icon name="like-o" size="0.8rem" color="#E60026" />
@@ -54,12 +54,13 @@ function routerPush(name, params) {
   height: auto;
   width: 100%;
   background-color: var(--card-background-color);
-  border-radius: 8px;
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 16px;
   box-sizing: border-box;
+  border-radius: 12px;
+  box-shadow: rgb(0 0 0 / 5%) 0px 0px 20px;
 
   &__left {
     width: 64px;
@@ -108,10 +109,10 @@ function routerPush(name, params) {
 
   &__center {
     display: flex;
-    align-items: flex-start;
     flex-direction: column;
     gap: 8px;
     flex: 1;
+    overflow: hidden;
 
     &__title {
       font-size: 16px;

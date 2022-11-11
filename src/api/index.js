@@ -962,7 +962,7 @@ export async function playlistDetailDynamic(id) {
  * 1. code：状态码
  * 2. data：音乐数据
  */
-export async function songUrlV1(id, level) {
+export async function songUrlV1(id, level = 'standard') {
   const { data } = await request({
     url: `/song/url/v1?id=${id}&level=${level}`,
     method: 'get',
@@ -1619,6 +1619,42 @@ export async function albumNewest() {
   const { data } = await request({
     url: '/album/newest',
     method: 'get',
+  });
+  return data;
+}
+// 获取歌曲详情
+// 说明 : 调用此接口 , 传入音乐 id(支持多个 id, 用 , 隔开), 可获得歌曲详情(dt为歌曲时长)
+// 必选参数 : ids: 音乐 id, 如 ids=347230
+// 接口地址 : /song/detail
+// 调用例子 : /song/detail?ids=347230,/song/detail?ids=347230,347231
+/**
+ * @description 获取歌曲详情
+ * @param {String} ids 音乐id,如ids=347230
+ * @example
+ * 1. code:状态码
+ * 2. songs:数据[{}]
+ * 3. id:歌曲id
+ * 4. name:歌曲名称
+ * 5. ar:歌手[{}]
+ * 6. al:专辑{}
+ * 7. dt:歌曲时长
+ * 8. alia:歌曲别名
+ * 9. picUrl:专辑图片
+ * 10. tns:歌曲翻译名
+ * 11. fee:歌曲是否收费
+ * 12. v:歌曲版本
+ * 13. mv:歌曲mv
+ * 14. cp:歌曲是否有版权
+ * 15. publishTime:歌曲发行时间
+ * 16. privilege:歌曲权限
+ */
+export async function songDetail(ids) {
+  const { data } = await request({
+    url: '/song/detail',
+    method: 'get',
+    params: {
+      ids,
+    },
   });
   return data;
 }

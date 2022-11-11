@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home nowrap">
     <UserInfoCard :config="userData.detail" />
     <FunctionCard />
     <MyLikeMusicCard :config="userData.playlist" />
@@ -12,7 +12,7 @@ import MySonglistCard from './components/mySonglistCard/index.vue'
 import MyLikeMusicCard from './components/myLikeMusicCard/index.vue'
 import UserInfoCard from "./components/userInfoCard/index.vue"
 import FunctionCard from "./components/functionCard/index.vue"
-import { watch } from "vue"
+import { watch, onActivated, onDeactivated } from "vue"
 import { storeToRefs } from "pinia"
 import { useUserStore } from "@/stores/user.js"
 import { useLoginStore } from '@/stores/login.js'
@@ -37,6 +37,13 @@ if (isLogin.value) init()
 watch(isLogin, (val) => {
   if (val) init()
 })
+
+// onActivated(() => {
+//   console.log('activated')
+// })
+// onDeactivated(() => {
+//   console.log('deactivated')
+// })
 </script>
 
 <style scoped lang="less">

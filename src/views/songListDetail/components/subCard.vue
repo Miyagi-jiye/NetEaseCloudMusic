@@ -44,6 +44,7 @@ const props = defineProps({
   background-color: var(--subCard-background-color);
   box-shadow: var(--song-list-box-shadow);
   z-index: 10;
+  overflow: hidden;
 
   .subscribedCount,
   .commentCount,

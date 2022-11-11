@@ -32,10 +32,16 @@ const props = defineProps({
 </script>
 
 <style scoped lang="less">
+:deep(.van-tag) {
+  transform: scale(.8);
+  transform-origin: left center;
+  font-weight: bold;
+}
+
 .Tags {
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
-  gap: 4px;
+  // gap: 4px;
 }
 </style>

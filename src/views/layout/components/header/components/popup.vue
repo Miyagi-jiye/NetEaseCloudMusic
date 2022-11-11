@@ -104,7 +104,7 @@
       </div>
     </div>
     <div class="footer">
-      <span class="button" @click="show = !show">关闭云音乐</span>
+      <span class="button" @click="show = !show">退出登录/关闭</span>
       <Teleport to="body">
         <van-action-sheet v-model:show="show" :actions="actions" cancel-text="取消" description="退出登录/关闭"
           close-on-click-action />
@@ -197,7 +197,7 @@ function settingItemClick(e) {
     padding: 16px;
     // 粘性定位
     position: sticky;
-    top: 0;
+    top: -1px; // 解决粘性定位缝隙问题
     z-index: 2;
     background-color: var(--van-search-content-background);
 
@@ -308,6 +308,7 @@ function settingItemClick(e) {
       box-sizing: border-box;
       background: var(--van-cell-group-background);
       cursor: pointer;
+      // border: 1px solid;
 
       &:hover,
       &:active {

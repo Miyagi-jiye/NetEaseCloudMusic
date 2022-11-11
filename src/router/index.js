@@ -2,6 +2,8 @@ import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
+NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false });// 进度条配置
+
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
@@ -15,7 +17,11 @@ const router = createRouter({
         {
           path: '/discover',
           name: 'discover',
-          component: () => import('@/views/discover/index.vue')
+          component: () => import('@/views/discover/index.vue'),
+          meta: {
+            title: '发现页',
+            keepAlive: true
+          }
         },
         {
           path: '/follow',
@@ -25,7 +31,11 @@ const router = createRouter({
         {
           path: '/home',
           name: 'home',
-          component: () => import('@/views/home/index.vue')
+          component: () => import('@/views/home/index.vue'),
+          meta: {
+            title: '首页',
+            keepAlive: true
+          }
         },
         {
           path: '/songListDetail',//vue-router 4.0,name+params形式传参需要添加冒号声明参数
