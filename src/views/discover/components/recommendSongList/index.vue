@@ -15,10 +15,6 @@ const { songlist } = storeToRefs(useDiscoverStore())
 const { getpersonalized } = useDiscoverStore()
 
 await getpersonalized()
-
-// const props = defineProps({
-//   songlist: Array
-// })
 </script>
 
 <style scoped lang="less">

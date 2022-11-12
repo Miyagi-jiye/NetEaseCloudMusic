@@ -42,10 +42,8 @@ const props = defineProps({
 })
 
 //跳转到歌单详情
-function routerPush(name, params) {
-  console.log('跳转', name, params)
-  // router.push({ name, params })
-  router.push({ path: name, query: params })
+function routerPush(path, query) {
+  router.push({ path, query })
 }
 </script>
 

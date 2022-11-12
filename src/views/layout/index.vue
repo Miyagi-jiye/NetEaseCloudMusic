@@ -14,16 +14,18 @@ import Header from '@/views//layout/components/header/index.vue'
 import Footer from "@/views//layout/components/footer/index.vue"
 import { useHideHeaderFooter } from "@/hooks/index.js"
 import { useAudioStore } from "@/stores/Audio.js"
-import { onBeforeUpdate, onUpdated } from "vue";// #backTop 滚动条回到顶部
+import { watch } from "vue";// #backTop 滚动条回到顶部
+import { useRoute } from "vue-router"
 
+const route = useRoute()
 const { audioData } = useAudioStore()
 // 判断是否隐藏头部和底部
 const isHide = useHideHeaderFooter()
 
-// 数据更新时执行，用于切换页面滚动条自动回到顶部
-onUpdated(() => {
+// 监听路由更新，切换页面滚动条自动回到顶部
+watch(route, () => {
   document.getElementById('backTop').scrollTop = 0
-});
+})
 </script>
 
 <style scoped lang="less">

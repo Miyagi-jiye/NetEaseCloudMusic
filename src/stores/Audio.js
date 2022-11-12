@@ -36,9 +36,9 @@ export const useAudioStore = defineStore(
     async function getSongUrl(id, level) {
       const res = await songUrlV1(id, level)
       audioData.url = res.data[0].url
-      audioData.id = id
+      audioData.id = res.data[0].id
       audioData.level = level
-      getSongDetail(id)// 获取歌曲详情
+      getSongDetail(res.data[0].id)// 获取歌曲详情
       console.log("新版歌曲url", res)
     }
     // 获取歌曲详情
@@ -57,10 +57,15 @@ export const useAudioStore = defineStore(
         console.log("播放列表已存在该歌曲", audioData.songs)
       }
     }
+    // 改变当前播放歌曲
+    function changeCurrentSong(song) {
+      audioData.song = song
+    }
 
     return {
       audio,
       audioData,
+      changeCurrentSong,
       getSongUrl,
     }
   },

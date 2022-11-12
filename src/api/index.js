@@ -1658,3 +1658,29 @@ export async function songDetail(ids) {
   });
   return data;
 }
+// 获取专辑内容
+// 说明 : 调用此接口 , 传入专辑 id, 可获得专辑内容
+// 必选参数 : id: 专辑 id
+// 接口地址 : /album
+// 调用例子 : /album?id=32311
+/**
+ * @description 获取专辑内容
+ * @param {String} id 专辑id
+ * @example
+ * 1. code:状态码
+ * 2. songs:数据[{}]
+ * 3. id:歌曲id
+ * 4. name:歌曲名称
+ * 5. ar:歌手[{}]
+ * 6. al:专辑{}
+ */
+export async function album(id) {
+  const { data } = await request({
+    url: '/album',
+    method: 'get',
+    params: {
+      id,
+    },
+  });
+  return data;
+}

@@ -8,7 +8,7 @@
         <span>{{ config.trackCount }}</span>
         <span>首</span>
       </div>
-      <div class="mask"></div>
+      <div class="mask" @click="routerPush('/songListDetail', { id: config.songListId })"></div>
       <div class="playCount">
         <van-icon name="play" size="0.6rem" />{{ filterPlayCount(config.playCount) }}
       </div>
@@ -21,7 +21,9 @@
 import { filterPlayCount } from '@/utils/useFilter.js'// 过滤播放量
 import wyyIcon from "@/assets/icons/mipush_small_notification.png"// 网易云图标
 import filledPlayIcon from "@/assets/icons/icon-play-square.png"// 播放图标(实心)
+import { useRouter } from "vue-router"
 
+const router = useRouter()//路由
 const props = defineProps({
   config: {
     // 歌单id
@@ -36,6 +38,11 @@ const props = defineProps({
     trackCount: Number,
   }
 })
+
+//跳转到歌单详情
+function routerPush(path, query) {
+  router.push({ path, query })
+}
 </script>
 
 <style scoped lang="less">
@@ -116,6 +123,7 @@ const props = defineProps({
       color: #fff;
       background: #ffffff24;
       border-radius: 50%;
+      cursor: pointer;
     }
 
     .playCount {

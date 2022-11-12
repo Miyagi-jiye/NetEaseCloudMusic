@@ -30,7 +30,7 @@
             </div>
             <div>
               <Description class="description" :desc="songListDetail.playlist.description"
-                v-if="songListDetail.playlist.description" :end="50" />
+                v-if="songListDetail.playlist.description" :end="24" />
             </div>
           </div>
         </div>

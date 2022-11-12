@@ -40,7 +40,7 @@ request.interceptors.response.use(
   function (error) {
     // 超出 2xx 范围的状态码都会触发该函数。
     // 对响应错误做点什么
-    const { isLogin, cookie } = storeToRefs(useLoginStore())//登录状态
+    // const { isLogin, cookie } = storeToRefs(useLoginStore())//登录状态
 
 
     // 1. 匹配常见错误，错误提示
@@ -49,7 +49,7 @@ request.interceptors.response.use(
         showNotify({ type: 'danger', message: error.response.data.message ?? error.response.data.msg ?? "请求参数错误" });
         break;
       case 401:
-        showNotify({ type: 'danger', message: error.response.data.message ?? error.response.data.msg ?? "登录过期，请重新登录" });
+        showNotify({ type: 'danger', message: error.response.data.message ?? error.response.data.msg ?? "无访问权限" });
         break;
       case 403:
         showNotify({ type: 'danger', message: error.response.data.message ?? error.response.data.msg ?? "拒绝访问" });

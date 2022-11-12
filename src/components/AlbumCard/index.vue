@@ -1,5 +1,5 @@
 <template>
-  <div class="AlbunCard">
+  <div class="AlbunCard" @click="routerPush('/songListDetail', { id: config.albumId })">
     <div class="image">
       <img class="cover" v-lazy="config.imageUrl + '?param=200y200'" alt="专辑封面" />
       <img class="disc" :src="disc" alt="唱片">
@@ -27,7 +27,9 @@
 <script setup>
 import disc from "@/assets/icons/crc.png"
 import { formatDate } from '@/utils/useFilter.js'
+import { useRouter } from "vue-router"
 
+const router = useRouter()//路由
 const props = defineProps({
   config: {
     // 专辑id
@@ -44,6 +46,10 @@ const props = defineProps({
     publishTime: Number,
   },
 })
+//跳转到歌单详情
+function routerPush(path, query) {
+  router.push({ path, query })
+}
 </script>
 
 <style scoped lang="less">

@@ -86,6 +86,7 @@ i.van-badge__wrapper.van-icon.van-icon-ellipsis {
   transform: rotate(90deg);
 }
 
+/* 全局图标小手 */
 .van-icon {
   cursor: pointer;
 }
@@ -93,6 +94,11 @@ i.van-badge__wrapper.van-icon.van-icon-ellipsis {
 /* 空心tag背景透明 */
 .van-tag--plain {
   background: transparent !important;
+}
+
+/* svg图标默认小手 */
+svg.icon {
+  cursor: pointer;
 }
 
 /* 隐藏进度条圈圈 */
