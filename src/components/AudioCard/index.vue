@@ -1,28 +1,28 @@
 <template>
   <div class="Audio">
     <div class="left">
-      <div class="play">
+      <div class="play" :style="{ animationPlayState: audioData.isPlay ? 'running' : 'paused' }">
         <img :src="disc" alt="唱片" class="discImg">
-        <img :src="audioData.song.al.picUrl" alt="图片" class="songImg">
+        <img v-lazy="audioData.song.al.picUrl + '?param=50y50'" alt="图片" class="songImg">
       </div>
     </div>
     <div class="center nowrap">
       {{ audioData.song.name }}<span class="alia" v-if="audioData.song.alia[0]">（{{ audioData.song.alia[0] }}）</span>
     </div>
     <div class="right">
-      <!-- 暂停 -->
-      <svg v-if="audioData.isPlay == false" t="1668172936808" class="icon" viewBox="0 0 1024 1024" version="1.1"
-        xmlns="http://www.w3.org/2000/svg" p-id="5876" width="20" height="20" @click="play">
-        <path
-          d="M870.2 466.333333l-618.666667-373.28a53.333333 53.333333 0 0 0-80.866666 45.666667v746.56a53.206667 53.206667 0 0 0 80.886666 45.666667l618.666667-373.28a53.333333 53.333333 0 0 0 0-91.333334z"
-          fill="var(--font-color-5)" p-id="5877"></path>
-      </svg>
-      <!-- 播放 -->
-      <svg v-else t="1668173002562" class="icon" viewBox="0 0 1024 1024" version="1.1"
-        xmlns="http://www.w3.org/2000/svg" p-id="6132" width="20" height="20" @click="play">
+      <!-- 播放中 -->
+      <svg v-if="audioData.isPlay" t="1668173002562" class="icon" viewBox="0 0 1024 1024" version="1.1"
+        xmlns="http://www.w3.org/2000/svg" p-id="6132" width="20" height="20" @click="play(false)">
         <path
           d="M426.666667 138.666667v746.666666a53.393333 53.393333 0 0 1-53.333334 53.333334H266.666667a53.393333 53.393333 0 0 1-53.333334-53.333334V138.666667a53.393333 53.393333 0 0 1 53.333334-53.333334h106.666666a53.393333 53.393333 0 0 1 53.333334 53.333334z m330.666666-53.333334H650.666667a53.393333 53.393333 0 0 0-53.333334 53.333334v746.666666a53.393333 53.393333 0 0 0 53.333334 53.333334h106.666666a53.393333 53.393333 0 0 0 53.333334-53.333334V138.666667a53.393333 53.393333 0 0 0-53.333334-53.333334z"
           fill="var(--font-color-5)" p-id="6133"></path>
+      </svg>
+      <!-- 暂停 -->
+      <svg v-else t="1668172936808" class="icon" viewBox="0 0 1024 1024" version="1.1"
+        xmlns="http://www.w3.org/2000/svg" p-id="5876" width="20" height="20" @click="play(true)">
+        <path
+          d="M870.2 466.333333l-618.666667-373.28a53.333333 53.333333 0 0 0-80.866666 45.666667v746.56a53.206667 53.206667 0 0 0 80.886666 45.666667l618.666667-373.28a53.333333 53.333333 0 0 0 0-91.333334z"
+          fill="var(--font-color-5)" p-id="5877"></path>
       </svg>
       <!-- 播放列表图标 -->
       <PlayListIcon :size="21" />
@@ -33,29 +33,9 @@
 <script setup>
 import PlayListIcon from "@/components/PlayListIcon/index.vue"
 import disc from "@/assets/icons/ewj.png";// 唱片
-import { onMounted } from 'vue';
 import { useAudioStore } from '@/stores/Audio.js';
 
-const { audioData } = useAudioStore();
-
-// 点击播放
-function play() {
-  audioData.isPlay = !audioData.isPlay;
-  isAnimation();
-}
-
-// 判断是否播放动画
-function isAnimation() {
-  if (audioData.isPlay) {
-    document.querySelector('.play').style.animationPlayState = 'running';
-  } else {
-    document.querySelector('.play').style.animationPlayState = 'paused';
-  }
-}
-
-onMounted(() => {
-  isAnimation();
-});
+const { audioData, play } = useAudioStore();
 </script>
 
 <style scoped lang="less">

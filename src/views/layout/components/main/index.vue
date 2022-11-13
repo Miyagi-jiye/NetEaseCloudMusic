@@ -3,18 +3,22 @@
     <!-- <router-view /> -->
     <RouterView v-slot="{ Component, route }">
       <template v-if="Component">
-        <Transition>
-          <KeepAlive :exclude="['home']">
-            <Suspense>
-              <component :is="Component"></component>
-              <template #fallback>
-                <DiscoverSkeleton v-if="route.name == 'discover'" />
-                <SongListDetailSkeleton v-else-if="route.name == 'songListDetail'" />
-                <div v-else>没有骨架屏====>{{ route.name }}</div>
-              </template>
-            </Suspense>
-          </KeepAlive>
-        </Transition>
+        <!-- <Transition name="slide-fade"> -->
+        <KeepAlive :exclude="['home']">
+          <Suspense timeout="git0">
+            <template #default>
+              <!-- <Transition name="slide-fade"> -->
+              <component :is="Component" :key="route.path"></component>
+              <!-- </Transition> -->
+            </template>
+            <template #fallback>
+              <DiscoverSkeleton v-if="route.name == 'discover'" />
+              <SongListDetailSkeleton v-else-if="route.name == 'songListDetail'" />
+              <div v-else>没有骨架屏====>{{ route.name }}</div>
+            </template>
+          </Suspense>
+        </KeepAlive>
+        <!-- </Transition> -->
       </template>
     </RouterView>
   </div>
@@ -26,13 +30,19 @@ import SongListDetailSkeleton from "./skeleton/songListDetail.vue";// 歌单详�
 </script>
 
 <style scoped lang="less">
-// 定义过渡动画
-.bounce-enter-active {
-  animation: bounce-in 0.5s;
+// 底部淡出动画
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
 }
 
-.bounce-leave-active {
-  animation: bounce-in 0.5s reverse;
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(500px);
+  opacity: 0;
 }
 
 @keyframes bounce-in {

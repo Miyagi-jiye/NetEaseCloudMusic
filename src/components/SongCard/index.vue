@@ -1,5 +1,5 @@
 <template>
-  <div class="SongCard" @click="getSongUrl(config.songId)">
+  <div class="SongCard" @click="playSong(config.songId)">
     <div class="SongCard__image">
       <img v-lazy="config.imageUrl + '?param=200y200'" alt="歌曲封面" class="cover" />
     </div>
@@ -31,7 +31,7 @@ import MVIcon from '@/components/MVIcon/index.vue'// MV图标组件
 import { formatDuration } from '@/utils/useFilter.js'
 import { useAudioStore } from '@/stores/Audio.js';
 
-const { getSongUrl, audioData } = useAudioStore()
+const { playSong, audioData } = useAudioStore()
 const props = defineProps({
   config: {
     // 歌曲id

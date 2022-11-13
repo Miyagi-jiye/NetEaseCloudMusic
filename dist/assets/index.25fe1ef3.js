@@ -1,1 +1,0 @@
-import{_ as a,L as o,v as _,x as t,f as c,z as n,A as s}from"./index.a60276eb.js";const d={},r={class:"loadingPage"};function i(f,l){const e=o;return _(),t("div",r,[c(e,{color:"#0094ff",vertical:""},{default:n(()=>[s("\u52A0\u8F7D\u4E2D...")]),_:1})])}const x=a(d,[["render",i],["__scopeId","data-v-851d64bf"]]);export{x as L};

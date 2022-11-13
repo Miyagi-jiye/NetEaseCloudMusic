@@ -22,16 +22,17 @@
             <span>列表循环</span>
           </div>
           <div class="right">
-            <van-icon name="down" />
-            <van-icon name="add-o" />
-            <van-icon name="delete-o" />
+            <van-icon name="down" title="全部下载" />
+            <van-icon name="add-o" title="收藏到歌单" />
+            <van-icon name="delete-o" title="清空播放列表" @click="clearPlayList" />
           </div>
         </div>
         <!-- 分割线 -->
         <div class="line"></div>
         <!-- 播放列表 -->
         <div class="playlist">
-          <div class="playlist__item" v-for="item in audioData.songs" :key="item.id" @click="changeCurrentSong(item)">
+          <div class="playlist__item" v-for="item in audioData.songs" :key="item.id"
+            @click="changeCurrentSong(item.id)">
             <!-- 左 -->
             <div class="left" :class="{ active: item.id == audioData.song.id }">
               <PlayingIcon :size="18" v-if="item.id == audioData.song.id" />
@@ -44,8 +45,7 @@
             <!-- 右 -->
             <div class="right">
               <div class="source">来源</div>
-              <van-icon name="cross" />
-              <!-- <van-icon name="close" /> -->
+              <van-icon name="cross" class="delete" title="移除" @click.stop="removeSongFromPlayList(item.id)" />
             </div>
           </div>
         </div>
@@ -59,7 +59,7 @@ import PlayingIcon from "@/components/PlayingIcon/index.vue"
 import { ref } from 'vue';
 import { useAudioStore } from '@/stores/Audio.js';
 
-const { audioData, changeCurrentSong } = useAudioStore();
+const { audioData, changeCurrentSong, removeSongFromPlayList, clearPlayList } = useAudioStore();
 const show = ref(false);
 const props = defineProps({
   color: {
@@ -132,6 +132,8 @@ const props = defineProps({
     .playlist {
       display: flex;
       flex-direction: column;
+      overflow-y: scroll;
+      margin-bottom: 16px;
 
       .active {
         color: #f9343d;
@@ -199,6 +201,10 @@ const props = defineProps({
             &:hover {
               background-color: var(--font-color-3);
             }
+          }
+
+          .delete:hover {
+            color: red;
           }
         }
       }

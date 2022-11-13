@@ -4,7 +4,7 @@
       :style="{ backgroundImage: 'url(' + songListDetail.playlist.coverImgUrl + '?param=10y10)' }">
       <div class="filter">
         <div class="songListDetail__header" ref="header">
-          <van-icon name="arrow-left" size='23' class="left" @click="$router.back()" />
+          <van-icon name="arrow-left" size='23' class="left" @click="router.back()" />
           <div class="right">
             <span>歌单</span>
             <div class="right__right">
@@ -41,7 +41,7 @@
             <div class="left">
               <van-icon name="play-circle-o" size="25" color="red" />
               <span>播放全部</span>
-              <span>(1)</span>
+              <span>({{ songListDetail.playlist.tracks.length }})</span>
             </div>
             <div class="right">
               <van-icon name="music-o" size="20" />
@@ -49,19 +49,10 @@
               <van-icon name="wap-nav" size="20" />
             </div>
           </div>
-          <Suspense>
-            <template #default>
-              <!-- 歌曲列表（可采取虚拟化列表） -->
-              <div class="songList">
-                <SongListItem v-for="(item, index) in songListDetail.playlist.tracks" :config="item" :index="index" />
-              </div>
-            </template>
-            <template #fallback>
-              <div>
-                <LoadingPage />
-              </div>
-            </template>
-          </Suspense>
+          <!-- 歌曲列表（可采取虚拟化列表） -->
+          <div class="songList">
+            <SongListItem v-for="(item, index) in songListDetail.playlist.tracks" :config="item" :index="index" />
+          </div>
         </div>
       </div>
     </div>
@@ -69,17 +60,19 @@
 </template>
 
 <script setup>
-// import SongListItem from "@/components/SongListItem/index.vue"// 歌曲列表项
+import SongListDetailSkeleton from "@/views/layout/components/main/skeleton/songListDetail.vue"// 歌单详情页骨架屏
+import SongListItem from "@/components/SongListItem/index.vue"// 歌曲列表项
 import LoadingPage from '@/components/LoadingPage/index.vue'// 加载中 
 import Description from './components/description.vue'// 描述组件
 import ImgCard from '@/components/imgCard/index.vue'// 引入图片组件
 import SubCard from './components/subCard.vue'// 引入收藏，评论，分享组件
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useSongListDetailStore } from '@/stores/songListDetail.js'
 import { watch, defineAsyncComponent } from 'vue'
 
-const SongListItem = defineAsyncComponent(() => import('@/components/SongListItem/index.vue'))// 异步组件歌曲列表项
+// const SongListItem = defineAsyncComponent(() => import('@/components/SongListItem/index.vue'))// 异步组件歌曲列表项
 const route = useRoute();
+const router = useRouter();
 const { songListDetail, getPlaylistDetail } = useSongListDetailStore();
 
 // 初始化执行一次,等待数据返回
@@ -110,6 +103,7 @@ watch(() => route.query.id, (newId) => {
     background-repeat: no-repeat;
     height: 100%;
     width: 100%;
+    transition: all .3s; // 过渡动画
   }
 
   .filter {

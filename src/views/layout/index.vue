@@ -1,9 +1,18 @@
 <template>
   <div class="layout">
+    <!-- <Transition name="slide-fade-up" appear> -->
     <Header v-if="isHide == false" />
+    <!-- </Transition> -->
+
     <Main id="backTop" />
-    <AudioCard v-if="audioData.songs.length > 0" />
-    <Footer v-if="isHide == false" />
+
+    <Transition name="slide-fade" appear>
+      <AudioCard v-if="audioData.songs.length > 0" />
+    </Transition>
+
+    <Transition name="slide-fade" appear>
+      <Footer v-if="isHide == false" />
+    </Transition>
   </div>
 </template>
 
@@ -26,9 +35,43 @@ const isHide = useHideHeaderFooter()
 watch(route, () => {
   document.getElementById('backTop').scrollTop = 0
 })
+// 监听浏览器页面刷新，如果刷新就让播放状态为false
+window.onbeforeunload = () => {
+  audioData.isPlay = false
+}
 </script>
 
 <style scoped lang="less">
+// 底部淡出动画
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(50px);
+  opacity: 0;
+}
+
+// 头部淡出动画
+.slide-fade-up-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-up-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-up-enter-from,
+.slide-fade-up-leave-to {
+  transform: translateY(-50px);
+  opacity: 1;
+}
+
 .layout {
   display: flex;
   flex-direction: column;

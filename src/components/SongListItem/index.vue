@@ -1,7 +1,8 @@
 <template>
   <!-- 可抽离复用于搜索 -->
-  <div class="SongListItem" @click="getSongUrl(config.id)">
-    <span class="left">{{ index + 1 }}</span>
+  <div class="SongListItem" @click="playSong(config.id)">
+    <PlayingIcon class="left" v-if="audioData.song.id == config.id" />
+    <span class="left" v-else>{{ index + 1 }}</span>
     <div class="center ">
       <div class="top" :class="{ active: audioData.song.id == config.id }">
         {{ config.name }}<span v-for="alia in config.alia">({{ alia }})</span>
@@ -22,9 +23,10 @@
 <script setup>
 import Tags from '@/components/tags/index.vue'// 引入标签组件
 import MVIcon from '@/components/MVIcon/index.vue'// MV图标组件
+import PlayingIcon from '@/components/PlayingIcon/index.vue'// 播放图标组件
 import { useAudioStore } from '@/stores/Audio.js';
 
-const { getSongUrl, audioData } = useAudioStore()
+const { audioData, playSong } = useAudioStore()
 const props = defineProps({
   config: Object,// 歌曲信息
   index: Number// 歌曲序号
