@@ -2,18 +2,24 @@
   <div class="header">
     <van-nav-bar>
       <template #left>
-        <van-icon name="wap-nav" size="24" @click="wapNavClick" />
+        <van-icon name="wap-nav" size="24" @click="menuClick" />
       </template>
       <template #title>
-        <van-search v-model="searchKey" placeholder="请输入搜索关键词" input-align="center" shape="round" />
+        <van-search v-model="searchKey" disabled placeholder="请输入搜索关键词" input-align="center" shape="round"
+          @click.stop="routerPush('/search')" />
       </template>
       <template #right>
         <van-icon name="setting" size="24" @click="settingClick" />
       </template>
     </van-nav-bar>
-    <van-popup v-model:show="show" position="left" :style="{ height: '100%', width: '80vw' }">
+    <van-popup v-model:show="leftShow" teleport="body" position="left" :style="{ height: '100%', width: '80vw' }">
       <slot name="default">
-        <Popup />
+        <MenuPopup />
+      </slot>
+    </van-popup>
+    <van-popup v-model:show="rightShow" teleport="body" position="right" :style="{ height: '100%', width: '80vw' }">
+      <slot name="default">
+        <SearchPopup />
       </slot>
     </van-popup>
   </div>
@@ -21,17 +27,36 @@
 
 <script setup>
 import { ref, inject } from "vue"
-import Popup from "./components/popup.vue"
+import SearchPopup from "./components/searchPopup.vue";
+import MenuPopup from "./components/menuPopup.vue"
+import { useRouter } from "vue-router"
 
+const router = useRouter()
 const searchKey = ref('')
-const show = ref(false)//popup显示状态
+const leftShow = ref(false)// 左边popup显示状态
+const rightShow = ref(false)// 右边popup显示状态
 const theme = inject('theme')// 获取根节点组件传递的值
 
+// 点击设置黑夜按钮
 function settingClick() {
   theme.value = theme.value === 'light' ? 'dark' : 'light'
 }
-function wapNavClick() {
-  show.value = !show.value
+// 左边菜单点击事件
+function menuClick() {
+  leftShow.value = !leftShow.value
+}
+// 点击搜索按钮
+function searchClick() {
+  rightShow.value = !rightShow.value
+}
+// 输入框清空事件
+function inputClear() {
+  searchKey.value = ''
+}
+// 跳转到搜索页面
+function routerPush(path, query) {
+  console.log('跳转到搜索页面', path, query)
+  router.push({ path, query })
 }
 </script>
 

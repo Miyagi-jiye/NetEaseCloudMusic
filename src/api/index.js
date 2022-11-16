@@ -1013,13 +1013,13 @@ export async function checkMusic(id, br) {
  * 1. code：状态码
  * 2. result：搜索结果
  */
-export async function search(keywords, { limit = 30, offset = 1, type = 1 }) {
+export async function search(keywords, { limit, offset, type }) {
   const { data } = await request({
     url: `/search?keywords=${keywords}`,
     method: 'get',
     params: {
       limit,
-      offset,
+      offset: (offset - 1) * limit,
       type,
     },
   });
@@ -1681,6 +1681,40 @@ export async function album(id) {
     params: {
       id,
     },
+  });
+  return data;
+}
+// 热搜列表(简略)
+// 说明 : 调用此接口,可获取热门搜索列表
+// 接口地址 : /search/hot
+// 调用例子 : /search/hot
+/**
+ * @description 热搜列表(简略)
+ * @example
+ * 1. code:状态码
+ * 2. result:数据[{}]
+ */
+export async function searchHot() {
+  const { data } = await request({
+    url: '/search/hot',
+    method: 'get',
+  });
+  return data;
+}
+// 热搜列表(详细)
+// 说明 : 调用此接口,可获取热门搜索列表
+// 接口地址 : /search/hot/detail
+// 调用例子 : /search/hot/detail
+/**
+ * @description 热搜列表(详细)
+ * @example
+ * 1. code:状态码
+ * 2. result:数据[{}]
+ */
+export async function searchHotDetail() {
+  const { data } = await request({
+    url: '/search/hot/detail',
+    method: 'get',
   });
   return data;
 }

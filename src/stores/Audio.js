@@ -103,6 +103,14 @@ export const useAudioStore = defineStore(
         console.log("❌重复添加", audioData.songs)
       }
     }
+    // 将待播放列表切换为歌单列表，并从第一首开始播放（参数是：歌单列表[{}]）
+    async function addAllToPlayList(songs) {
+      audioData.songs = songs// 设置播放列表
+      audioData.song = songs[0]// 设置当前播放歌曲
+      await getSongUrl(songs[0].id)// 获取歌曲url
+      play(true)// 播放
+      console.log("✅歌单播放成功", audioData.songs)
+    }
     // 从播放列表移除
     function removeSongFromPlayList(id) {
       // 移除指定id的歌曲
@@ -172,20 +180,26 @@ export const useAudioStore = defineStore(
             audioData.isPlay = false// 播放失败
             return showNotify({ type: 'danger', message: '播放失败' })
           })
+          // 播放结束，播放下一首
+          audio.onended = () => {
+            playNextSong()
+            console.log("🎵播放结束")
+          }
         } else {
           audioData.isPlay = false// 播放失败
           showNotify({ type: 'danger', message: 'url不存在' })
         }
-        console.log("播放")
+        console.log("▶播放")
       } else {
         audio.pause()
-        console.log("暂停")
+        console.log("⏸暂停")
       }
     }
 
     return {
       audio,
       audioData,
+      addAllToPlayList,
       clearPlayList,
       removeSongFromPlayList,
       changeCurrentSong,

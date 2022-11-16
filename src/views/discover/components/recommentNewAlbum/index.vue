@@ -67,12 +67,6 @@ const newAlbumSlice = computed(() => {
     object-fit: cover;
   }
 
-  @media (min-width: 600px) {
-    .swiper-slide {
-      width: 50% !important;
-    }
-  }
-
   .swiper-slide {
     width: 90%;
   }

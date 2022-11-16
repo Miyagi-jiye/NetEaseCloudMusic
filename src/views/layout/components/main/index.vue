@@ -5,7 +5,7 @@
       <template v-if="Component">
         <!-- <Transition name="slide-fade"> -->
         <KeepAlive :exclude="['home']">
-          <Suspense timeout="git0">
+          <Suspense timeout="0">
             <template #default>
               <!-- <Transition name="slide-fade"> -->
               <component :is="Component" :key="route.path"></component>

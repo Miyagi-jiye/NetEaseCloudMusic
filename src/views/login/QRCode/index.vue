@@ -60,7 +60,7 @@ function polling() {
         console.log("登录成功")
         clearInterval(timer)// 清除定时器
         isLogin.value = true//改变登录状态
-        showNotify({ type: 'danger', message: '登录成功' });
+        showNotify({ type: 'success', message: '登录成功' });
         // 跳转到首页
         router.push({ name: 'home' })
         break;

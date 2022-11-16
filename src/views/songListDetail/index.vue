@@ -39,7 +39,8 @@
           <!-- 操作栏（可抽离） -->
           <div class="functionCard">
             <div class="left">
-              <van-icon name="play-circle-o" size="25" color="red" />
+              <van-icon name="play-circle-o" size="25" color="red"
+                @click="addAllToPlayList(songListDetail.playlist.tracks)" />
               <span>播放全部</span>
               <span>({{ songListDetail.playlist.tracks.length }})</span>
             </div>
@@ -68,11 +69,13 @@ import ImgCard from '@/components/imgCard/index.vue'// 引入图片组件
 import SubCard from './components/subCard.vue'// 引入收藏，评论，分享组件
 import { useRoute, useRouter } from 'vue-router'
 import { useSongListDetailStore } from '@/stores/songListDetail.js'
+import { useAudioStore } from "@/stores/Audio.js"
 import { watch, defineAsyncComponent } from 'vue'
 
 // const SongListItem = defineAsyncComponent(() => import('@/components/SongListItem/index.vue'))// 异步组件歌曲列表项
 const route = useRoute();
 const router = useRouter();
+const { addAllToPlayList } = useAudioStore();
 const { songListDetail, getPlaylistDetail } = useSongListDetailStore();
 
 // 初始化执行一次,等待数据返回

@@ -7,7 +7,7 @@ NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false });// 进�
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
-    // 主页
+    // 主页(需要头部和底部的页面)
     {
       path: '/',
       name: 'layout',
@@ -37,11 +37,18 @@ const router = createRouter({
             keepAlive: true
           }
         },
+        // 歌单详情
         {
           path: '/songListDetail',//vue-router 4.0,name+params形式传参需要添加冒号声明参数
           name: 'songListDetail',
           component: () => import('@/views/songListDetail/index.vue')
         },
+        // 搜索
+        {
+          path: '/search',
+          name: 'search',
+          component: () => import('@/views/search/index.vue'),
+        }
       ]
     },
     // 登录页

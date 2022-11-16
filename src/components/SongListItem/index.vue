@@ -1,5 +1,5 @@
 <template>
-  <!-- 可抽离复用于搜索 -->
+  <!-- 歌单列表项 -->
   <div class="SongListItem" @click="playSong(config.id)">
     <PlayingIcon class="left" v-if="audioData.song.id == config.id" />
     <span class="left" v-else>{{ index + 1 }}</span>
