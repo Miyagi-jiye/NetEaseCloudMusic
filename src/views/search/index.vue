@@ -1,11 +1,11 @@
 <template>
-  <div class="search">
-    <div class="top nowrap">
+  <div class="search nowrap">
+    <div class="top">
       <div class="top__search">
         <van-icon name="arrow-left" size="22" @click="backClick" />
         <van-search v-model="searchData.keyword" placeholder="请输入搜索关键词" input-align="center" shape='round'
           :clearable="false" @keydown.enter.stop="searchClick" />
-        <span @click="searchClick">搜索</span>
+        <span class="searchBtn" @click="searchClick">搜索</span>
       </div>
       <div class="top__function" v-show="showCard == false">
         <div class="top__function__item">
@@ -30,28 +30,28 @@
       </div>
     </div>
     <!-- 搜索结果 -->
-    <div class="searchResult" v-show="showCard == true">
-      <van-tabs v-model:active="searchData.searchParams.type" swipeable sticky offset-top="46px" line-width="30px"
-        class="searchResult__top">
-        <van-tab title="单曲" name="1">
+    <div class="searchResult" v-if="showCard == true">
+      <van-tabs v-model:active="searchData.searchParams.type" line-width="30px" class="searchResult__top">
+        <van-tab title="单曲" :name="1">
           <div class="searchResult__songs">
             <SongListItem v-for="(item, index) in searchData.searchResult.songs" :key="item.id" :config="item"
-              :index="index" />
+              :index="index" :keyword="searchData.keyword" />
           </div>
         </van-tab>
-        <van-tab title="专辑" name="10">
+        <van-tab title="专辑" :name="10">
           <div class="searchResult__albums">
-            <AlbumListItem v-for="(item, index) in searchData.searchResult.albums" :key="item.id" :config="item" />
+            <AlbumListItem v-for="(item, index) in searchData.searchResult.albums" :key="item.id" :config="item"
+              :keyword="searchData.keyword" />
           </div>
         </van-tab>
-        <van-tab title="歌手" name="100">歌手</van-tab>
-        <van-tab title="歌单" name="1000">歌单</van-tab>
-        <van-tab title="用户" name="1002">用户</van-tab>
-        <van-tab title="MV" name="1004">MV</van-tab>
+        <van-tab title="歌手" :name="100">歌手</van-tab>
+        <van-tab title="歌单" :name="1000">歌单</van-tab>
+        <van-tab title="用户" :name="1002">用户</van-tab>
+        <van-tab title="MV" :name="1004">MV</van-tab>
       </van-tabs>
     </div>
     <!-- 热搜和搜索历史 -->
-    <div class="content" v-show="showCard == false">
+    <div class="content" v-else="showCard == false">
       <!-- 搜索历史记录 -->
       <div v-if="searchData.historyList.length > 0" class="content__searchHistory">
         <div class="content__searchHistory__title">
@@ -147,7 +147,16 @@ watch(
   bottom: 22px;
 }
 
+:deep(.van-tabs__wrap) {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
 .search {
+  height: 100%;
+  width: 100%;
+  // overflow-y: scroll;
   display: flex;
   flex-direction: column;
 
@@ -173,6 +182,10 @@ watch(
       background: var(--van-search-background);
       padding: 0 16px;
       box-sizing: border-box;
+
+      .searchBtn {
+        cursor: pointer;
+      }
     }
 
     // 功能
@@ -204,6 +217,8 @@ watch(
     display: flex;
     flex-direction: column;
     color: var(--font-color-5);
+    flex: 1;
+    overflow-y: scroll;
 
     // 搜索历史记录
     &__searchHistory {
@@ -233,6 +248,7 @@ watch(
           font-size: 12px;
           padding: 4px 4px;
           color: var(--font-color-4);
+          cursor: pointer;
         }
       }
     }
@@ -313,6 +329,8 @@ watch(
     display: flex;
     flex-direction: column;
     color: var(--font-color-5);
+    flex: 1;
+    overflow-y: scroll;
 
     &__songs {
       display: flex;

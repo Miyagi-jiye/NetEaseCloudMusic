@@ -95,7 +95,9 @@ watch(() => route.query.id, (newId) => {
 }
 
 .songListDetail {
-  min-height: 100%;
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   white-space: nowrap;
@@ -204,8 +206,6 @@ watch(() => route.query.id, (newId) => {
   }
 
   &__content {
-    height: 100%;
-    min-height: 100vh;
     position: relative;
     padding-top: 32px;
     background-color: var(--card-background-color);

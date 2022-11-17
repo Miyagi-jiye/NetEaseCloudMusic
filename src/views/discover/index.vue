@@ -26,6 +26,8 @@ const RecommentNewAlbum = defineAsyncComponent(() => import('./components/recomm
 
 <style scoped>
 .discover {
-  height: auto;
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
 }
 </style>

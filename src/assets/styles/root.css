@@ -109,3 +109,13 @@ svg.icon {
 /* .van-tab {
   font-size: 14px !important;
 } */
+
+/* 高亮搜索关键字 */
+.highlight {
+  color: #105db4;
+}
+
+/* 高亮激活歌曲 */
+.active {
+  color: #ff0000b3 !important;
+}

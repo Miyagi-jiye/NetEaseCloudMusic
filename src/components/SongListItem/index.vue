@@ -3,14 +3,37 @@
   <div class="SongListItem" @click="playSong(config.id)">
     <PlayingIcon class="left" v-if="audioData.song.id == config.id" />
     <span class="left" v-else>{{ index + 1 }}</span>
-    <div class="center ">
+    <!-- 如果有传搜索关键字 -->
+    <div v-if="keyword" class="center ">
       <div class="top" :class="{ active: audioData.song.id == config.id }">
-        {{ config.name }}<span v-for="alia in config.alia">({{ alia }})</span>
+        <span v-html="highlightName(config.name)"></span>
+        <span v-for="alia in config.alia" class="top__alia">
+          (<span v-html="highlightAlia(alia)"></span>)
+        </span>
       </div>
       <div class="bottom">
         <Tags :config="config" style="float: left;" />
-        <span v-for="ar in config.ar">{{ ar.name }}</span>
-        - {{ config.al.name }}
+        <span class="bottom__ar">
+          <span v-for="ar in config.ar" class="bottom__ar__item">
+            <span v-html="highlightAlia(ar.name)"></span>
+          </span>
+        </span>
+        <span> - </span>
+        <span class="bottom__al" v-html="highlightAlia(config.al.name)"></span>
+      </div>
+    </div>
+    <!-- 没有搜索关键字 -->
+    <div v-else class="center ">
+      <div class="top" :class="{ active: audioData.song.id == config.id }">
+        {{ config.name }}<span v-for="alia in config.alia" class="top__alia">({{ alia }})</span>
+      </div>
+      <div class="bottom">
+        <Tags :config="config" style="float: left;" />
+        <span class="bottom__ar">
+          <span v-for="ar in config.ar" class="bottom__ar__item">{{ ar.name }}</span>
+        </span>
+        <span> - </span>
+        <span class="bottom__al">{{ config.al.name }}</span>
       </div>
     </div>
     <div class="right">
@@ -25,12 +48,26 @@ import Tags from '@/components/tags/index.vue'// 引入标签组件
 import MVIcon from '@/components/MVIcon/index.vue'// MV图标组件
 import PlayingIcon from '@/components/PlayingIcon/index.vue'// 播放图标组件
 import { useAudioStore } from '@/stores/Audio.js';
+import { toRaw } from 'vue';
 
 const { audioData, playSong } = useAudioStore()
 const props = defineProps({
   config: Object,// 歌曲信息
-  index: Number// 歌曲序号
+  index: Number,// 歌曲序号
+  keyword: String,// 搜索关键字
 })
+// 匹配所有关键字，高亮
+const reg = new RegExp(props.keyword, 'g')
+// 让搜索关键字失去响应式
+const keyword = toRaw(props.keyword)
+
+// 高亮关键字(css样式已在全局定义)
+function highlightName(str) {
+  return str.replace(reg, `<span class="${audioData.song.id == props.config.id ? 'active' : 'highlight'}">${keyword}</span>`)
+}
+function highlightAlia(str) {
+  return str.replace(reg, `<span class="${audioData.song.id == props.config.id ? '' : 'highlight'}">${keyword}</span>`)
+}
 </script>
 
 <style scoped lang="less">
@@ -73,32 +110,30 @@ const props = defineProps({
       font-size: 14px;
       color: var(--song-list-color);
 
-      span {
+      &__alia {
         color: #999999;
         margin-left: 4px;
       }
     }
 
-    .active {
-      color: #ff0000b3;
-    }
+    // .active {
+    //   color: #ff0000b3 !important;
+    // }
 
     .bottom {
       font-size: 12px;
       color: #999999;
       line-height: 16px;
+
       // flex布局文本溢出省略号会失效
       // display: flex;
       // align-items: center;
-
-      span:not(:last-child)::after {
-        content: "/";
-        margin: 0 4px;
+      &__ar {
+        &__item:not(:last-child):after {
+          content: "/";
+          margin: 0 4px;
+        }
       }
-
-      // span:last-child {
-      //   margin-right: 4px;
-      // }
     }
   }
 

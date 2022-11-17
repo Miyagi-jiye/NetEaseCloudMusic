@@ -76,6 +76,7 @@ window.onbeforeunload = () => {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  overflow: hidden;
 
   .header {
     height: 46px;
@@ -83,7 +84,7 @@ window.onbeforeunload = () => {
 
   .main {
     flex: 1;
-    overflow-y: scroll;
+    overflow: hidden;
     background-color: var(--van-search-content-background);
   }
 

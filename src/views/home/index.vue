@@ -48,8 +48,9 @@ watch(isLogin, (val) => {
 
 <style scoped lang="less">
 .home {
-  height: auto;
+  height: 100%;
   width: 100%;
+  overflow-y: scroll;
   background: var(--van-search-content-background);
   padding: 16px;
   box-sizing: border-box;
