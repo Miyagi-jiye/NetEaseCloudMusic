@@ -1,5 +1,6 @@
 <template>
   <div class="search nowrap">
+    <!-- 顶部搜索栏 -->
     <div class="top">
       <div class="top__search">
         <van-icon name="arrow-left" size="22" @click="backClick" />
@@ -44,9 +45,24 @@
               :keyword="searchData.keyword" />
           </div>
         </van-tab>
-        <van-tab title="歌手" :name="100">歌手</van-tab>
-        <van-tab title="歌单" :name="1000">歌单</van-tab>
-        <van-tab title="用户" :name="1002">用户</van-tab>
+        <van-tab title="歌手" :name="100">
+          <div class="searchResult__artists">
+            <ArtistListItem v-for="(item, index) in searchData.searchResult.artists" :key="item.id" :config="item"
+              :keyword="searchData.keyword" />
+          </div>
+        </van-tab>
+        <van-tab title="歌单" :name="1000">
+          <div class="searchResult__playlists">
+            <PlayListItem v-for="(item, index) in searchData.searchResult.playlists" :key="item.id" :config="item"
+              :keyword="searchData.keyword" />
+          </div>
+        </van-tab>
+        <van-tab title="用户" :name="1002">
+          <div class="searchResult__users">
+            <UserListItem v-for="(item, index) in searchData.searchResult.userprofiles" :key="item.id" :config="item"
+              :keyword="searchData.keyword" />
+          </div>
+        </van-tab>
         <van-tab title="MV" :name="1004">MV</van-tab>
       </van-tabs>
     </div>
@@ -79,7 +95,9 @@
             </span>
             <div class="content__hotSearch__list__item__right nowrap">
               <div style="display:flex;gap: 16px;align-items: center;">
-                <span :class="{ topThree: index < 3 }" class="nowrap">{{ item.searchWord }}</span>
+                <span :class="{ topThree: index < 3 }" class="nowrap" @click="hotSearchClick(item)">
+                  {{ item.searchWord }}
+                </span>
                 <img v-if="item.iconUrl" :src="item.iconUrl" alt="hot">
               </div>
               <span v-if="item.content" class="nowrap">{{ item.content }}</span>
@@ -92,6 +110,9 @@
 </template>
 
 <script setup>
+import UserListItem from '@/components/UserListItem/index.vue'// 用户列表
+import PlayListItem from '@/components/PlayListItem/index.vue'// 歌单列表
+import ArtistListItem from '@/components/ArtistListItem/index.vue'// 歌手列表
 import SongListItem from '@/components/SongListItem/index.vue'//单曲
 import AlbumListItem from '@/components/AlbumListItem/index.vue'//专辑
 import { useSearchStore } from '@/stores/search.js'
@@ -136,6 +157,11 @@ watch(
   },
   // { immediate: true }
 )
+// 点击热门搜索关键字
+function hotSearchClick(item) {
+  searchData.keyword = item.searchWord
+  searchClick()
+}
 </script>
 
 <style scoped lang="less">
@@ -339,6 +365,24 @@ watch(
     }
 
     &__albums {
+      display: flex;
+      flex-direction: column;
+      background: var(--van-search-background)
+    }
+
+    &__artists {
+      display: flex;
+      flex-direction: column;
+      background: var(--van-search-background)
+    }
+
+    &__playlists {
+      display: flex;
+      flex-direction: column;
+      background: var(--van-search-background)
+    }
+
+    &__users {
       display: flex;
       flex-direction: column;
       background: var(--van-search-background)

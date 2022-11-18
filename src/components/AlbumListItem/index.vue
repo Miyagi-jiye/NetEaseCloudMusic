@@ -26,9 +26,13 @@ import { formatDate } from '@/utils/useFilter.js'
 import { toRaw } from 'vue';
 
 const props = defineProps({
+  // 专辑信息
   config: {
-    type: Object,
-    required: true
+    id: Number,//专辑id
+    name: String,//专辑名称
+    artists: Array,//歌手
+    publishTime: Number,//发布时间
+    picUrl: String,//专辑封面
   },
   // 高亮关键字
   keyword: {
@@ -61,11 +65,10 @@ function highlight(str) {
   .AlbumListItem__left {
     width: 65px;
     height: 65px;
-    border-radius: 4px;
+    // border-radius: 4px;
     // overflow: hidden;
     position: relative;
     z-index: 1;
-    border: 1px solid #00000042;
     box-sizing: border-box;
 
     img {
@@ -73,7 +76,7 @@ function highlight(str) {
       height: 100%;
       z-index: 1;
       overflow: hidden;
-      border-radius: 4px;
+      // border-radius: 4px;
     }
 
     .shadow {
@@ -113,7 +116,7 @@ function highlight(str) {
 
     .AlbumListItem__right__title {
       font-size: 16px;
-      color: #333;
+      color: var(--font-color-5);
       margin-bottom: 5px;
       overflow: hidden;
       text-overflow: ellipsis;

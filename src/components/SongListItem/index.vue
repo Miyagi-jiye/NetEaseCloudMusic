@@ -52,7 +52,15 @@ import { toRaw } from 'vue';
 
 const { audioData, playSong } = useAudioStore()
 const props = defineProps({
-  config: Object,// 歌曲信息
+  // 歌曲数据
+  config: {
+    id: Number,// 歌曲id
+    name: String,// 歌曲名
+    alia: Array,// 歌曲别名
+    ar: Array,// 歌手
+    al: Object,// 专辑
+    mv: Number,// mv id
+  },
   index: Number,// 歌曲序号
   keyword: String,// 搜索关键字
 })
