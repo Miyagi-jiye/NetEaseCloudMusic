@@ -1,5 +1,5 @@
 <template>
-  <div class="PlayListItem">
+  <div class="PlayListItem" @click="routerPush('/songListDetail', { id: config.id })">
     <div class="PlayListItem__left">
       <ImgCard :imgUrl="config.coverImgUrl" />
     </div>
@@ -21,7 +21,9 @@
 <script setup>
 import { filterPlayCount } from '@/utils/useFilter.js'// 过滤播放次数
 import ImgCard from '@/components/ImgCard/index.vue'// 歌单封面
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const props = defineProps({
   // 歌单数据
   config: {
@@ -38,6 +40,11 @@ const props = defineProps({
   // 搜索关键字
   keyword: String,
 })
+
+// 跳转到歌单详情
+function routerPush(path, query) {
+  router.push({ path, query })
+}
 </script>
 
 <style scoped lang="less">
@@ -48,6 +55,9 @@ const props = defineProps({
   padding: 16px;
   box-sizing: border-box;
   // cursor: pointer;
+  // user-select: none; // 禁止选中文字
+  // -webkit-user-select: none; // 禁止选中文字
+  // -webkit-user-drag: none; // 禁止拖拽
 
   &:hover {
     background-color: var(--song-list-hover);

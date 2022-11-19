@@ -14,7 +14,8 @@
             <template #fallback>
               <DiscoverSkeleton v-if="route.name == 'discover'" />
               <SongListDetailSkeleton v-else-if="route.name == 'songListDetail'" />
-              <div v-else>没有骨架屏====>{{ route.name }}</div>
+              <!-- <div v-else>没有骨架屏====>{{ route.name }}</div> -->
+              <LoadingPage v-else />
             </template>
           </Suspense>
         </KeepAlive>
@@ -25,6 +26,7 @@
 </template>
 
 <script setup>
+import LoadingPage from '@/components/loadingPage/index.vue';
 import DiscoverSkeleton from "./skeleton/discover.vue";// 发现页骨架屏
 import SongListDetailSkeleton from "./skeleton/songListDetail.vue";// 歌单详情页骨架屏
 </script>

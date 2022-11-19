@@ -43,6 +43,12 @@ const router = createRouter({
           name: 'songListDetail',
           component: () => import('@/views/songListDetail/index.vue')
         },
+        // 专辑详情
+        {
+          path: '/albumListDetail',//vue-router 4.0,name+params形式传参需要添加冒号声明参数
+          name: 'albumListDetail',
+          component: () => import('@/views/albumListDetail/index.vue')
+        },
         // 搜索
         {
           path: '/search',

@@ -1684,6 +1684,31 @@ export async function album(id) {
   });
   return data;
 }
+// 数字专辑详情
+// 说明 : 调用此接口 ,传入数字专辑 id 可获取数字专辑详情(和歌单详情有差异)
+// 接口地址 : /album/detail
+// 调用例子 : /album/detail?id=84547195
+/**
+ * @description 数字专辑详情
+ * @param {String} id 数字专辑id
+ * @example
+ * 1. code:状态码
+ * 2. songs:数据[{}]
+ * 3. id:歌曲id
+ * 4. name:歌曲名称
+ * 5. ar:歌手[{}]
+ * 6. al:专辑{}
+ */
+export async function albumDetail(id) {
+  const { data } = await request({
+    url: '/album/detail',
+    method: 'get',
+    params: {
+      id,
+    },
+  });
+  return data;
+}
 // 热搜列表(简略)
 // 说明 : 调用此接口,可获取热门搜索列表
 // 接口地址 : /search/hot

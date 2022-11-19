@@ -41,47 +41,53 @@ export const useSearchStore = defineStore(
     async function getSearch() {
       // 判断是否有搜索关键字
       if (!searchData.keyword) return console.log("请输入搜索关键字")
+      // 添加搜索历史
+      addHistory()
       // 发起请求
       const res = await search(searchData.keyword, searchData.searchParams)
       // 判断是否第一页数据
       if (searchData.searchParams.offset == 1) {
+        console.log("🔍搜索", res.result)
         // 匹配搜索类型(if else)
-        if (searchData.searchParams.type == 1) {
+        if (searchData.searchParams.type == 1 && res.result.songs) {
           searchData.searchResult.songs = res.result.songs
-        } else if (searchData.searchParams.type == 10) {
+        } else if (searchData.searchParams.type == 10 && res.result.albums) {
           searchData.searchResult.albums = res.result.albums
-        } else if (searchData.searchParams.type == 100) {
+        } else if (searchData.searchParams.type == 100 && res.result.artists) {
           searchData.searchResult.artists = res.result.artists
-        } else if (searchData.searchParams.type == 1000) {
+        } else if (searchData.searchParams.type == 1000 && res.result.playlists) {
           searchData.searchResult.playlists = res.result.playlists
-        } else if (searchData.searchParams.type == 1002) {
+        } else if (searchData.searchParams.type == 1002 && res.result.userprofiles) {
           searchData.searchResult.userprofiles = res.result.userprofiles
-        } else if (searchData.searchParams.type == 1004) {
+        } else if (searchData.searchParams.type == 1004 && res.result.mvs) {
           searchData.searchResult.mvs = res.result.mvs
+        } else {
+          console.log("偏移量错误")
         }
       } else {
-        console.log("加载更多")
+        console.log("🔄加载更多")
         // 匹配搜索类型(if else)
-        if (searchData.searchParams.type == 1) {
+        if (searchData.searchParams.type == 1 && res.result.songs) {
           // 合并去重
           // searchData.searchResult.songs = [...new Set([...searchData.searchResult.songs, ...res.result.songs])]
           // 合并不去重
           searchData.searchResult.songs = searchData.searchResult.songs.concat(res.result.songs)
-        } else if (searchData.searchParams.type == 10) {
+        } else if (searchData.searchParams.type == 10 && res.result.albums) {
           searchData.searchResult.albums = searchData.searchResult.albums.concat(res.result.albums)
-        } else if (searchData.searchParams.type == 100) {
+        } else if (searchData.searchParams.type == 100 && res.result.artists) {
           searchData.searchResult.artists = searchData.searchResult.artists.concat(res.result.artists)
-        } else if (searchData.searchParams.type == 1000) {
+        } else if (searchData.searchParams.type == 1000 && res.result.playlists) {
           searchData.searchResult.playlists = searchData.searchResult.playlists.concat(res.result.playlists)
-        } else if (searchData.searchParams.type == 1002) {
+        } else if (searchData.searchParams.type == 1002 && res.result.userprofiles) {
           searchData.searchResult.userprofiles = searchData.searchResult.userprofiles.concat(res.result.userprofiles)
-        } else if (searchData.searchParams.type == 1004) {
+        } else if (searchData.searchParams.type == 1004 && res.result.mvs) {
           searchData.searchResult.mvs = searchData.searchResult.mvs.concat(res.result.mvs)
+        } else {
+          console.log("❌没有更多数据了")
+          return false
         }
       }
-
-      addHistory()
-      console.log("搜索", res, searchData.searchResult)
+      return true
     }
     // 添加搜索历史
     function addHistory() {
@@ -92,17 +98,12 @@ export const useSearchStore = defineStore(
         else searchData.historyList.push(searchData.keyword)
       }
     }
-    // 下一页
-    function nextPage() {
-      searchData.searchParams.offset++
-      getSearch()
-    }
 
     return {
       searchData,
       addHistory,
       getSearch,
-      getHotDetail
+      getHotDetail,
     }
   },
   {

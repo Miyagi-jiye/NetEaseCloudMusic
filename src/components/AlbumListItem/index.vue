@@ -3,6 +3,7 @@
     <div class="AlbumListItem__left">
       <img v-lazy="config.picUrl + '?param=100y100'" alt="" />
       <div class="disc"></div>
+      <div class="mask"></div>
       <div class="shadow" :style="'background-image: url(' + config.picUrl + '?param=10y10)'"></div>
     </div>
     <div class="AlbumListItem__right">
@@ -65,8 +66,6 @@ function highlight(str) {
   .AlbumListItem__left {
     width: 65px;
     height: 65px;
-    // border-radius: 4px;
-    // overflow: hidden;
     position: relative;
     z-index: 1;
     box-sizing: border-box;
@@ -76,7 +75,9 @@ function highlight(str) {
       height: 100%;
       z-index: 1;
       overflow: hidden;
-      // border-radius: 4px;
+      border: 1px solid #cccccc69;
+      box-sizing: border-box;
+      border-radius: 1px;
     }
 
     .shadow {
@@ -106,6 +107,20 @@ function highlight(str) {
       border: 1px solid #ffffff42;
       border-radius: 50%;
       background-color: #000000;
+    }
+
+    // 唱片遮罩
+    .mask {
+      height: 50px;
+      width: 50px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: -3px;
+      /* background: #7e7e7e; */
+      z-index: -2;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
     }
   }
 

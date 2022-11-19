@@ -34,9 +34,17 @@
     <div class="searchResult" v-if="showCard == true">
       <van-tabs v-model:active="searchData.searchParams.type" line-width="30px" class="searchResult__top">
         <van-tab title="单曲" :name="1">
-          <div class="searchResult__songs">
+          <div class="searchResult__songs" v-if="searchData.searchParams.type == 1">
             <SongListItem v-for="(item, index) in searchData.searchResult.songs" :key="item.id" :config="item"
               :index="index" :keyword="searchData.keyword" />
+          </div>
+          <!-- 加载更多 -->
+          <div class="loadMore">
+            <div v-if="showLoadingText">
+              <span @click="loadMore" v-show="showLoading == false">加载更多</span>
+              <van-loading size="24px" v-show="showLoading == true">加载中...</van-loading>
+            </div>
+            <span v-else>没有更多数据了</span>
           </div>
         </van-tab>
         <van-tab title="专辑" :name="10">
@@ -44,11 +52,27 @@
             <AlbumListItem v-for="(item, index) in searchData.searchResult.albums" :key="item.id" :config="item"
               :keyword="searchData.keyword" />
           </div>
+          <!-- 加载更多 -->
+          <div class="loadMore">
+            <div v-if="showLoadingText">
+              <span @click="loadMore" v-show="showLoading == false">加载更多</span>
+              <van-loading size="24px" v-show="showLoading == true">加载中...</van-loading>
+            </div>
+            <span v-else>没有更多数据了</span>
+          </div>
         </van-tab>
         <van-tab title="歌手" :name="100">
           <div class="searchResult__artists">
             <ArtistListItem v-for="(item, index) in searchData.searchResult.artists" :key="item.id" :config="item"
               :keyword="searchData.keyword" />
+          </div>
+          <!-- 加载更多 -->
+          <div class="loadMore">
+            <div v-if="showLoadingText">
+              <span @click="loadMore" v-show="showLoading == false">加载更多</span>
+              <van-loading size="24px" v-show="showLoading == true">加载中...</van-loading>
+            </div>
+            <span v-else>没有更多数据了</span>
           </div>
         </van-tab>
         <van-tab title="歌单" :name="1000">
@@ -56,14 +80,43 @@
             <PlayListItem v-for="(item, index) in searchData.searchResult.playlists" :key="item.id" :config="item"
               :keyword="searchData.keyword" />
           </div>
+          <!-- 加载更多 -->
+          <div class="loadMore">
+            <div v-if="showLoadingText">
+              <span @click="loadMore" v-show="showLoading == false">加载更多</span>
+              <van-loading size="24px" v-show="showLoading == true">加载中...</van-loading>
+            </div>
+            <span v-else>没有更多数据了</span>
+          </div>
         </van-tab>
         <van-tab title="用户" :name="1002">
           <div class="searchResult__users">
             <UserListItem v-for="(item, index) in searchData.searchResult.userprofiles" :key="item.id" :config="item"
               :keyword="searchData.keyword" />
           </div>
+          <!-- 加载更多 -->
+          <div class="loadMore">
+            <div v-if="showLoadingText">
+              <span @click="loadMore" v-show="showLoading == false">加载更多</span>
+              <van-loading size="24px" v-show="showLoading == true">加载中...</van-loading>
+            </div>
+            <span v-else>没有更多数据了</span>
+          </div>
         </van-tab>
-        <van-tab title="MV" :name="1004">MV</van-tab>
+        <van-tab title="MV" :name="1004">
+          <div class="searchResult__mvs">
+            <MvListItem v-for="(item, index) in searchData.searchResult.mvs" :key="item.id" :config="item"
+              :keyword="searchData.keyword" />
+          </div>
+          <!-- 加载更多 -->
+          <div class="loadMore">
+            <div v-if="showLoadingText">
+              <span @click="loadMore" v-show="showLoading == false">加载更多</span>
+              <van-loading size="24px" v-show="showLoading == true">加载中...</van-loading>
+            </div>
+            <span v-else>没有更多数据了</span>
+          </div>
+        </van-tab>
       </van-tabs>
     </div>
     <!-- 热搜和搜索历史 -->
@@ -110,6 +163,7 @@
 </template>
 
 <script setup>
+import MvListItem from '@/components/MvListItem/index.vue'// mv列表
 import UserListItem from '@/components/UserListItem/index.vue'// 用户列表
 import PlayListItem from '@/components/PlayListItem/index.vue'// 歌单列表
 import ArtistListItem from '@/components/ArtistListItem/index.vue'// 歌手列表
@@ -120,6 +174,8 @@ import { watch, ref } from 'vue'
 
 const { searchData, getHotDetail, getSearch } = useSearchStore()
 const showCard = ref(false)// 是否显示搜索结果
+const showLoading = ref(false)// 是否显示加载中
+const showLoadingText = ref(true)// 显示加载更多或者没有数据了
 
 await getHotDetail()
 
@@ -131,8 +187,8 @@ function backClick() {
     showCard.value = false
     // 清空搜索关键字
     searchData.keyword = ''
-    // 变更默认激活的标签
-    searchData.searchParams.type = 1
+    // // 变更默认激活的标签
+    // searchData.searchParams.type = 1
   } else {
     // 返回上一页
     window.history.go(-1)
@@ -140,31 +196,68 @@ function backClick() {
 }
 // 点击搜索
 async function searchClick() {
-  await getSearch()
-  showCard.value = true// 显示搜索结果,隐藏热门搜索和搜索历史
+  // 判断是否有搜索关键字
+  if (searchData.keyword) {
+    showLoading.value = false//显示加载更多
+    showLoadingText.value = true// 显示加载更多
+    searchData.searchParams.offset = 1// 重置偏移量
+    await getSearch()
+    showCard.value = true// 显示搜索结果,隐藏热门搜索和搜索历史
+    // 返回顶部
+    // document.querySelector('.searchResult').scrollTop = 0
+  }
 }
 // 点击历史记录搜索
 function historySearch(item) {
   searchData.keyword = item
   searchClick()
 }
-// 监听tab栏切换
-watch(
-  () => searchData.searchParams.type,
-  (val) => {
-    console.log('监听tab栏切换', val)
-    getSearch()
-  },
-  // { immediate: true }
-)
 // 点击热门搜索关键字
 function hotSearchClick(item) {
   searchData.keyword = item.searchWord
   searchClick()
 }
+// 点击加载更多
+function loadMore() {
+  showLoading.value = true// 显示加载中
+  setTimeout(async () => {
+    searchData.searchParams.offset++// 加载下一页
+    const res = await getSearch()
+    if (res) showLoading.value = false// 隐藏加载中
+    else showLoadingText.value = false// 没有数据了
+  }, 500)
+}
+
+// 监听tab栏切换
+watch(
+  () => searchData.searchParams.type,
+  (val) => {
+    // console.log('监听tab栏切换', val)
+    document.querySelector('.searchResult').scrollTop = 0// 返回顶部
+    searchClick()// 点击搜索
+  },
+  // { immediate: true }
+)
 </script>
 
 <style scoped lang="less">
+.loadMore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+
+  span {
+    font-size: 14px;
+    line-height: 1.5;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
 :deep(.van-search__field) {
   height: 28px;
 }
@@ -261,8 +354,12 @@ function hotSearchClick(item) {
       }
 
       &__list {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+        // display: grid;
+        // grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+        // gap: 16px;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
         gap: 16px;
 
         &__item {
@@ -272,7 +369,7 @@ function hotSearchClick(item) {
           border-radius: 16px;
           background: var(--van-search-background);
           font-size: 12px;
-          padding: 4px 4px;
+          padding: 4px 12px;
           color: var(--font-color-4);
           cursor: pointer;
         }
@@ -351,6 +448,7 @@ function hotSearchClick(item) {
     }
   }
 
+  // 搜索返回内容
   .searchResult {
     display: flex;
     flex-direction: column;
@@ -385,6 +483,14 @@ function hotSearchClick(item) {
     &__users {
       display: flex;
       flex-direction: column;
+      background: var(--van-search-background)
+    }
+
+    &__mvs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      padding: 16px;
       background: var(--van-search-background)
     }
   }

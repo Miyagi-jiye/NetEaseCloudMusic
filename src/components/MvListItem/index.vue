@@ -1,0 +1,98 @@
+<template>
+  <div class="MvListItem">
+    <div class="MvListItem__top">
+      <img v-lazy="config.cover" alt="">
+      <div class="MvListItem__top__desc">
+        <span class="MvListItem__top__desc__duration">{{ formatDuration(config.duration) }}</span>
+        <span class="MvListItem__top__desc__playCount">
+          <van-icon name="play-circle-o" class="playIcon" />{{ filterPlayCount(config.playCount) }}次播放
+        </span>
+      </div>
+    </div>
+    <div class="MvListItem__bottom">
+      <div class="MvListItem__bottom__name nowrap">{{ config.name }}</div>
+      <div class="MvListItem__bottom__artist nowrap">{{ config.artistName }}</div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { formatDuration, filterPlayCount } from "@/utils/useFilter.js";// 过滤播放时长,播放次数
+const props = defineProps({
+  config: {
+    id: Number,// mv id
+    name: String,// mv 名称
+    artistName: String,// mv 歌手
+    artists: Array,// mv 歌手
+    cover: String,// mv 封面
+    duration: Number,// mv 时长
+    playCount: Number,// mv 播放次数
+  },
+  keyword: String// 高亮关键字
+})
+</script>
+
+<style scoped lang="less">
+.MvListItem {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  .MvListItem__top {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+
+    &:hover {
+      .MvListItem__top__desc {
+        transform: translateY(100%);
+      }
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .MvListItem__top__desc {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px;
+      box-sizing: border-box;
+      color: #fff;
+      font-size: 12px;
+      line-height: 1;
+      transition: all .4s;
+
+      .playIcon {
+        margin-right: 4px;
+      }
+    }
+  }
+
+  .MvListItem__bottom {
+    margin-top: 4px;
+
+    .MvListItem__bottom__name {
+      font-size: 14px;
+      color: var(--font-color-5);
+    }
+
+    .MvListItem__bottom__artist {
+      margin-top: 4px;
+      font-size: 12px;
+      color: #999;
+    }
+  }
+}
+</style>

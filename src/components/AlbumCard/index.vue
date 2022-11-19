@@ -1,5 +1,5 @@
 <template>
-  <div class="AlbunCard" @click="routerPush('/songListDetail', { id: config.albumId })">
+  <div class="AlbunCard" @click="routerPush('/albumListDetail', { id: config.albumId })">
     <div class="image">
       <img class="cover" v-lazy="config.imageUrl + '?param=200y200'" alt="专辑封面" />
       <img class="disc" :src="disc" alt="唱片">
@@ -46,7 +46,7 @@ const props = defineProps({
     publishTime: Number,
   },
 })
-//跳转到歌单详情
+//跳转到专辑详情页
 function routerPush(path, query) {
   router.push({ path, query })
 }
