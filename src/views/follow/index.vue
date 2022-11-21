@@ -10,14 +10,26 @@
       <van-tab title="标签 3" name="3">内容 3</van-tab>
       <van-tab title="标签 4" name="4">内容 4</van-tab>
     </van-tabs>
+    <!-- 轮播图 -->
+    <swiper :slidesPerView="3" :spaceBetween="30" :freeMode="true" :modules="modules" class="mySwiper">
+      <swiper-slide v-for="item in 10">
+        {{ item }}
+      </swiper-slide>
+    </swiper>
   </div>
 </template>
 
 <script setup>
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from "swiper/vue";
+import "swiper/css";
+import "swiper/css/free-mode";// 自由模式
+import { FreeMode } from "swiper";
 // 在页面没有加载完成之前，显示加载中的页面
 import LoadingPage from '@/components/LoadingPage/index.vue'// 加载中
 import { ref, onMounted } from 'vue';
 
+const modules = [FreeMode]// swiper功能模块
 const active = ref('3');
 const loading = ref(false)
 const list = ref([]);

@@ -49,6 +49,12 @@ const router = createRouter({
           name: 'albumListDetail',
           component: () => import('@/views/albumListDetail/index.vue')
         },
+        // mv详情
+        {
+          path: '/mvListDetail',//vue-router 4.0,name+params形式传参需要添加冒号声明参数
+          name: 'mvListDetail',
+          component: () => import('@/views/mvListDetail/index.vue')
+        },
         // 搜索
         {
           path: '/search',

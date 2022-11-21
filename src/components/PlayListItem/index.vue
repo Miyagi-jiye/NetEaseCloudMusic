@@ -54,7 +54,7 @@ function routerPush(path, query) {
   gap: 16px;
   padding: 16px;
   box-sizing: border-box;
-  // cursor: pointer;
+  cursor: pointer;
   // user-select: none; // 禁止选中文字
   // -webkit-user-select: none; // 禁止选中文字
   // -webkit-user-drag: none; // 禁止拖拽

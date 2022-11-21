@@ -24,7 +24,8 @@ export const useAlbumListDetailStore = defineStore(
     // 获取专辑详情
     async function getAlbumDetail(id) {
       const res = await album(id)
-      // albumListDetail.album = res.album
+      albumListDetail.album = res.album// 专辑详情
+      albumListDetail.songs = res.songs// 专辑歌曲列表
       console.log('专辑详情', res)
     }
 

@@ -1,16 +1,25 @@
 <template>
   <div class="recommendSongList">
-    <div v-for="item in songlist">
-      <SongListCard :config="item" />
-    </div>
+    <swiper slidesPerView="auto" :spaceBetween="16" :freeMode="true" :modules="modules" class="mySwiper">
+      <swiper-slide v-for="item in songlist">
+        <SongListCard :config="item" />
+      </swiper-slide>
+    </swiper>
   </div>
 </template>
 
 <script setup>
-import SongListCard from '@/components/SongListCard/index.vue'//歌单卡片
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from "swiper/vue";
+import "swiper/css";
+import "swiper/css/free-mode";// 自由模式
+import { FreeMode } from "swiper";
+// Import Swiper Vue.js components
+import SongListCard from '@/components/SongListCard/index.vue'// 歌单卡片组件
 import { storeToRefs } from 'pinia';// 解决响应式丢失问题
 import { useDiscoverStore } from "@/stores/discover.js"
 
+const modules = [FreeMode]// swiper功能模块
 const { songlist } = storeToRefs(useDiscoverStore())
 const { getpersonalized } = useDiscoverStore()
 
@@ -18,6 +27,10 @@ await getpersonalized()
 </script>
 
 <style scoped lang="less">
+.swiper-slide {
+  width: 128px;
+}
+
 .recommendSongList {
   display: flex;
   flex-direction: row;

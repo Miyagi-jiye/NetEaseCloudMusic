@@ -2,15 +2,18 @@
   <div class="Tags">
     <van-tag v-if="config.pc" plain color="var(--tags-border-color)" text-color="var(--tags-text-color)">云盘</van-tag>
     <van-tag v-if="config.originCoverType == 1" color="#ff0000" text-color="#ffffff">原唱</van-tag>
+    <van-tag v-if="config.fee == 4" plain color="#20c1ff" text-color="#4aa3ff">试听</van-tag>
     <van-tag v-if="config.originCoverType == 2" plain color="var(--tags-border-color)"
       text-color="var(--tags-text-color)">翻唱</van-tag>
     <van-tag v-if="config.hr" plain color="var(--tags-border-color)" text-color="var(--tags-text-color)">Hi-Res
     </van-tag>
     <van-tag v-if="config.sq && !config.hr" plain color="var(--tags-border-color)" text-color="var(--tags-text-color)">
       SQ</van-tag>
-    <van-tag v-if="config.fee == 1" plain color="var(--tags-border-color)" text-color="var(--tags-text-color)">VIP
+    <van-tag v-if="config.fee == 1 || config.fee == 8" plain color="var(--tags-border-color)"
+      text-color="var(--tags-text-color)">VIP
     </van-tag>
-    <van-tag v-if="config.originCoverType == null" plain color="var(--tags-border-color)"
+
+    <van-tag v-if="config.noCopyrightRcmd !== null" plain color="var(--tags-border-color)"
       text-color="var(--tags-text-color)">无版权</van-tag>
   </div>
 </template>

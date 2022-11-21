@@ -15,8 +15,8 @@ export const useAudioStore = defineStore(
       songs: [],// 播放列表
       volume: 0.5,// 音量
       isPlay: false,// 是否正在播放
-      isPause: false,// 是否暂停
-      isMuted: false,// 是否静音
+      // isPause: false,// 是否暂停
+      // isMuted: false,// 是否静音
     })
     // // 播放状态
     // let isPlay = ref(false)
@@ -189,7 +189,7 @@ export const useAudioStore = defineStore(
           audioData.isPlay = false// 播放失败
           showNotify({ type: 'danger', message: 'url不存在' })
         }
-        console.log("▶播放")
+        console.log("⏯播放")
       } else {
         audio.pause()
         console.log("⏸暂停")

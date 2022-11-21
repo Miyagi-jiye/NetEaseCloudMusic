@@ -1,5 +1,5 @@
 <template>
-  <div class="MvListItem">
+  <div class="MvListItem" @click="routerPush('/mvListDetail', { id: config.id })">
     <div class="MvListItem__top">
       <img v-lazy="config.cover" alt="">
       <div class="MvListItem__top__desc">
@@ -18,6 +18,9 @@
 
 <script setup>
 import { formatDuration, filterPlayCount } from "@/utils/useFilter.js";// 过滤播放时长,播放次数
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 const props = defineProps({
   config: {
     id: Number,// mv id
@@ -30,6 +33,11 @@ const props = defineProps({
   },
   keyword: String// 高亮关键字
 })
+
+// 跳转到mv详情页
+function routerPush(path, query) {
+  router.push({ path, query })
+}
 </script>
 
 <style scoped lang="less">

@@ -1,32 +1,44 @@
 <template>
   <div class="menu">
-    <div v-for="item in dragonBall" class="menu-item" :data-foo="today">
+    <!-- <div v-for="item in dragonBall" class="menu-item" :data-foo="today">
       <i class="icon" :style="`-webkit-mask-image: url(${item.iconUrl})`" />
       <p style="font-size: 12px" class="title">{{ item.name }}</p>
-    </div>
+    </div> -->
+    <swiper slidesPerView="auto" :spaceBetween="0" :freeMode="true" :modules="modules" class="mySwiper">
+      <swiper-slide v-for="item in dragonBall" class="menu-item" :data-foo="today">
+        <i class="icon" :style="`-webkit-mask-image: url(${item.iconUrl})`" />
+        <p class="title">{{ item.name }}</p>
+      </swiper-slide>
+    </swiper>
   </div>
 </template>
 
 
 <script setup>
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from "swiper/vue";
+import "swiper/css";
+import "swiper/css/free-mode";// 自由模式
+import { FreeMode } from "swiper";
+// Import Swiper Vue.js components
 import { storeToRefs } from 'pinia';// 解决响应式丢失问题
 import { useDiscoverStore } from "@/stores/discover.js"
 
+const modules = [FreeMode]// swiper功能模块
 const { dragonBall } = storeToRefs(useDiscoverStore())
 const { getdragonBall } = useDiscoverStore()
 
 await getdragonBall()
 
-// const props = defineProps({
-//   menus: {
-//     type: Array,
-//     default: () => [],
-//   },
-// });
+// 每日推荐的日期
 const today = new Date().getDate();
 </script>
 
 <style scoped lang="less">
+.swiper-slide {
+  width: 65px;
+}
+
 .menu {
   display: flex;
   flex-wrap: nowrap;
@@ -50,7 +62,7 @@ const today = new Date().getDate();
       margin: 0 0 8px 0;
     }
 
-    // 添加当前日期
+    // 每日推荐添加当前日期
     &:nth-child(1)::after {
       content: attr(data-foo); // 获取data-foo属性
       position: absolute;
@@ -68,6 +80,7 @@ const today = new Date().getDate();
     .title {
       position: absolute;
       bottom: 0px;
+      font-size: 12px;
       color: var(--font-color-4)
     }
   }

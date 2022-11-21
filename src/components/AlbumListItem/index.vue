@@ -1,5 +1,5 @@
 <template>
-  <div class="AlbumListItem">
+  <div class="AlbumListItem" @click="routerPush('/albumListDetail', { id: config.id })">
     <div class="AlbumListItem__left">
       <img v-lazy="config.picUrl + '?param=100y100'" alt="" />
       <div class="disc"></div>
@@ -24,8 +24,10 @@
 
 <script setup>
 import { formatDate } from '@/utils/useFilter.js'
-import { toRaw } from 'vue';
+import { toRaw } from 'vue'
+import { useRouter } from "vue-router"
 
+const router = useRouter()//路由
 const props = defineProps({
   // 专辑信息
   config: {
@@ -49,6 +51,10 @@ const keyword = toRaw(props.keyword)
 // 高亮关键字(css样式已在全局定义)
 function highlight(str) {
   return str.replace(reg, '<span class="highlight">' + keyword + '</span>')
+}
+//跳转到专辑详情页
+function routerPush(path, query) {
+  router.push({ path, query })
 }
 </script>
 

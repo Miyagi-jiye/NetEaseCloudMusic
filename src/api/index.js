@@ -1743,3 +1743,98 @@ export async function searchHotDetail() {
   });
   return data;
 }
+// 获取 mv 数据
+// 必选参数 : mvid: mv 的 id
+// 接口地址 : /mv/detail
+// 调用例子 : /mv/detail?mvid=5436712
+/**
+ * @description 获取 mv 数据
+ * @param {String} mvid mv的id
+ * @example
+ * 1. code:状态码
+ * 2. data:数据{}
+ * 3. id:mv的id
+ * 4. name:mv的名称
+ * 5. cover:mv的封面
+ * 6. playCount:mv的播放次数
+ */
+export async function mvDetail(mvid) {
+  const { data } = await request({
+    url: '/mv/detail',
+    method: 'get',
+    params: {
+      mvid,
+    },
+  });
+  return data;
+}
+// mv 地址
+// 说明 : 调用此接口 , 传入 mv id,可获取 mv 播放地址
+// 必选参数 : id: mv id
+// 可选参数 : r: 分辨率,默认 1080,可从 /mv/detail 接口获取分辨率列表
+// 接口地址 : /mv/url
+// 调用例子 :
+// /mv/url?id=5436712 /mv/url?id=10896407&r=1080
+/**
+ * @description mv 地址
+ * @param {String} id mv的id
+ * @param {String} r 分辨率,默认 1080,可从 /mv/detail 接口获取分辨率列表
+ * @example
+ * 1. code:状态码
+ * 2. data:数据[{}]
+ */
+export async function mvUrl(id, r) {
+  const { data } = await request({
+    url: '/mv/url',
+    method: 'get',
+    params: {
+      id,
+      r,
+    },
+  });
+  return data;
+}
+// 视频详情
+// 说明 : 调用此接口 , 可获取视频详情
+// 必选参数 : id: 视频 的 id
+// 接口地址 : /video/detail
+// 调用例子 : /video/detail?id=89ADDE33C0AAE8EC14B99F6750DB954D
+/**
+ * @description 视频详情
+ * @param {String} id 视频的id
+ * @example
+ * 1. code:状态码
+ * 2. data:数据{}
+ */
+export async function videoDetail(id) {
+  const { data } = await request({
+    url: '/video/detail',
+    method: 'get',
+    params: {
+      id,
+    },
+  });
+  return data;
+}
+// 相似 mv
+// 说明 : 调用此接口 , 传入 mvid 可获取相似 mv
+// 必选参数 : mvid: mv id
+// 接口地址 : /simi/mv
+// 调用例子 : /simi/mv?mvid=5436712
+/**
+ * @description 相似 mv
+ * @param {String} mvid mv的id
+ * @example
+ * 1. code:状态码
+ * 2. mvs:数据[{}]
+ */
+export async function simiMv(mvid) {
+  const { data } = await request({
+    url: '/simi/mv',
+    method: 'get',
+    params: {
+      mvid,
+    },
+  });
+  return data;
+}

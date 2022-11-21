@@ -1,10 +1,10 @@
 <template>
   <!-- 歌单列表项 -->
-  <div class="SongListItem" @click="playSong(config.id)">
+  <div class="SongListItem">
     <PlayingIcon class="left" v-if="audioData.song.id == config.id" />
     <span class="left" v-else>{{ index + 1 }}</span>
     <!-- 如果有传搜索关键字 -->
-    <div v-if="keyword" class="center ">
+    <div v-if="keyword" class="center" @click="playSong(config.id)">
       <div class="top" :class="{ active: audioData.song.id == config.id }">
         <span v-html="highlightName(config.name)"></span>
         <span v-for="alia in config.alia" class="top__alia">
@@ -23,7 +23,7 @@
       </div>
     </div>
     <!-- 没有搜索关键字 -->
-    <div v-else class="center ">
+    <div v-else class="center" @click="playSong(config.id)">
       <div class="top" :class="{ active: audioData.song.id == config.id }">
         {{ config.name }}<span v-for="alia in config.alia" class="top__alia">({{ alia }})</span>
       </div>

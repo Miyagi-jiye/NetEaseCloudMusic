@@ -3,7 +3,7 @@
     <!-- 收藏，评论，分享 -->
     <SubCard class="subCard" height="40px" />
     <!-- 操作栏 -->
-    <FunctionBar />
+    <FunctionBar :songs="songListDetail.playlist.tracks" />
     <!-- 歌曲列表 -->
     <div class="songList">
       <SongListItem v-for="(item, index) in songListDetail.playlist.tracks" :config="item" :index="index" />

@@ -1,9 +1,9 @@
 <template>
   <div class="functionBar">
     <div class="left">
-      <van-icon name="play-circle-o" size="25" color="red" @click="addAllToPlayList(songListDetail.playlist.tracks)" />
+      <van-icon name="play-circle-o" size="25" color="red" @click="addAllToPlayList(songs)" />
       <span>播放全部</span>
-      <span>({{ songListDetail.playlist.tracks.length }})</span>
+      <span>({{ songs.length }})</span>
     </div>
     <div class="right">
       <van-icon name="music-o" size="20" />
@@ -14,11 +14,12 @@
 </template>
 
 <script setup>
-import { useSongListDetailStore } from '@/stores/songListDetail.js'
 import { useAudioStore } from "@/stores/Audio.js"
 
 const { addAllToPlayList } = useAudioStore();
-const { songListDetail, getPlaylistDetail } = useSongListDetailStore();
+const props = defineProps({
+  songs: Array,//歌曲列表
+})
 </script>
 
 <style scoped lang="less">

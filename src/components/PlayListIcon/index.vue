@@ -147,6 +147,7 @@ const props = defineProps({
         line-height: 2.6;
         font-size: 14px;
         padding: 0 16px;
+        gap: 8px;
 
         &:hover {
           background: var(--song-list-hover);
