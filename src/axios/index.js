@@ -6,6 +6,7 @@ import { storeToRefs } from 'pinia'
 const request = axios.create({
   baseURL: import.meta.env.DEV ? '/api' : 'http://guowei.fun:3000',
   // baseURL: import.meta.env.DEV ? 'http://guowei.fun:3000' : '/api',
+  withCredentials: true,// 允许携带cookie
 });
 
 // 添加请求拦截器
@@ -17,6 +18,9 @@ request.interceptors.request.use(
     //   'color: #eaeaea;background: #000;padding: 4px 0 4px 8px;border-radius:4px 0 0 4px;font-weight:bold;',
     //   'color: #08d9d6;background: #000;padding: 4px 8px 4px 0;border-radius:0 4px 4px 0;font-weight: bold;',
     // );
+    if (localStorage.getItem('cookie')) {
+      document.cookie = localStorage.getItem('cookie')
+    }
     return config;
   },
   function (error) {
@@ -31,9 +35,10 @@ request.interceptors.response.use(
     // 2xx 范围内的状态码都会触发该函数。
     // 对响应数据做点什么
     // 拦截响应成功返回的cookie，存入本地
-    const cookie = response.data.cookie;
-    if (cookie) {
-      console.log("拦截到响应头cookie===>", { cookie })
+    if (response.data.cookie) {
+      document.cookie = response.data.cookie
+      localStorage.setItem('cookie', response.data.cookie)
+      console.log("拦截到响应头cookie===>", { '请求返回的cookie': response.data.cookie })
     }
     return response;
   },
