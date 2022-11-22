@@ -33,7 +33,7 @@ request.interceptors.response.use(
     // 拦截响应成功返回的cookie，存入本地
     const cookie = response.data.cookie;
     if (cookie) {
-      console.log("拦截到响应头cookie===>", cookie)
+      console.log("拦截到响应头cookie===>", { cookie })
     }
     return response;
   },

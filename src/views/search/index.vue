@@ -31,7 +31,7 @@
       </div>
     </div>
     <!-- 搜索结果 -->
-    <div class="searchResult" v-if="showCard == true">
+    <div class="searchResult" v-if="showCard == true" ref="root">
       <van-tabs v-model:active="searchData.searchParams.type" line-width="30px" class="searchResult__top">
         <van-tab title="单曲" :name="1">
           <div class="searchResult__songs" v-if="searchData.searchParams.type == 1">
@@ -39,7 +39,7 @@
               :index="index" :keyword="searchData.keyword" />
           </div>
           <!-- 加载更多 -->
-          <div class="loadMore">
+          <div class="loadMore" v-intersection-observer="[onIntersectionObserver, { root }]">
             <div v-if="showLoadingText">
               <span @click="loadMore" v-show="showLoading == false">加载更多</span>
               <van-loading size="24px" v-show="showLoading == true">加载中...</van-loading>
@@ -53,7 +53,7 @@
               :keyword="searchData.keyword" />
           </div>
           <!-- 加载更多 -->
-          <div class="loadMore">
+          <div class="loadMore" v-intersection-observer="[onIntersectionObserver, { root }]">
             <div v-if="showLoadingText">
               <span @click="loadMore" v-show="showLoading == false">加载更多</span>
               <van-loading size="24px" v-show="showLoading == true">加载中...</van-loading>
@@ -67,7 +67,7 @@
               :keyword="searchData.keyword" />
           </div>
           <!-- 加载更多 -->
-          <div class="loadMore">
+          <div class="loadMore" v-intersection-observer="[onIntersectionObserver, { root }]">
             <div v-if="showLoadingText">
               <span @click="loadMore" v-show="showLoading == false">加载更多</span>
               <van-loading size="24px" v-show="showLoading == true">加载中...</van-loading>
@@ -81,7 +81,7 @@
               :keyword="searchData.keyword" />
           </div>
           <!-- 加载更多 -->
-          <div class="loadMore">
+          <div class="loadMore" v-intersection-observer="[onIntersectionObserver, { root }]">
             <div v-if="showLoadingText">
               <span @click="loadMore" v-show="showLoading == false">加载更多</span>
               <van-loading size="24px" v-show="showLoading == true">加载中...</van-loading>
@@ -95,7 +95,7 @@
               :keyword="searchData.keyword" />
           </div>
           <!-- 加载更多 -->
-          <div class="loadMore">
+          <div class="loadMore" v-intersection-observer="[onIntersectionObserver, { root }]">
             <div v-if="showLoadingText">
               <span @click="loadMore" v-show="showLoading == false">加载更多</span>
               <van-loading size="24px" v-show="showLoading == true">加载中...</van-loading>
@@ -109,7 +109,7 @@
               :keyword="searchData.keyword" />
           </div>
           <!-- 加载更多 -->
-          <div class="loadMore">
+          <div class="loadMore" v-intersection-observer="[onIntersectionObserver, { root }]">
             <div v-if="showLoadingText">
               <span @click="loadMore" v-show="showLoading == false">加载更多</span>
               <van-loading size="24px" v-show="showLoading == true">加载中...</van-loading>
@@ -171,14 +171,21 @@ import SongListItem from '@/components/SongListItem/index.vue'//单曲
 import AlbumListItem from '@/components/AlbumListItem/index.vue'//专辑
 import { useSearchStore } from '@/stores/search.js'
 import { watch, ref } from 'vue'
+import { vIntersectionObserver } from '@vueuse/components'// 可见性监听自定义指令
 
 const { searchData, getHotDetail, getSearch } = useSearchStore()
 const showCard = ref(false)// 是否显示搜索结果
 const showLoading = ref(false)// 是否显示加载中
 const showLoadingText = ref(true)// 显示加载更多或者没有数据了
+const root = ref(null)// 需要监听可见性的根节点
 
 await getHotDetail()
 
+// 监听对象可见性改变时触发
+function onIntersectionObserver([{ isIntersecting }]) {
+  console.log("👀加载更多__可见性", isIntersecting)
+  if (isIntersecting) loadMore()
+}
 // 返回按钮
 function backClick() {
   // 判断是否显示搜索结果

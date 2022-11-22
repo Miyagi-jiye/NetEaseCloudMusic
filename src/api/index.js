@@ -915,7 +915,7 @@ export async function playlistTrackAll(id, { limit, offset }) {
     method: 'get',
     params: {
       limit,
-      offset,
+      offset: (offset - 1) * limit,
     },
   });
   return data;

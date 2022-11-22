@@ -28,6 +28,8 @@ await getPlaylistDetail(route.query.id);// 获取歌单详情
 // 监听路由id变化，判断是否在当前页面
 watch(() => route.query.id, (newId) => {
   if (route.path === '/songListDetail') getPlaylistDetail(newId);
+  // 离开当前页面
+  else songListDetail.trackAllParams.offset = 1;// 重置offset
 });
 </script>
 

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { playlistDetail } from "@/api"
+import { playlistDetail, playlistTrackAll } from "@/api"
 import { reactive } from 'vue'
 
 export const useSongListDetailStore = defineStore(
@@ -7,6 +7,7 @@ export const useSongListDetailStore = defineStore(
   () => {
     const songListDetail = reactive({
       playlist: {
+        id: 0,// 歌单id
         coverImgUrl: '',// 歌单封面
         name: '',// 歌单名
         creator: {
@@ -21,6 +22,10 @@ export const useSongListDetailStore = defineStore(
         commentCount: 0,// 评论数
         subscribedCount: 0,// 收藏数
         tracks: []// 歌曲列表
+      },
+      trackAllParams: {
+        offset: 1,
+        limit: 20
       }
     })
 
@@ -30,10 +35,22 @@ export const useSongListDetailStore = defineStore(
       songListDetail.playlist = res.playlist
       console.log('歌单详情', res.playlist)
     }
+    // 获取歌单所有歌曲
+    async function getPlaylistTrackAll() {
+      const res = await playlistTrackAll(songListDetail.playlist.id, songListDetail.trackAllParams)
+      // songListDetail.playlist.tracks = res.songs
+      // 去重合并
+      // songListDetail.playlist.tracks = [...new Set([...songListDetail.playlist.tracks, ...res.songs])]
+      // id 去重合并
+      songListDetail.playlist.tracks = [...new Map([...songListDetail.playlist.tracks, ...res.songs].map(item => [item.id, item])).values()]
+      console.log('歌单所有歌曲', res)
+      return true
+    }
 
     return {
       songListDetail,
-      getPlaylistDetail
+      getPlaylistDetail,
+      getPlaylistTrackAll
     }
   }
 ) 
