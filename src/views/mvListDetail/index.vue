@@ -7,7 +7,7 @@
       <van-icon name="weapp-nav" size="22" />
     </div>
     <!-- 视频插件 -->
-    <div style="aspect-ratio: 16 / 9;">
+    <div style="aspect-ratio: 16 / 9;width: 100%;">
       <videoPlay v-bind="options" @play="onPlay" />
     </div>
     <!-- mv信息 -->
@@ -119,7 +119,6 @@ function onPlay() {
 // 监听路由id变化，判断是否在当前页面
 watch(() => route.query.id, (newId) => {
   if (route.path === '/mvListDetail') init();
-  console.log('路由变化', newId)
 });
 </script>
 
@@ -147,7 +146,7 @@ watch(() => route.query.id, (newId) => {
   width: 100%;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 999;
 }
 
 .mvListDetail__info {

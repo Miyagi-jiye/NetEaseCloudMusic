@@ -67,13 +67,14 @@ const today = new Date().getDate();
       content: attr(data-foo); // 获取data-foo属性
       position: absolute;
       top: 50%;
-      right: 50%;
-      transform: translate(50%, -11px);
-      color: #ffffffe8;
+      left: 50%;
+      transform: translate(-50%, -10px);
+      color: var(--menu-color);
       font-size: 18px;
       font-weight: bolder;
-      height: 20px;
-      width: 20px;
+      line-height: 1;
+      // height: 20px;
+      // width: 20px;
       text-align: center;
     }
 

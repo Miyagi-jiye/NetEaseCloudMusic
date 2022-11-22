@@ -1,5 +1,5 @@
 <template>
-  <div class="SongCard" @click="playSong(config.songId)">
+  <div class="SongCard nowrap" @click="playSong(config.songId)">
     <div class="SongCard__image">
       <img v-lazy="config.imageUrl + '?param=200y200'" alt="歌曲封面" class="cover" />
     </div>
@@ -98,7 +98,7 @@ const props = defineProps({
       overflow: hidden;
       display: -webkit-box;
       -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 1;
       font-size: 12px;
 
       // 添加伪元素分割线，排除最后一个
