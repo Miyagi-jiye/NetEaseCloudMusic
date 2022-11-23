@@ -6,7 +6,7 @@
         <img v-lazy="audioData.song.al.picUrl + '?param=50y50'" alt="图片" class="songImg">
       </div>
     </div>
-    <div class="center nowrap">
+    <div class="center nowrap" @click="show = true">
       {{ audioData.song.name }}<span class="alia" v-if="audioData.song.alia[0]">（{{ audioData.song.alia[0] }}）</span>
     </div>
     <div class="right">
@@ -27,18 +27,187 @@
       <!-- 播放列表图标 -->
       <PlayListIcon :size="21" />
     </div>
+    <!-- 播放弹出框 -->
+    <van-popup v-model:show="show" position="bottom" :style="{ height: '100%' }">
+      <div class="popup">
+        <div class="popup__top">
+          <div class="popup__top__left" @click="show = false">
+            <van-icon name="arrow-down" size="24" />
+          </div>
+          <div class="popup__top__center">
+            <span>
+              {{ audioData.song.name }}
+              <span v-if="audioData.song.alia[0]">（{{ audioData.song.alia[0] }}）</span>
+            </span>
+            <span>{{ audioData.song.ar[0].name }}</span>
+          </div>
+          <div class="popup__top__right">
+            <van-icon name="share-o" size="24" />
+          </div>
+        </div>
+        <div class="popup__center">
+          <img class="pointer" :src="pointer" alt="指针" @click="play(true)"
+            :style="audioData.isPlay ? 'transform: translateX(-10px) rotate(0deg)' : 'transform: translateX(-10px) rotate(-20deg)'">
+          <img class="disc" :src="disc" alt="唱片" @click="play(false)">
+          <img class="cover" v-lazy="audioData.song.al.picUrl + '?param=250y250'" alt="封面"
+            :style="audioData.isPlay ? 'animation-play-state: running' : 'animation-play-state: paused'" />
+        </div>
+        <div class="popup__bottom">
+          <!-- 播放进度条 -->
+          <div class="progress">
+            <span>{{ formatTime(currentTime) }}</span>
+            <van-slider v-model="sliderValue" @change="onChange" :min="0" :max="Math.floor(audio.duration)">
+              <template #button>
+                <div class="custom-button">自定义进度条图标</div>
+              </template>
+            </van-slider>
+            <span>{{ formatTime(audio.duration) }}</span>
+          </div>
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
 <script setup>
-import PlayListIcon from "@/components/PlayListIcon/index.vue"
+import { formatTime } from '@/utils/useFilter.js'// 时间格式化
+// import PlayPopup from '@/components/PlayPopup/index.vue'// 引入播放弹窗组件
+import PlayListIcon from "@/components/PlayListIcon/index.vue"// 引入播放列表图标组件
 import disc from "@/assets/icons/ewj.png";// 唱片
+import pointer from "@/assets/icons/fd6.png";// 指针
 import { useAudioStore } from '@/stores/Audio.js';
+import { ref } from 'vue'
 
-const { audioData, play } = useAudioStore();
+const { audioData, play, audio } = useAudioStore();
+const show = ref(false)
+const sliderValue = ref(0)// 进度条的值
+const currentTime = ref(0)// 当前播放时间
+// 监听播放时间更新的事件
+audio.ontimeupdate = () => {
+  currentTime.value = Math.floor(audio.currentTime)// 更新当前播放时间
+  sliderValue.value = Math.floor(audio.currentTime)
+}
+
+// 滑块改变时触发
+const onChange = (value) => {
+  audio.currentTime = Math.floor(value)
+}
 </script>
 
 <style scoped lang="less">
+.popup {
+  height: 100vh;
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .popup__top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .popup__top__center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+
+      span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .popup__center {
+    flex: 1;
+    background-color: rgb(134, 134, 134);
+    position: relative;
+    min-height: 400px; // 最小高度,防止指针和唱片超出弹窗
+    overflow: hidden;
+    // 禁止
+    user-select: none;
+    -webkit-user-drag: none;
+
+    .pointer {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 100px;
+      // height: 100%;
+      aspect-ratio: 4 / 7;
+      // transform: translateX(-10px) rotate(0deg); //停止播放时的指针角度为：-20deg
+      transform-origin: 15px 15px; // 旋转中心点(x,y,z)
+      transition: transform 0.3s;
+      z-index: 2;
+    }
+
+    .disc {
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+      position: absolute;
+      top: 110px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+    }
+
+    .cover {
+      border-radius: 50%;
+      width: 170px;
+      height: 170px;
+      position: absolute;
+      top: 150px;
+      z-index: 0;
+      // left: 50%;
+      // transform: translateX(-50%);// transform和animation不能同时使用
+      // 左右居中
+      margin: 0 auto;
+      left: 0;
+      right: 0;
+      // 
+      animation: discRotate 20s linear infinite;
+      // animation-play-state: paused; // 暂停动画
+      // animation-play-state: running; // 恢复动画
+    }
+  }
+
+  .popup__bottom {
+    display: flex;
+    flex-direction: column;
+
+    .progress {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12px;
+
+      .custom-button {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: rgb(255, 0, 0);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        transition: all .3s;
+
+        &:hover {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+}
+
 // 定义唱片旋转动画
 @keyframes discRotate {
   0% {

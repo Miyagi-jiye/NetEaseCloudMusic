@@ -29,6 +29,14 @@ await getpersonalized()
 <style scoped lang="less">
 .swiper-slide {
   width: 128px;
+
+  &:nth-child(1) {
+    margin-left: 16px;
+  }
+
+  &:last-child {
+    margin-right: 16px;
+  }
 }
 
 .recommendSongList {
@@ -37,7 +45,7 @@ await getpersonalized()
   align-items: flex-start;
   overflow-x: scroll;
   gap: 12px;
-  padding: 0 16px;
+  // padding: 0 16px;
   scrollbar-width: none; // firefox浏览器隐藏滚动条
 
   &::-webkit-scrollbar {

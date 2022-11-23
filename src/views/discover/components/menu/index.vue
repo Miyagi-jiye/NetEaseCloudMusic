@@ -37,12 +37,20 @@ const today = new Date().getDate();
 <style scoped lang="less">
 .swiper-slide {
   width: 65px;
+
+  &:nth-child(1) {
+    margin-left: 8px;
+  }
+
+  &:last-child {
+    margin-right: 8px;
+  }
 }
 
 .menu {
   display: flex;
   flex-wrap: nowrap;
-  padding: 0 8px;
+  // padding: 0 8px;
   overflow-x: scroll;
   gap: 10px;
   scrollbar-width: none; // firefox浏览器隐藏滚动条

@@ -53,10 +53,14 @@ function routerPush(path, query) {
     border-radius: 4px;
     overflow: hidden;
     cursor: pointer;
+    transition: all 0.5s;
 
     &:hover {
+      box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+
       .MvListItem__top__desc {
         transform: translateY(100%);
+        font-weight: bold;
       }
     }
 

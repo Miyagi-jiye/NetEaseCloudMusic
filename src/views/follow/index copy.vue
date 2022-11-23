@@ -1,9 +1,9 @@
 <template>
   <div class="follow">
     <span>{{ formatTime(currentTime) }}</span>
-    <van-slider v-model="sliderValue" @change="onChange" :min="0" :max="Math.floor(audio.duration)">
+    <van-slider v-model="sliderValue" @change="onChange">
       <template #button>
-        <div class="custom-button">{{ formatTime(sliderValue) }}</div>
+        <div class="custom-button">{{ sliderValue }}%</div>
       </template>
     </van-slider>
     <span>{{ formatTime(audio.duration) }}</span>
@@ -16,18 +16,18 @@ import { useAudioStore } from '@/stores/Audio.js'
 import { formatTime } from '@/utils/useFilter.js'
 
 const { audio, audioData } = useAudioStore()
-const sliderValue = ref(0)// 进度条的值
+const sliderValue = ref(0)// 进度条百分比
 const currentTime = ref(0)// 当前播放时间
 
 // 监听播放时间更新的事件
 audio.ontimeupdate = () => {
   currentTime.value = Math.floor(audio.currentTime)// 更新当前播放时间
-  sliderValue.value = Math.floor(audio.currentTime)
+  sliderValue.value = Math.floor((audio.currentTime / audio.duration) * 100)// 进度条百分比
 }
 
 // 滑块改变时触发
 const onChange = (value) => {
-  audio.currentTime = Math.floor(value)
+  audio.currentTime = Math.floor(audio.duration * (value / 100))
 }
 
 </script>

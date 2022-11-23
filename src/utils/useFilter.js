@@ -61,8 +61,6 @@ export function filterMyPlaylist(array, uid) {
   }
 }
 
-// 过滤用户详情
-
 // 过滤播放量，亿保留后一位小数，万保留整数
 export function filterPlayCount(playCount) {
   if (playCount > 100000000) {
@@ -97,4 +95,16 @@ export function formatDuration(duration) {
     second = '0' + second
   }
   return minute + ':' + second
+}
+
+// 格式化播放音乐时间，参数是秒
+export function formatTime(time) {
+  // 如果时间 等于0 或者 等于NaN 先显示00：00
+  if (time == 0 || window.isNaN(time)) {
+    return '00:00'
+  }
+  let sec = Math.floor(time % 60);
+  let min = Math.floor(time / 60);
+  // 返回格式 00：00 不足两位的补零
+  return `${min < 10 ? '0' + min : min}:${sec < 10 ? '0' + sec : sec}`;
 }

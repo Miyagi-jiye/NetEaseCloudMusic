@@ -249,7 +249,7 @@ export async function userAccount() {
     method: 'get',
     params: {
       timestamp: Date.now(), //防止缓存
-      cookie: JSON.stringify(cookie),//cookie请求头
+      cookie: encodeURIComponent(JSON.stringify(cookie.value)),//cookie请求头
     }
   });
   return data;
@@ -963,9 +963,13 @@ export async function playlistDetailDynamic(id) {
  * 2. data：音乐数据
  */
 export async function songUrlV1(id, level = 'standard') {
+  const { cookie } = storeToRefs(useLoginStore());// 获取cookie
   const { data } = await request({
     url: `/song/url/v1?id=${id}&level=${level}`,
     method: 'get',
+    params: {
+      cookie: encodeURIComponent(JSON.stringify(cookie.value)),//cookie请求头
+    }
   });
   return data;
 }

@@ -18,9 +18,10 @@ request.interceptors.request.use(
     //   'color: #eaeaea;background: #000;padding: 4px 0 4px 8px;border-radius:4px 0 0 4px;font-weight:bold;',
     //   'color: #08d9d6;background: #000;padding: 4px 8px 4px 0;border-radius:0 4px 4px 0;font-weight: bold;',
     // );
-    if (localStorage.getItem('cookie')) {
-      document.cookie = localStorage.getItem('cookie')
-    }
+    // const { cookie } = useLoginStore()
+    // if (cookie) {
+    //   config.url = config.url + '?cookie=' + encodeURIComponent(JSON.stringify(cookie))
+    // }
     return config;
   },
   function (error) {
@@ -36,9 +37,7 @@ request.interceptors.response.use(
     // 对响应数据做点什么
     // 拦截响应成功返回的cookie，存入本地
     if (response.data.cookie) {
-      document.cookie = response.data.cookie
-      localStorage.setItem('cookie', response.data.cookie)
-      console.log("拦截到响应头cookie===>", { '请求返回的cookie': response.data.cookie })
+      console.log("拦截到响应头cookie===>", { 'cookie': response.data.cookie })
     }
     return response;
   },
@@ -46,7 +45,6 @@ request.interceptors.response.use(
     // 超出 2xx 范围的状态码都会触发该函数。
     // 对响应错误做点什么
     const { isLogin, cookie } = storeToRefs(useLoginStore())//登录状态
-
 
     // 1. 匹配常见错误，错误提示
     switch (error.response.status) {
@@ -62,6 +60,7 @@ request.interceptors.response.use(
       case 404:
         showNotify({ type: 'danger', message: error.response.data.message ?? error.response.data.msg ?? "请求地址出错" });
         isLogin.value = false
+        cookie.value = null
         break;
       case 501:
         showNotify({ type: 'danger', message: error.response.data.message ?? error.response.data.msg ?? "账号错误" });
