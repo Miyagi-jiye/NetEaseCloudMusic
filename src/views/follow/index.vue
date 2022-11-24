@@ -1,12 +1,7 @@
 <template>
   <div class="follow">
-    <span>{{ formatTime(currentTime) }}</span>
-    <van-slider v-model="sliderValue" @change="onChange" :min="0" :max="Math.floor(audio.duration)">
-      <template #button>
-        <div class="custom-button">{{ formatTime(sliderValue) }}</div>
-      </template>
-    </van-slider>
-    <span>{{ formatTime(audio.duration) }}</span>
+    <!-- <iframe src="https://kaifa.baidu.com/" frameborder="0" style="width: 100%;;height: 100%;"></iframe> -->
+    123
   </div>
 </template>
 
@@ -16,20 +11,6 @@ import { useAudioStore } from '@/stores/Audio.js'
 import { formatTime } from '@/utils/useFilter.js'
 
 const { audio, audioData } = useAudioStore()
-const sliderValue = ref(0)// 进度条的值
-const currentTime = ref(0)// 当前播放时间
-
-// 监听播放时间更新的事件
-audio.ontimeupdate = () => {
-  currentTime.value = Math.floor(audio.currentTime)// 更新当前播放时间
-  sliderValue.value = Math.floor(audio.currentTime)
-}
-
-// 滑块改变时触发
-const onChange = (value) => {
-  audio.currentTime = Math.floor(value)
-}
-
 </script>
 
 <style scoped lang="less">

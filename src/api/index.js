@@ -1842,3 +1842,31 @@ export async function simiMv(mvid) {
   });
   return data;
 }
+// 获取歌词
+// 说明 : 调用此接口 , 传入音乐 id 可获得对应音乐的歌词 ( 不需要登录 )
+// 必选参数 : id: 音乐 id
+// 接口地址 : /lyric
+// 调用例子 : /lyric?id=33894312
+/**
+ * @description 获取歌词
+ * @param {String} id 音乐的id
+ * @example
+ * 1. code:状态码
+ * 2. lrc:歌词
+ * 3. tlyric:翻译歌词
+ * 4. lyric:歌词
+ * 5. transUser:翻译歌词的用户
+ * 6. nolyric:是否有歌词
+ * 7. uncollected:是否有翻译歌词
+ * 8. tlyric:翻译歌词
+ */
+export async function uselyric(id) {
+  const { data } = await request({
+    url: '/lyric',
+    method: 'get',
+    params: {
+      id,
+    },
+  });
+  return data;
+}

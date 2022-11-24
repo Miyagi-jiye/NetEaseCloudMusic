@@ -1,6 +1,6 @@
 import { ref, reactive, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
-import { songUrlV1, songDetail } from "@/api/index.js"
+import { songUrlV1, songDetail, uselyric } from "@/api/index.js"
 import { showNotify } from 'vant'
 
 export const useAudioStore = defineStore(
@@ -17,6 +17,11 @@ export const useAudioStore = defineStore(
       isPlay: false,// 是否正在播放
       // isPause: false,// 是否暂停
       // isMuted: false,// 是否静音
+      // 播放模式
+      playMode: 'order',// 顺序播放,循环播放,随机播放,默认顺序播放: order, loop, random
+      lyric: '', // 原本歌词
+      romalrc: '',// 罗马音歌词
+      tlyric: '',// 翻译歌词
     })
     // // 播放状态
     // let isPlay = ref(false)
@@ -146,7 +151,23 @@ export const useAudioStore = defineStore(
           await getSongUrl(audioData.song.id)// 获取歌曲url
           play(audioData.isPlay)
         }
-        console.log("⏭播放下一首", audioData.song)
+        console.log("⏭播放下一首")
+      }
+    }
+    // 播放上一首
+    async function playPrevSong() {
+      if (audioData.songs.length > 0) {
+        const index = audioData.songs.findIndex(item => item.id === audioData.song.id)
+        if (index === 0) {// 如果是第一首则播放最后一首
+          audioData.song = audioData.songs[audioData.songs.length - 1]
+          await getSongUrl(audioData.song.id)// 获取歌曲url
+          play(audioData.isPlay)
+        } else {
+          audioData.song = audioData.songs[index - 1]// 播放上一首
+          await getSongUrl(audioData.song.id)// 获取歌曲url
+          play(audioData.isPlay)
+        }
+        console.log("⏮播放上一首")
       }
     }
     // 改变当前播放歌曲
@@ -180,6 +201,8 @@ export const useAudioStore = defineStore(
             audioData.isPlay = false// 播放失败
             return showNotify({ type: 'danger', message: '播放失败' })
           })
+          // 获取歌词
+          getLyric(audioData.song.id)
           // 播放结束，播放下一首
           audio.onended = () => {
             playNextSong()
@@ -189,16 +212,44 @@ export const useAudioStore = defineStore(
           audioData.isPlay = false// 播放失败
           showNotify({ type: 'danger', message: 'url不存在' })
         }
-        console.log("⏯播放")
+        console.log("🎤播放")
       } else {
         audio.pause()
         console.log("⏸暂停")
       }
     }
+    // 获取歌词
+    async function getLyric(id) {
+      const res = await uselyric(id)
+      // 过滤歌词
+      const lyric = res.lrc.lyric.split("\n").map(item => {
+        const time = item.match(/\[(\d{2}):(\d{2})\.(\d{2,3})\]/)
+        const text = item.replace(/\[(\d{2}):(\d{2})\.(\d{2,3})\]/, '')
+        // 判断是否有时间和歌词，过滤掉空的歌词
+        if (time && text) {
+          return {
+            time: time[1] * 60 + time[2] * 1 + time[3] / 1000,
+            text: text,
+          }
+        }
+      }).filter(item => item)
+      // 添加下一句歌词时间
+      for (let i = 0; i < lyric.length; i++) {
+        if (i === lyric.length - 1) {
+          lyric[i].nextTime = lyric[i].time + 5
+        } else {
+          lyric[i].nextTime = lyric[i + 1].time
+        }
+      }
+      audioData.lyric = lyric
+      console.log("📃歌词", lyric)
+    }
 
     return {
       audio,
       audioData,
+      playPrevSong,
+      playNextSong,
       addAllToPlayList,
       clearPlayList,
       removeSongFromPlayList,
