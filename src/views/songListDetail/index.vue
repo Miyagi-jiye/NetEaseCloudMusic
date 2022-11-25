@@ -58,7 +58,8 @@ watch(() => route.query.id, (newId) => {
   }
 
   .filter {
-    backdrop-filter: saturate(150%) contrast(100%) blur(150px);
+    // 滤镜: 饱和度150% 对比度100% 模糊150px 亮度90%
+    backdrop-filter: saturate(150%) contrast(100%) blur(150px) brightness(90%);
     height: 100%;
     width: 100%;
     display: flex;

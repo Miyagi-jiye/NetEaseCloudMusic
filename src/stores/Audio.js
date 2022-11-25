@@ -15,15 +15,13 @@ export const useAudioStore = defineStore(
       songs: [],// 播放列表
       volume: 0.5,// 音量
       isPlay: false,// 是否正在播放
-      // isPause: false,// 是否暂停
       // isMuted: false,// 是否静音
-      // 播放模式
-      playMode: 'order',// 顺序播放,循环播放,随机播放,默认顺序播放: order, loop, random
-      lyric: '', // 原本歌词
-      romalrc: '',// 罗马音歌词
-      tlyric: '',// 翻译歌词
+      playMode: 'order',// 播放模式: 顺序播放,循环播放,随机播放,默认顺序播放: order, loop, random
+      lyric: '', // 歌词（原歌词 + 罗马音歌词 + 翻译歌词）
+      haveRomalrc: false,// 是否有罗马音歌词
+      haveTlyric: false,// 是否有翻译歌词
     })
-    // // 播放状态
+    // 播放状态
     // let isPlay = ref(false)
     // // 播放模式，0列表循环，1单曲循环，2随机播放
     // let playMode = ref(0)
@@ -90,7 +88,6 @@ export const useAudioStore = defineStore(
     async function getSongUrl(id) {
       const res = await songUrlV1(id)
       audioData.url = res.data[0].url// 设置歌曲url
-      // audio.src = audioData.url// 设置audio的src
       // console.log("新版歌曲url", res.data[0])
     }
     // 获取歌曲详情
@@ -135,6 +132,7 @@ export const useAudioStore = defineStore(
       audioData.songs = []// 清空播放列表
       audioData.song = {}// 清空当前播放歌曲
       audioData.url = ''// 清空歌曲url
+      audioData.lyric = ''// 清空歌词
       audio.pause()// 暂停播放
       console.log("🧺清空成功", audioData.songs)
     }
@@ -145,10 +143,12 @@ export const useAudioStore = defineStore(
         if (index === audioData.songs.length - 1) {// 如果是最后一首则播放第一首
           audioData.song = audioData.songs[0]
           await getSongUrl(audioData.song.id)// 获取歌曲url
+          await getLyric(audioData.song.id) // 获取歌词
           play(audioData.isPlay)
         } else {
           audioData.song = audioData.songs[index + 1]// 播放下一首
           await getSongUrl(audioData.song.id)// 获取歌曲url
+          await getLyric(audioData.song.id) // 获取歌词
           play(audioData.isPlay)
         }
         console.log("⏭播放下一首")
@@ -161,10 +161,12 @@ export const useAudioStore = defineStore(
         if (index === 0) {// 如果是第一首则播放最后一首
           audioData.song = audioData.songs[audioData.songs.length - 1]
           await getSongUrl(audioData.song.id)// 获取歌曲url
+          await getLyric(audioData.song.id) // 获取歌词
           play(audioData.isPlay)
         } else {
           audioData.song = audioData.songs[index - 1]// 播放上一首
           await getSongUrl(audioData.song.id)// 获取歌曲url
+          await getLyric(audioData.song.id) // 获取歌词
           play(audioData.isPlay)
         }
         console.log("⏮播放上一首")
@@ -174,6 +176,7 @@ export const useAudioStore = defineStore(
     async function changeCurrentSong(id) {
       await getSongDetail(id)// 获取歌曲详情
       await getSongUrl(id)// 获取歌曲url
+      await getLyric(audioData.song.id) // 获取歌词
       addSongToPlayList()// 添加到播放列表
       play(true)
     }
@@ -183,6 +186,7 @@ export const useAudioStore = defineStore(
       if (audioData.song.id === id) return console.log("正在播放该歌曲")
       await getSongDetail(id)// 获取歌曲详情
       await getSongUrl(id)// 获取歌曲url
+      await getLyric(audioData.song.id) // 获取歌词
       addSongToPlayList()// 添加到播放列表
       play(true)
     }
@@ -192,7 +196,9 @@ export const useAudioStore = defineStore(
       if (audioData.isPlay) {
         // 判断是否是同一首歌，如果是则继续播放，如果不是则重新赋值播放
         audio.src === audioData.url ? audio.play() : audio.src = audioData.url// 设置audio的src
-        audio.volume = audioData.volume
+        audio.volume = audioData.volume// 设置音量
+        // 判断是否有歌词
+        if (!audioData.lyric) getLyric(audioData.song.id) // 获取歌词
         // 判断url是否存在
         if (audioData.url) {
           audio.play().then(() => {
@@ -201,9 +207,7 @@ export const useAudioStore = defineStore(
             audioData.isPlay = false// 播放失败
             return showNotify({ type: 'danger', message: '播放失败' })
           })
-          // 获取歌词
-          getLyric(audioData.song.id)
-          // 播放结束，播放下一首
+          // 监听播放结束，播放下一首
           audio.onended = () => {
             playNextSong()
             console.log("🎵播放结束")
@@ -221,18 +225,38 @@ export const useAudioStore = defineStore(
     // 获取歌词
     async function getLyric(id) {
       const res = await uselyric(id)
-      // 过滤歌词
-      const lyric = res.lrc.lyric.split("\n").map(item => {
+      // 是否有罗马音歌词
+      if (res.romalrc && res.romalrc.lyric) {
+        audioData.haveRomalrc = true
+      } else {
+        audioData.haveRomalrc = false
+      }
+      // 是否有翻译歌词
+      if (res.tlyric && res.tlyric.lyric) {
+        audioData.haveTlyric = true
+      } else {
+        audioData.haveTlyric = false
+      }
+      // 合并歌词
+      audioData.lyric = mergeLyric(filterLyric(res.lrc.lyric), filterLyric(res.tlyric?.lyric), filterLyric(res.romalrc?.lyric)) // 过滤歌词
+      console.log("📃歌词", res, audioData)
+    }
+    // 过滤歌词(参数是歌词字符串)
+    function filterLyric(string) {
+      if (!string) return []// 如果没有歌词则返回空数组
+      const lyric = string.split("\n").map(item => {
         const time = item.match(/\[(\d{2}):(\d{2})\.(\d{2,3})\]/)
         const text = item.replace(/\[(\d{2}):(\d{2})\.(\d{2,3})\]/, '')
         // 判断是否有时间和歌词，过滤掉空的歌词
         if (time && text) {
+          // 毫秒转换成秒,全部变为三位数，避免毫秒除以1000时错误
+          if (time[3].length === 2) time[3] = time[3] * 10
           return {
             time: time[1] * 60 + time[2] * 1 + time[3] / 1000,
             text: text,
           }
         }
-      }).filter(item => item)
+      }).filter(item => item)// 过滤掉空的歌词
       // 添加下一句歌词时间
       for (let i = 0; i < lyric.length; i++) {
         if (i === lyric.length - 1) {
@@ -241,8 +265,49 @@ export const useAudioStore = defineStore(
           lyric[i].nextTime = lyric[i + 1].time
         }
       }
-      audioData.lyric = lyric
-      console.log("📃歌词", lyric)
+      return lyric
+    }
+    // 合并原本歌词和翻译歌词(参数是歌词过滤后的数组)
+    function mergeLyric(lyric, tlyric, romalrc) {
+      // 判断是否有翻译歌词
+      if (tlyric.length > 0) {
+        // 判断原本歌词和翻译歌词是否一样长
+        if (lyric.length === tlyric.length) {
+          // 合并歌词
+          for (let i = 0; i < lyric.length; i++) {
+            lyric[i].tlyric = tlyric[i].text
+          }
+        } else {
+          // 如果不一样长则判断时间是否一样
+          for (let i = 0; i < lyric.length; i++) {
+            for (let j = 0; j < tlyric.length; j++) {
+              if (lyric[i].time === tlyric[j].time) {
+                lyric[i].tlyric = tlyric[j].text
+              }
+            }
+          }
+        }
+      }
+      // 判断是否有罗马音歌词
+      if (romalrc.length > 0) {
+        // 判断原本歌词和罗马音歌词是否一样长
+        if (lyric.length === romalrc.length) {
+          // 合并歌词
+          for (let i = 0; i < lyric.length; i++) {
+            lyric[i].romalrc = romalrc[i].text
+          }
+        } else {
+          // 如果不一样长则判断时间是否一样
+          for (let i = 0; i < lyric.length; i++) {
+            for (let j = 0; j < romalrc.length; j++) {
+              if (lyric[i].time === romalrc[j].time) {
+                lyric[i].romalrc = romalrc[j].text
+              }
+            }
+          }
+        }
+      }
+      return lyric
     }
 
     return {

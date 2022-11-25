@@ -121,17 +121,23 @@ import { useRouter } from 'vue-router'
 import { storeToRefs } from "pinia"
 import { useLoginStore } from '@/stores/login.js'
 import { useUserStore } from '@/stores/user.js'
+import { useAudioStore } from '@/stores/Audio.js'
 
-const { isLogin } = storeToRefs(useLoginStore())//登录状态
+const { isLogin, cookie } = storeToRefs(useLoginStore())//登录状态
+const { play } = useAudioStore()//播放状态
 const { userData } = useUserStore()//用户信息
 const router = useRouter()
 const show = ref(false);//退出弹框
+
+// 动作栏配置
 const actions = [
   {
     name: '关闭云音乐',
     callback: () => {
       // 改变登录状态
       isLogin.value = !isLogin.value
+      // 暂停播放
+      play(false)
       // log
       console.log('登录状态', isLogin.value)
     }
@@ -139,12 +145,14 @@ const actions = [
   {
     name: '退出登录',
     callback: () => {
-      // 清空缓存数据
-      localStorage.clear()
-      // 移除cookie
-      document.cookie = 'MUSIC_U=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/'
       // 改变登录状态
       isLogin.value = false
+      // cookie
+      cookie.value = ''
+      // 清空缓存数据
+      localStorage.clear()
+      // 暂停播放
+      play(false)
       // 跳转到登录页面
       router.push('/login')
       // log
@@ -153,15 +161,16 @@ const actions = [
   },
 ];
 
+// 清除缓存
 function settingItemClick(e) {
   console.log(e)
   if (e == '清空缓存') {
     localStorage.clear()
     sessionStorage.clear()
-    // 刷新页面
-    // bug:Audio清除不了
-    window.location.reload()
+    play(false)
     console.log('清空缓存')
+    // 刷新页面
+    window.location.reload()
     alert('缓存清除成功')
   }
 }

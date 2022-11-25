@@ -59,14 +59,53 @@
                 <img class="disc" :src="disc" alt="唱片">
                 <img class="cover" v-lazy="audioData.song.al.picUrl + '?param=250y250'" alt="封面"
                   :style="audioData.isPlay ? 'animation-play-state: running' : 'animation-play-state: paused'" />
+                <!-- 喜欢，下载，评论，定时关闭，音质选择 -->
+                <div class="bottom">
+                  <van-icon name="like-o" />
+                  <van-icon name="upgrade" style="transform: rotate(180deg);" />
+                  <van-icon name="underway-o" />
+                  <van-icon name="chat-o" />
+                  <van-icon name="ellipsis" />
+                </div>
               </div>
             </Transition>
             <!-- 歌词 -->
             <Transition>
-              <div class="popup__center__lyric" v-show="showLyric == true" @click="showLyric = false">
-                <div class="popup__center__lyric__item" v-for="item in audioData.lyric" :key="item.time"
-                  :class="{ activeLyric: item.time <= currentTime + 0.5 && item.nextTime > currentTime + 0.5 }">
-                  <span>{{ item.text }}</span>
+              <div class="popup__center__lyric">
+                <!-- 顶部功能 -->
+                <div class="top__setting">
+                  <div class="bottom__setting__left">
+                    <van-icon name="volume-o" size="22px" />
+                  </div>
+                  <div class="bottom__setting__right">
+                    <van-icon name="font-o" size="22px" />
+                  </div>
+                </div>
+                <!-- 歌词页 -->
+                <ul class="lyric" v-show="showLyric == true" @click="showLyric = false" @touchstart="isTouch = true"
+                  @touchend="touchendHandle">
+                  <li class="lyric__item" v-for="(item, index) in audioData.lyric" :key="index"
+                    :class="{ activeLyric: currentIndex == index }">
+                    <span>{{ item.text }}</span>
+                    <span v-show="showLyricType == 1">{{ item.tlyric }}</span>
+                    <span v-show="showLyricType == 2">{{ item.romalrc }}</span>
+                  </li>
+                </ul>
+                <!-- 底部功能 -->
+                <div class="bottom__setting">
+                  <div class="bottom__setting__left">
+                    <MVIcon v-if="audioData.song.mv" :mvid="audioData.song.mv" color="currentColor" />
+                  </div>
+                  <div class="bottom__setting__right">
+                    <div class="translateLyric" @click="switchLyricType"
+                      v-if="audioData.haveTlyric || audioData.haveRomalrc">
+                      <span v-show="audioData.haveTlyric == true"
+                        :style="{ color: showLyricType == 1 ? '#fff' : '' }">译</span>
+                      <span v-show="audioData.haveRomalrc == true"
+                        :style="{ color: showLyricType == 2 ? '#fff' : '' }">音</span>
+                    </div>
+                    <van-icon name="more-o" size="22px" />
+                  </div>
                 </div>
               </div>
             </Transition>
@@ -76,7 +115,7 @@
             <!-- 播放进度条 -->
             <div class="progress">
               <span>{{ formatTime(currentTime) }}</span>
-              <van-slider v-model="sliderValue" @change="onChange" :min="0" :max="Math.floor(audio.duration)">
+              <van-slider v-model="currentTime" @change="onChange" :min="0" :max="audio.duration">
                 <template #button>
                   <div class="custom-button">自定义进度条图标</div>
                 </template>
@@ -153,35 +192,72 @@
 </template>
 
 <script setup>
+import { throttle, debounce } from '@/utils/index.js'//节流函数
 import { formatTime } from '@/utils/useFilter.js'// 时间格式化
-// import PlayPopup from '@/components/PlayPopup/index.vue'// 引入播放弹窗组件
+import MVIcon from '@/components/MVIcon/index.vue'// mv图标
 import PlayListIcon from "@/components/PlayListIcon/index.vue"// 引入播放列表图标组件
 import disc from "@/assets/icons/ewj.png";// 唱片
 import pointer from "@/assets/icons/fd6.png";// 指针
 import { useAudioStore } from '@/stores/Audio.js';
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
-const { audioData, play, audio, playPrevSong, playNextSong, } = useAudioStore();
+const { audioData, play, audio, playPrevSong, playNextSong } = useAudioStore();
 const show = ref(false)// 是否显示播放弹窗
 const showLyric = ref(false)// 是否显示歌词
-const sliderValue = ref(0)// 进度条的值
 const currentTime = ref(0)// 当前播放时间
+const currentIndex = ref(0)// 当前激活的歌词索引
+const isTouch = ref(false)// 是否正在拖动歌词
+const showLyricType = ref(0)// 显示的歌词类型：0-原歌词，1-翻译歌词，2-罗马音歌词
 
 // 监听播放时间更新的事件
 audio.ontimeupdate = () => {
-  currentTime.value = Math.floor(audio.currentTime)// 更新当前播放时间
-  sliderValue.value = Math.floor(audio.currentTime)
-  // console.log("当前播放时间", currentTime.value)
+  // 更新当前播放时间
+  currentTime.value = audio.currentTime
+  // 更新当前激活的歌词索引
+  for (let i = 0; i < audioData.lyric.length; i++) {
+    if (currentTime.value >= audioData.lyric[i].time) {
+      currentIndex.value = i
+    }
+  }
+}
+
+// 播放激活歌词索引改变时，滚动歌词列表
+watch(
+  currentIndex,
+  (newIndex) => {
+    // 判断是否在歌词页
+    if (showLyric.value) {
+      // 判断是否正在拖动歌词
+      if (isTouch.value == false) {
+        scrollLyric()
+      }
+    }
+  },
+  { immediate: true }
+)
+
+// 切换歌词显示类型
+const switchLyricType = () => {
+  showLyricType.value++
+  if (showLyricType.value > 2) {
+    showLyricType.value = 0
+  }
+}
+
+// touchend：触摸结束（手指从触摸屏上移开）,5s内没有再次触发该事件就回到当前激活歌词（防抖函数）
+const touchendHandle = debounce(() => {
+  isTouch.value = false
   scrollLyric()
-}
+}, 5000)//可手动设置
 
-// 滑块改变时触发
+// 滑块改变时触发(value是当前滑块的值)
 const onChange = (value) => {
-  audio.currentTime = Math.floor(value)
+  audio.currentTime = value
 }
 
-// 滚动激活歌词
+// 滚动到激活歌词
 const scrollLyric = () => {
+  console.log("滚动到激活歌词")
   // 获取激活的歌词
   const activeLyric = document.querySelector(".activeLyric")
   // 让歌词滚动到可视区域
@@ -343,6 +419,22 @@ const scrollLyric = () => {
         // animation-play-state: paused; // 暂停动画
         // animation-play-state: running; // 恢复动画
       }
+
+      // 喜欢，下载，评论，定时关闭，音质选择
+      .bottom {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        gap: 16px;
+        color: #ffffff;
+        font-size: 24px;
+        line-height: 1;
+      }
     }
 
     .popup__center__lyric {
@@ -350,39 +442,110 @@ const scrollLyric = () => {
       display: flex;
       align-items: center;
       flex-direction: column;
+      gap: 20px;
       font-size: 16px;
       color: #ffffff88;
       scroll-behavior: smooth;
       transition: all 0.3s;
-      // 滚动条
-      overflow-y: auto;
+      position: relative;
 
-      // 滚动条样式
-      &::-webkit-scrollbar {
-        width: 0; // 隐藏滚动条
-        height: 0; // 隐藏滚动条
-      }
+      // 歌词
+      .lyric {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+        font-size: 16px;
+        color: #ffffff88;
+        scroll-behavior: smooth;
+        transition: all 0.3s;
+        overflow-y: auto;
 
-      &::-webkit-scrollbar-thumb {
-        background: #fff;
-        border-radius: 4px;
-      }
+        .lyric__item {
+          line-height: 1.5;
+          font-size: 15px;
+          text-align: center; // 文本居中
+          white-space: normal; // 换行
+          word-break: break-word; // 换行
+          display: flex;
+          flex-direction: column;
 
-      &::-webkit-scrollbar-track {
-        background: #fff;
-        border-radius: 4px;
-      }
+          &:nth-child(1) {
+            margin-top: 50%;
+          }
 
-      .popup__center__lyric__item {
-        line-height: 2.5;
+          &:last-child {
+            margin-bottom: 50%;
+          }
 
-        &:nth-child(1) {
-          margin-top: 50%;
+          span:nth-child(2) {
+            font-size: 13px;
+          }
         }
 
-        &:last-child {
-          margin-bottom: 50%;
+        // 滚动条样式
+        &::-webkit-scrollbar {
+          width: 0; // 隐藏滚动条
+          height: 0; // 隐藏滚动条
         }
+
+        &::-webkit-scrollbar-thumb {
+          background: #fff;
+          border-radius: 4px;
+        }
+
+        &::-webkit-scrollbar-track {
+          background: #fff;
+          border-radius: 4px;
+        }
+      }
+
+      // MV,歌词翻译切换，更多设置
+      .bottom__setting {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box;
+        line-height: 1;
+
+        .bottom__setting__right {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+
+          .translateLyric {
+            border: 1px solid currentColor;
+            border-radius: 20px;
+            padding: 3px 6px;
+            font-size: 12px;
+            cursor: pointer;
+
+            span:not(:last-child)::after {
+              content: '/';
+              margin: 0 4px;
+              color: #ffffff88;
+            }
+          }
+        }
+      }
+
+      .top__setting {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box;
       }
 
     }
@@ -398,6 +561,7 @@ const scrollLyric = () => {
       align-items: center;
       gap: 16px;
       font-size: 12px;
+      user-select: none;
 
       // 进度条按钮样式
       .custom-button {
@@ -422,6 +586,7 @@ const scrollLyric = () => {
       display: flex;
       align-items: center;
       justify-content: space-around;
+      color: #fff;
     }
   }
 }
