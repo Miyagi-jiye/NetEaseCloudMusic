@@ -14,8 +14,8 @@ export const useAudioStore = defineStore(
       song: {},// 当前播放的歌曲信息
       songs: [],// 播放列表
       volume: 0.5,// 音量
+      duration: 0,// 当前播放歌曲的总时长
       isPlay: false,// 是否正在播放
-      // isMuted: false,// 是否静音
       playMode: 'order',// 播放模式: 顺序播放,循环播放,随机播放,默认顺序播放: order, loop, random
       lyric: '', // 歌词（原歌词 + 罗马音歌词 + 翻译歌词）
       haveRomalrc: false,// 是否有罗马音歌词
@@ -88,6 +88,7 @@ export const useAudioStore = defineStore(
     async function getSongUrl(id) {
       const res = await songUrlV1(id)
       audioData.url = res.data[0].url// 设置歌曲url
+      await getLyric(audioData.song.id) // 获取歌词
       // console.log("新版歌曲url", res.data[0])
     }
     // 获取歌曲详情
@@ -143,12 +144,10 @@ export const useAudioStore = defineStore(
         if (index === audioData.songs.length - 1) {// 如果是最后一首则播放第一首
           audioData.song = audioData.songs[0]
           await getSongUrl(audioData.song.id)// 获取歌曲url
-          await getLyric(audioData.song.id) // 获取歌词
           play(audioData.isPlay)
         } else {
           audioData.song = audioData.songs[index + 1]// 播放下一首
           await getSongUrl(audioData.song.id)// 获取歌曲url
-          await getLyric(audioData.song.id) // 获取歌词
           play(audioData.isPlay)
         }
         console.log("⏭播放下一首")
@@ -161,12 +160,10 @@ export const useAudioStore = defineStore(
         if (index === 0) {// 如果是第一首则播放最后一首
           audioData.song = audioData.songs[audioData.songs.length - 1]
           await getSongUrl(audioData.song.id)// 获取歌曲url
-          await getLyric(audioData.song.id) // 获取歌词
           play(audioData.isPlay)
         } else {
           audioData.song = audioData.songs[index - 1]// 播放上一首
           await getSongUrl(audioData.song.id)// 获取歌曲url
-          await getLyric(audioData.song.id) // 获取歌词
           play(audioData.isPlay)
         }
         console.log("⏮播放上一首")
@@ -176,7 +173,6 @@ export const useAudioStore = defineStore(
     async function changeCurrentSong(id) {
       await getSongDetail(id)// 获取歌曲详情
       await getSongUrl(id)// 获取歌曲url
-      await getLyric(audioData.song.id) // 获取歌词
       addSongToPlayList()// 添加到播放列表
       play(true)
     }
@@ -186,36 +182,45 @@ export const useAudioStore = defineStore(
       if (audioData.song.id === id) return console.log("正在播放该歌曲")
       await getSongDetail(id)// 获取歌曲详情
       await getSongUrl(id)// 获取歌曲url
-      await getLyric(audioData.song.id) // 获取歌词
       addSongToPlayList()// 添加到播放列表
       play(true)
     }
     // 播放
-    function play(value) {
+    async function play(value) {
       audioData.isPlay = value// 播放状态
       if (audioData.isPlay) {
-        // 判断是否是同一首歌，如果是则继续播放，如果不是则重新赋值播放
-        audio.src === audioData.url ? audio.play() : audio.src = audioData.url// 设置audio的src
-        audio.volume = audioData.volume// 设置音量
+        // 判断正在播放的是不是同一首歌
+        if (audio.src === audioData.url) {
+          audio.play().then(() => {
+            console.log("🎶歌曲src存在，继续播放")
+          }).catch(async (err) => {
+            await getSongUrl(audioData.song.id)// 重新获取url
+            play(audioData.isPlay)
+            console.log("🎶歌曲src过期，重新获取并播放")
+          })
+        } else {
+          // 判断url是否存在
+          if (audioData.url) {
+            audio.src = audioData.url
+            audio.play().then(() => {
+              audioData.isPlay = true// 播放成功
+              // 开始监听播放结束，播放下一首
+              audio.onended = () => {
+                playNextSong()
+                console.log("🎵播放结束")
+              }
+            }).catch((err) => {
+              audioData.isPlay = false// 播放失败
+              return showNotify({ type: 'danger', message: err.message ?? '播放失败' })
+            })
+          } else {
+            await getSongUrl(audioData.song.id)// 重新获取url
+            play(audioData.isPlay)
+            console.log("🎶歌曲url不存在，重新获取并播放")
+          }
+        }
         // 判断是否有歌词
         if (!audioData.lyric) getLyric(audioData.song.id) // 获取歌词
-        // 判断url是否存在
-        if (audioData.url) {
-          audio.play().then(() => {
-            audioData.isPlay = true// 播放成功
-          }).catch(() => {
-            audioData.isPlay = false// 播放失败
-            return showNotify({ type: 'danger', message: '播放失败' })
-          })
-          // 监听播放结束，播放下一首
-          audio.onended = () => {
-            playNextSong()
-            console.log("🎵播放结束")
-          }
-        } else {
-          audioData.isPlay = false// 播放失败
-          showNotify({ type: 'danger', message: 'url不存在' })
-        }
         console.log("🎤播放")
       } else {
         audio.pause()
@@ -239,7 +244,7 @@ export const useAudioStore = defineStore(
       }
       // 合并歌词
       audioData.lyric = mergeLyric(filterLyric(res.lrc.lyric), filterLyric(res.tlyric?.lyric), filterLyric(res.romalrc?.lyric)) // 过滤歌词
-      console.log("📃歌词", res, audioData)
+      // console.log("📃歌词", res, audioData)
     }
     // 过滤歌词(参数是歌词字符串)
     function filterLyric(string) {
@@ -309,6 +314,39 @@ export const useAudioStore = defineStore(
       }
       return lyric
     }
+    // 备份// 播放
+    // function play(value) {
+    //   audioData.isPlay = value// 播放状态
+    //   if (audioData.isPlay) {
+    //     // 判断是否是同一首歌，如果是则继续播放，如果不是则重新赋值播放
+    //     audio.src === audioData.url ? audio.play() : audio.src = audioData.url// 设置audio的src
+    //     audio.volume = audioData.volume// 设置音量
+    //     // 判断是否有歌词
+    //     if (!audioData.lyric) getLyric(audioData.song.id) // 获取歌词
+    //     // 判断url是否存在
+    //     if (audioData.url) {
+    //       audio.play().then(() => {
+    //         audioData.isPlay = true// 播放成功
+    //       }).catch(() => {
+    //         audioData.isPlay = false// 播放失败
+    //         // 重新获取url
+    //         return showNotify({ type: 'danger', message: '播放失败,url过期' })
+    //       })
+    //       // 监听播放结束，播放下一首
+    //       audio.onended = () => {
+    //         playNextSong()
+    //         console.log("🎵播放结束")
+    //       }
+    //     } else {
+    //       audioData.isPlay = false// 播放失败
+    //       showNotify({ type: 'danger', message: 'url不存在' })
+    //     }
+    //     console.log("🎤播放")
+    //   } else {
+    //     audio.pause()
+    //     console.log("⏸暂停")
+    //   }
+    // }
 
     return {
       audio,

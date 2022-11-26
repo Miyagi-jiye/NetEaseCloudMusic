@@ -60,7 +60,6 @@ function routerPush(path, query) {
 
       .MvListItem__top__desc {
         transform: translateY(100%);
-        font-weight: bold;
       }
     }
 

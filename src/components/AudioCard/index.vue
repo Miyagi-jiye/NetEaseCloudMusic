@@ -74,34 +74,47 @@
               <div class="popup__center__lyric">
                 <!-- 顶部功能 -->
                 <div class="top__setting">
-                  <div class="bottom__setting__left">
+                  <div class="top__setting__left">
                     <van-icon name="volume-o" size="22px" />
                   </div>
-                  <div class="bottom__setting__right">
+                  <div class="top__setting__right">
+                    <van-icon name="plus" size="18px" @click="defaultFontSize++" />
                     <van-icon name="font-o" size="22px" />
+                    <van-icon name="minus" size="18px" @click="defaultFontSize--" />
                   </div>
                 </div>
+                <!-- 歌词时间线 -->
+                <div v-show="showTimeline == true" class="timeline">
+                  <van-icon name="play" size="22px" />
+                  <span class="timeline__line"></span>
+                  <span>{{ formatTime(currentTime) }}</span>
+                </div>
                 <!-- 歌词页 -->
-                <ul class="lyric" v-show="showLyric == true" @click="showLyric = false" @touchstart="isTouch = true"
+                <ul class="lyric" v-show="showLyric == true" @click="showLyric = false" @touchstart="touchstartHandle"
                   @touchend="touchendHandle">
                   <li class="lyric__item" v-for="(item, index) in audioData.lyric" :key="index"
-                    :class="{ activeLyric: currentIndex == index }">
+                    :class="{ activeLyric: currentIndex == index }" :style="{ fontSize: defaultFontSize + 3 + 'px' }">
                     <span>{{ item.text }}</span>
-                    <span v-show="showLyricType == 1">{{ item.tlyric }}</span>
-                    <span v-show="showLyricType == 2">{{ item.romalrc }}</span>
+                    <span v-show="showLyricType == 1" :style="{ fontSize: defaultFontSize + 1 + 'px' }">
+                      {{ item.tlyric }}
+                    </span>
+                    <span v-show="showLyricType == 2" :style="{ fontSize: defaultFontSize + 1 + 'px' }">
+                      {{ item.romalrc }}
+                    </span>
                   </li>
                 </ul>
                 <!-- 底部功能 -->
                 <div class="bottom__setting">
                   <div class="bottom__setting__left">
-                    <MVIcon v-if="audioData.song.mv" :mvid="audioData.song.mv" color="currentColor" />
+                    <MVIcon v-if="audioData.song.mv" :mvid="audioData.song.mv" color="currentColor"
+                      @click="show = false" />
                   </div>
                   <div class="bottom__setting__right">
                     <div class="translateLyric" @click="switchLyricType"
                       v-if="audioData.haveTlyric || audioData.haveRomalrc">
-                      <span v-show="audioData.haveTlyric == true"
+                      <span v-if="audioData.haveTlyric == true"
                         :style="{ color: showLyricType == 1 ? '#fff' : '' }">译</span>
-                      <span v-show="audioData.haveRomalrc == true"
+                      <span v-if="audioData.haveRomalrc == true"
                         :style="{ color: showLyricType == 2 ? '#fff' : '' }">音</span>
                     </div>
                     <van-icon name="more-o" size="22px" />
@@ -114,13 +127,14 @@
           <div class="popup__bottom">
             <!-- 播放进度条 -->
             <div class="progress">
-              <span>{{ formatTime(currentTime) }}</span>
-              <van-slider v-model="currentTime" @change="onChange" :min="0" :max="audio.duration">
+              <span class="progress__time">{{ formatTime(currentTime) }}</span>
+              <van-slider v-model="currentTime" @change="onChange" :min="0" :max="audio.duration" bar-height="4px"
+                active-color="#fff" inactive-color="#ffffff58">
                 <template #button>
-                  <div class="custom-button">自定义进度条图标</div>
+                  <div class="custom-button"></div>
                 </template>
               </van-slider>
-              <span>{{ formatTime(audio.duration) }}</span>
+              <span class="progress__time">{{ formatTime(audio.duration) }}</span>
             </div>
             <!-- 播放控制器 -->
             <div class="controller">
@@ -192,14 +206,14 @@
 </template>
 
 <script setup>
-import { throttle, debounce } from '@/utils/index.js'//节流函数
-import { formatTime } from '@/utils/useFilter.js'// 时间格式化
-import MVIcon from '@/components/MVIcon/index.vue'// mv图标
-import PlayListIcon from "@/components/PlayListIcon/index.vue"// 引入播放列表图标组件
+import { throttle, debounce } from '@/utils/index.js';//节流函数
+import { formatTime } from '@/utils/useFilter.js';// 时间格式化
+import MVIcon from '@/components/MVIcon/index.vue';// mv图标
+import PlayListIcon from "@/components/PlayListIcon/index.vue";// 引入播放列表图标组件
 import disc from "@/assets/icons/ewj.png";// 唱片
 import pointer from "@/assets/icons/fd6.png";// 指针
 import { useAudioStore } from '@/stores/Audio.js';
-import { ref, watch } from 'vue'
+import { ref, watch } from 'vue';
 
 const { audioData, play, audio, playPrevSong, playNextSong } = useAudioStore();
 const show = ref(false)// 是否显示播放弹窗
@@ -208,6 +222,8 @@ const currentTime = ref(0)// 当前播放时间
 const currentIndex = ref(0)// 当前激活的歌词索引
 const isTouch = ref(false)// 是否正在拖动歌词
 const showLyricType = ref(0)// 显示的歌词类型：0-原歌词，1-翻译歌词，2-罗马音歌词
+const showTimeline = ref(false)// 是否显示时间线
+const defaultFontSize = ref(12)// 默认歌词字体大小
 
 // 监听播放时间更新的事件
 audio.ontimeupdate = () => {
@@ -225,11 +241,12 @@ audio.ontimeupdate = () => {
 watch(
   currentIndex,
   (newIndex) => {
-    // 判断是否在歌词页
-    if (showLyric.value) {
+    // 判断是否在歌词页，防止dom还未渲染完毕
+    if (show.value && showLyric.value) {
       // 判断是否正在拖动歌词
       if (isTouch.value == false) {
         scrollLyric()
+        // test()
       }
     }
   },
@@ -239,16 +256,33 @@ watch(
 // 切换歌词显示类型
 const switchLyricType = () => {
   showLyricType.value++
-  if (showLyricType.value > 2) {
+  // 判断一共有几种歌词类型
+  if (audioData.haveTlyric && audioData.haveRomalrc) {
+    if (showLyricType.value > 2) {
+      showLyricType.value = 0
+    }
+  } else if (audioData.haveTlyric) {
+    if (showLyricType.value > 1) {
+      showLyricType.value = 0
+    }
+  } else {
     showLyricType.value = 0
   }
+  // console.log(showLyricType.value)
 }
 
-// touchend：触摸结束（手指从触摸屏上移开）,5s内没有再次触发该事件就回到当前激活歌词（防抖函数）
+// touchstart:手指触摸屏幕时触发
+const touchstartHandle = () => {
+  isTouch.value = true
+  showTimeline.value = true
+}
+
+// touchend：触摸结束（手指从触摸屏上移开）,3s内没有再次触发该事件就回到当前激活歌词（防抖函数）
 const touchendHandle = debounce(() => {
   isTouch.value = false
+  showTimeline.value = false
   scrollLyric()
-}, 5000)//可手动设置
+}, 3000)//可手动设置延时时间
 
 // 滑块改变时触发(value是当前滑块的值)
 const onChange = (value) => {
@@ -262,6 +296,29 @@ const scrollLyric = () => {
   const activeLyric = document.querySelector(".activeLyric")
   // 让歌词滚动到可视区域
   activeLyric && activeLyric.scrollIntoView({ behavior: "smooth", block: "center" })
+}
+
+// 测试操作dom滚动歌词
+const test = () => {
+  // 1.通过document.querySelectorAll(".lyric__item")获取所有歌词的元素，根据每个元素的clientHeight获取元素的高度；
+  // 2.根据当前播放歌词的索引，获取当前歌词元素到顶部的距离，并设置滚动到顶部的距离；
+  // 3.同时根据当前歌词的索引，就可以设置歌词的高亮样式；
+  // 4.同时，根据元素的高度还可以设置当前歌词居中；
+
+  // 通过document.querySelectorAll(".lyric__item")获取所有歌词的元素，根据每个元素的clientHeight获取元素的高度
+  const lyricItems = document.querySelectorAll(".lyric__item")
+  // 获取所有歌词的高度
+  const lyricItemsHeight = Array.from(lyricItems).map((item) => item.clientHeight)
+  // console.log(lyricItemsHeight)
+
+  // 根据当前播放歌词的索引，获取当前歌词元素到顶部的距离，并设置滚动到顶部的距离
+  const lyricScrollTop = lyricItemsHeight.slice(0, currentIndex.value).reduce((prev, next) => prev + next, 0)
+  // console.log(lyricScrollTop)
+
+  // 设置滚动到顶部的距离
+  const lyricList = document.querySelector(".lyric")
+  // const lyricListHeight = lyricList.clientHeight
+  lyricList.scrollTop = lyricScrollTop
 }
 </script>
 
@@ -281,6 +338,7 @@ const scrollLyric = () => {
 .activeLyric {
   color: #ffffff;
   font-size: 16px;
+  scroll-behavior: smooth;
 }
 
 .background {
@@ -451,19 +509,35 @@ const scrollLyric = () => {
 
       // 歌词
       .lyric {
+        scroll-behavior: smooth;
         height: 100%;
         width: 100%;
         display: flex;
         align-items: center;
         flex-direction: column;
-        gap: 20px;
+        // gap: 20px;
         font-size: 16px;
         color: #ffffff88;
         scroll-behavior: smooth;
         transition: all 0.3s;
         overflow-y: auto;
+        // 淡入淡出遮罩效果
+        -webkit-mask-image: linear-gradient(180deg,
+            hsla(0, 0%, 100%, 0) 0,
+            hsla(0, 0%, 100%, .6) 7%,
+            #fff 15%, #fff 85%,
+            hsla(0, 0%, 100%, .6) 93%,
+            hsla(0, 0%, 100%, 0));
+        mask-image: linear-gradient(180deg,
+            hsla(0, 0%, 100%, 0) 0,
+            hsla(0, 0%, 100%, .6) 7%,
+            #fff 15%, #fff 85%,
+            hsla(0, 0%, 100%, .6) 93%,
+            hsla(0, 0%, 100%, 0));
 
         .lyric__item {
+          padding: 16px 0;
+          scroll-behavior: smooth;
           line-height: 1.5;
           font-size: 15px;
           text-align: center; // 文本居中
@@ -478,10 +552,6 @@ const scrollLyric = () => {
 
           &:last-child {
             margin-bottom: 50%;
-          }
-
-          span:nth-child(2) {
-            font-size: 13px;
           }
         }
 
@@ -514,6 +584,7 @@ const scrollLyric = () => {
         justify-content: space-between;
         box-sizing: border-box;
         line-height: 1;
+        z-index: 1;
 
         .bottom__setting__right {
           display: flex;
@@ -546,6 +617,36 @@ const scrollLyric = () => {
         align-items: center;
         justify-content: space-between;
         box-sizing: border-box;
+        line-height: 1;
+        z-index: 1;
+
+        .top__setting__right {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+      }
+
+      // 时间线
+      .timeline {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+        bottom: 50%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        gap: 10px;
+        font-size: 12px;
+
+        .timeline__line {
+          width: 100%;
+          height: 1px;
+          background: #ffffff44;
+        }
       }
 
     }
@@ -562,6 +663,11 @@ const scrollLyric = () => {
       gap: 16px;
       font-size: 12px;
       user-select: none;
+
+      .progress__time {
+        width: 50px;
+        text-align: center;
+      }
 
       // 进度条按钮样式
       .custom-button {
