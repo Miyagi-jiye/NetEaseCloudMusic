@@ -59,14 +59,6 @@
                 <img class="disc" :src="disc" alt="唱片">
                 <img class="cover" v-lazy="audioData.song.al.picUrl + '?param=250y250'" alt="封面"
                   :style="audioData.isPlay ? 'animation-play-state: running' : 'animation-play-state: paused'" />
-                <!-- 喜欢，下载，评论，定时关闭，音质选择 -->
-                <div class="bottom">
-                  <van-icon name="like-o" />
-                  <van-icon name="upgrade" style="transform: rotate(180deg);" />
-                  <van-icon name="underway-o" />
-                  <van-icon name="chat-o" />
-                  <van-icon name="ellipsis" />
-                </div>
               </div>
             </Transition>
             <!-- 歌词 -->
@@ -78,9 +70,7 @@
                     <van-icon name="volume-o" size="22px" />
                   </div>
                   <div class="top__setting__right">
-                    <van-icon name="plus" size="18px" @click="defaultFontSize++" />
                     <van-icon name="font-o" size="22px" />
-                    <van-icon name="minus" size="18px" @click="defaultFontSize--" />
                   </div>
                 </div>
                 <!-- 歌词时间线 -->
@@ -106,10 +96,14 @@
                 <!-- 底部功能 -->
                 <div class="bottom__setting">
                   <div class="bottom__setting__left">
+                    <!-- mv详情页跳转 -->
                     <MVIcon v-if="audioData.song.mv" :mvid="audioData.song.mv" color="currentColor"
-                      @click="show = false" />
+                      @click="show = false" :size="28" />
+                    <!-- 音质切换 -->
+                    <MusicQualityIcon :song="audioData.song" :active="audioData.level" @switch="switchQuality" />
                   </div>
                   <div class="bottom__setting__right">
+                    <!-- 歌词切换 -->
                     <div class="translateLyric" @click="switchLyricType"
                       v-if="audioData.haveTlyric || audioData.haveRomalrc">
                       <span v-if="audioData.haveTlyric == true"
@@ -117,7 +111,29 @@
                       <span v-if="audioData.haveRomalrc == true"
                         :style="{ color: showLyricType == 2 ? '#fff' : '' }">音</span>
                     </div>
-                    <van-icon name="more-o" size="22px" />
+                    <!-- 更多设置 -->
+                    <van-icon name="more-o" size="24px" @click="showMoreSetting = true" />
+                    <van-action-sheet v-model:show="showMoreSetting" teleport="body">
+                      <div class="lyricMoreSetting nowrap">
+                        <span class="lyricMoreSetting__title">更多</span>
+                        <div class="lyricMoreSetting__line"></div>
+                        <div class="lyricMoreSetting__item">
+                          <div class="lyricMoreSetting__item__left">
+                            <van-icon name="font-o" size="22px" />
+                            <span>调整歌词字体大小</span>
+                          </div>
+                          <van-stepper v-model="defaultFontSize" :disable-input="true" :min="12" :max="24" />
+                        </div>
+                        <div class="lyricMoreSetting__item">
+                          <div class="lyricMoreSetting__item__left">
+                            <van-icon name="underway-o" size="22px" />
+                            <span>歌词时间调整</span>
+                          </div>
+                          <van-stepper v-model.number="defaultLyricTime" :default-value="0" :step="0.1" :min="-5"
+                            :max="5" :decimal-length="1" />
+                        </div>
+                      </div>
+                    </van-action-sheet>
                   </div>
                 </div>
               </div>
@@ -128,13 +144,13 @@
             <!-- 播放进度条 -->
             <div class="progress">
               <span class="progress__time">{{ formatTime(currentTime) }}</span>
-              <van-slider v-model="currentTime" @change="onChange" :min="0" :max="audio.duration" bar-height="4px"
-                active-color="#fff" inactive-color="#ffffff58">
+              <van-slider v-model="currentTime" @change="onChange" :min="0" :max="(audioData.song.dt / 1000)"
+                bar-height="4px" active-color="#fff" inactive-color="#ffffff58">
                 <template #button>
                   <div class="custom-button"></div>
                 </template>
               </van-slider>
-              <span class="progress__time">{{ formatTime(audio.duration) }}</span>
+              <span class="progress__time">{{ formatTime(audioData.song.dt / 1000) }}</span>
             </div>
             <!-- 播放控制器 -->
             <div class="controller">
@@ -210,12 +226,14 @@ import { throttle, debounce } from '@/utils/index.js';//节流函数
 import { formatTime } from '@/utils/useFilter.js';// 时间格式化
 import MVIcon from '@/components/MVIcon/index.vue';// mv图标
 import PlayListIcon from "@/components/PlayListIcon/index.vue";// 引入播放列表图标组件
+import MusicQualityIcon from "@/components/MusicQualityIcon/index.vue";// 引入音质图标组件
 import disc from "@/assets/icons/ewj.png";// 唱片
 import pointer from "@/assets/icons/fd6.png";// 指针
 import { useAudioStore } from '@/stores/Audio.js';
 import { ref, watch } from 'vue';
+import { showNotify, showDialog } from 'vant';
 
-const { audioData, play, audio, playPrevSong, playNextSong } = useAudioStore();
+const { audioData, play, audio, playPrevSong, playNextSong, changeQuality } = useAudioStore();
 const show = ref(false)// 是否显示播放弹窗
 const showLyric = ref(false)// 是否显示歌词
 const currentTime = ref(0)// 当前播放时间
@@ -224,11 +242,15 @@ const isTouch = ref(false)// 是否正在拖动歌词
 const showLyricType = ref(0)// 显示的歌词类型：0-原歌词，1-翻译歌词，2-罗马音歌词
 const showTimeline = ref(false)// 是否显示时间线
 const defaultFontSize = ref(12)// 默认歌词字体大小
+const defaultLyricTime = ref(0)// 默认歌词时间
+const showMoreSetting = ref(false)// 是否显示更多设置
+const WaypointPercent = ref('0%')// 试听歌词时长锚点百分比
+const WaypointDisplay = ref('none')// 是否显示锚点
 
 // 监听播放时间更新的事件
 audio.ontimeupdate = () => {
   // 更新当前播放时间
-  currentTime.value = audio.currentTime
+  currentTime.value = Number(audio.currentTime + defaultLyricTime.value)
   // 更新当前激活的歌词索引
   for (let i = 0; i < audioData.lyric.length; i++) {
     if (currentTime.value >= audioData.lyric[i].time) {
@@ -245,12 +267,27 @@ watch(
     if (show.value && showLyric.value) {
       // 判断是否正在拖动歌词
       if (isTouch.value == false) {
-        scrollLyric()
-        // test()
+        // scrollLyric()
+        test()
       }
     }
   },
   { immediate: true }
+)
+
+// 监听是否是试听歌曲的变化
+watch(
+  () => audioData.isTrial,
+  (value) => {
+    if (value == true) {
+      WaypointPercent.value = audio.duration / (audioData.song.dt / 1000) * 100 + '% '// 计算试听时长占总时长的百分比
+      WaypointDisplay.value = 'block'// 显示锚点
+      console.log("试听时长占总时长的百分比", WaypointPercent.value)
+    } else {
+      WaypointDisplay.value = 'none'// 隐藏锚点
+      console.log("不是试听")
+    }
+  },
 )
 
 // 切换歌词显示类型
@@ -320,9 +357,27 @@ const test = () => {
   // const lyricListHeight = lyricList.clientHeight
   lyricList.scrollTop = lyricScrollTop
 }
+
+// 切换播放音质
+const switchQuality = (e) => {
+  changeQuality(e)
+}
 </script>
 
 <style scoped lang="less">
+:deep(.van-slider::after) {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: v-bind(WaypointPercent);
+  height: 6px;
+  width: 6px;
+  border-radius: 50%;
+  background-color: #fff;
+  display: v-bind(WaypointDisplay);
+}
+
 // 唱片和歌词切换的淡入淡出过渡
 .v-enter-active,
 .v-leave-active {
@@ -332,6 +387,40 @@ const test = () => {
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
+}
+
+// 歌词更多设置弹窗
+.lyricMoreSetting {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+
+  &__title {
+    padding: 16px;
+    font-size: 14px;
+  }
+
+  &__line {
+    height: 1px;
+    background-color: #e5e5e5;
+  }
+
+  &__item {
+    padding: 16px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    line-height: 1;
+    overflow: hidden;
+
+    &__left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
 }
 
 // 激活歌词的样式
@@ -351,6 +440,7 @@ const test = () => {
   transition: all 0.5s;
 }
 
+// 歌词弹窗
 .popup {
   height: 100vh;
   padding: 16px;
@@ -478,21 +568,6 @@ const test = () => {
         // animation-play-state: running; // 恢复动画
       }
 
-      // 喜欢，下载，评论，定时关闭，音质选择
-      .bottom {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        gap: 16px;
-        color: #ffffff;
-        font-size: 24px;
-        line-height: 1;
-      }
     }
 
     .popup__center__lyric {
@@ -605,6 +680,12 @@ const test = () => {
             }
           }
         }
+
+        .bottom__setting__left {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
       }
 
       .top__setting {
@@ -693,6 +774,7 @@ const test = () => {
       align-items: center;
       justify-content: space-around;
       color: #fff;
+      line-height: 1;
     }
   }
 }

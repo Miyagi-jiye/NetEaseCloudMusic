@@ -947,6 +947,31 @@ export async function playlistDetailDynamic(id) {
   });
   return data;
 }
+// 获取音乐 url - 旧版
+// 说明 : 调用此接口 , 传入的音乐 id ( 音乐 id 可从搜索接口获取 ) , 可获得音乐的 url
+// 必选参数 : id : 音乐 id
+// 可选参数 : br: 码率,默认设置了 999000 即最大码率,如果要 320k 则可设置为 320000,其他类推
+// 接口地址 : /song/url
+// 调用例子 : /song/url?id=33894312
+/**
+ * @description 获取音乐 url - 旧版
+ * @param {Number} id 音乐 id
+ * @param {Number} br 码率,默认设置了 999000 即最大码率,如果要 320k 则可设置为 320000,其他类推
+ * @example
+ * 1. code：状态码
+ * 2. data：歌曲列表
+ */
+export async function songUrl(id, br = 999000) {
+  const { data } = await request({
+    url: '/song/url',
+    method: 'get',
+    params: {
+      id,
+      br,
+    },
+  });
+  return data;
+}
 // 获取音乐 url - 新版
 // 说明 : 使用注意事项同上
 // 必选参数 : 
@@ -962,7 +987,7 @@ export async function playlistDetailDynamic(id) {
  * 1. code：状态码
  * 2. data：音乐数据
  */
-export async function songUrlV1(id, level = 'standard') {
+export async function songUrlV1(id, level) {
   const { cookie } = storeToRefs(useLoginStore());// 获取cookie
   const { data } = await request({
     url: `/song/url/v1?id=${id}&level=${level}`,
