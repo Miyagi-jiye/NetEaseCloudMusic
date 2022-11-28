@@ -1,5 +1,5 @@
 <template>
-  <div class="ArtistListItem">
+  <div class="ArtistListItem" @click="routerPush('/artistListDetail', { id: config.id })">
     <div class="ArtistListItem__left">
       <img v-lazy="config.picUrl + '?param=100y100'" alt="" />
     </div>
@@ -24,7 +24,9 @@
 <script setup>
 import FollowButton from '@/components/FollowButton/index.vue'// 关注按钮组件
 import { toRaw } from 'vue';
+import { useRouter } from "vue-router"
 
+const router = useRouter()//路由
 const props = defineProps({
   // 歌手信息
   config: {
@@ -49,6 +51,11 @@ const keyword = toRaw(props.keyword)
 // 高亮关键字(css样式已在全局定义)
 function highlightName(str) {
   return str.replace(reg, `<span class="${audioData.song.id == props.config.id ? 'active' : 'highlight'}">${keyword}</span>`)
+}
+
+//跳转到歌手详情页
+function routerPush(path, query) {
+  router.push({ path, query })
 }
 </script>
 

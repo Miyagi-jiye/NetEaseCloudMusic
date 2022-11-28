@@ -7,11 +7,13 @@
       <div class="shadow" :style="'background-image: url(' + config.picUrl + '?param=10y10)'"></div>
     </div>
     <div class="AlbumListItem__right">
-      <div class="AlbumListItem__right__title" v-html="highlight(config.name)"></div>
+      <div v-if="keyword" class="AlbumListItem__right__title" v-html="highlight(config.name)"></div>
+      <div v-else class="AlbumListItem__right__title">{{ config.name }}</div>
       <div class="AlbumListItem__right__artists">
         作者：
         <span v-for="item in config.artists">
-          <span v-html="highlight(item.name)"></span>
+          <span v-if="keyword" v-html="highlight(item.name)"></span>
+          <span v-else>{{ item.name }}</span>
         </span>
       </div>
       <div class="AlbumListItem__right__desc">
@@ -38,10 +40,7 @@ const props = defineProps({
     picUrl: String,//专辑封面
   },
   // 高亮关键字
-  keyword: {
-    type: String,
-    required: true
-  }
+  keyword: String
 })
 // 匹配所有关键字，高亮
 const reg = new RegExp(props.keyword, 'g')

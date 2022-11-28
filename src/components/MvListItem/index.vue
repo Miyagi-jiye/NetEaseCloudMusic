@@ -1,7 +1,8 @@
 <template>
   <div class="MvListItem" @click="routerPush('/mvListDetail', { id: config.id })">
     <div class="MvListItem__top">
-      <img v-lazy="config.cover" alt="">
+      <img v-if="config.cover" v-lazy="config.cover" alt="">
+      <img v-if="config.imgurl" v-lazy="config.imgurl" alt="">
       <div class="MvListItem__top__desc">
         <span class="MvListItem__top__desc__duration">{{ formatDuration(config.duration) }}</span>
         <span class="MvListItem__top__desc__playCount">
@@ -28,6 +29,7 @@ const props = defineProps({
     artistName: String,// mv 歌手
     artists: Array,// mv 歌手
     cover: String,// mv 封面
+    imgurl: String,// mv 封面
     duration: Number,// mv 时长
     playCount: Number,// mv 播放次数
   },

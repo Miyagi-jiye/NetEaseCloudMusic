@@ -7,19 +7,19 @@
       <span class="MusicQuality__title">音质</span>
       <div class="MusicQuality__line"></div>
       <div v-if="song.m" class="MusicQuality__item" @click="switchQuality('standard')"
-        :style="{ color: active == 'standard' ? 'red' : 'currentColor' }">
+        :class="active == 'standard' ? 'activeQuality' : ''">
         标准（{{ filterSize(song.m.size) }}M）
       </div>
       <div v-if="song.h" class="MusicQuality__item" @click="switchQuality('exhigh')"
-        :style="{ color: active == 'exhigh' ? 'red' : 'currentColor' }">
+        :class="active == 'exhigh' ? 'activeQuality' : ''">
         极高（{{ filterSize(song.h.size) }}M）
       </div>
       <div v-if="song.sq" class="MusicQuality__item" @click="switchQuality('lossless')"
-        :style="{ color: active == 'lossless' ? 'red' : 'currentColor' }">
+        :class="active == 'lossless' ? 'activeQuality' : ''">
         无损（{{ filterSize(song.sq.size) }}M）
       </div>
       <div v-if="song.hr" class="MusicQuality__item" @click="switchQuality('hires')"
-        :style="{ color: active == 'hires' ? 'red' : 'currentColor' }">
+        :class="active == 'hires' ? 'activeQuality' : ''">
         Hi-Res（{{ filterSize(song.hr.size) }}M）
       </div>
     </div>
@@ -83,6 +83,7 @@ const switchQuality = (quality) => {
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;
+  transition: all 0.3s;
 
   &__title {
     font-size: 14px;
@@ -100,8 +101,13 @@ const switchQuality = (quality) => {
     cursor: pointer;
 
     &:hover {
-      background-color: #f2f2f2;
+      background-color: var(--song-list-hover);
     }
+  }
+
+  .activeQuality {
+    color: red;
+    font-weight: bold;
   }
 }
 </style>

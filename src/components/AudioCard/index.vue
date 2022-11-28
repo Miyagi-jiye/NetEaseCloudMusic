@@ -282,10 +282,9 @@ watch(
     if (value == true) {
       WaypointPercent.value = audio.duration / (audioData.song.dt / 1000) * 100 + '% '// 计算试听时长占总时长的百分比
       WaypointDisplay.value = 'block'// 显示锚点
-      console.log("试听时长占总时长的百分比", WaypointPercent.value)
+      // console.log("试听时长占总时长的百分比", WaypointPercent.value)
     } else {
       WaypointDisplay.value = 'none'// 隐藏锚点
-      console.log("不是试听")
     }
   },
 )
@@ -348,13 +347,15 @@ const test = () => {
   const lyricItemsHeight = Array.from(lyricItems).map((item) => item.clientHeight)
   // console.log(lyricItemsHeight)
 
+  // 获取歌词容器的高度
+  const lyricContentHeight = document.querySelector(".lyric").clientHeight
+
   // 根据当前播放歌词的索引，获取当前歌词元素到顶部的距离，并设置滚动到顶部的距离
   const lyricScrollTop = lyricItemsHeight.slice(0, currentIndex.value).reduce((prev, next) => prev + next, 0)
   // console.log(lyricScrollTop)
 
-  // 设置滚动到顶部的距离
+  // 设置滚动到顶部的距离，让它居中显示  - (lyricContentHeight - lyricItemsHeight[currentIndex.value]) / 2
   const lyricList = document.querySelector(".lyric")
-  // const lyricListHeight = lyricList.clientHeight
   lyricList.scrollTop = lyricScrollTop
 }
 
@@ -517,6 +518,7 @@ const switchQuality = (e) => {
     // backdrop-filter: sepia(90%);// 褐色
     // backdrop-filter: saturate(80%);// 饱和度
 
+    // 唱片页
     .popup__center__disc {
       position: relative;
       height: 100%;
@@ -570,6 +572,7 @@ const switchQuality = (e) => {
 
     }
 
+    // 歌词页
     .popup__center__lyric {
       height: 100%;
       display: flex;
@@ -622,11 +625,12 @@ const switchQuality = (e) => {
           flex-direction: column;
 
           &:nth-child(1) {
-            margin-top: 50%;
+            // 腾出半个空屏， 16px * 4是padding和gap，46px是头部的padding，80px是播放控件的高度
+            margin-top: calc((100vh - (16px * 4) - 46px - 80px) / 2);
           }
 
           &:last-child {
-            margin-bottom: 50%;
+            margin-bottom: calc((100vh - (16px * 4) - 46px - 80px) / 2);
           }
         }
 

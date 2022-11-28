@@ -649,6 +649,25 @@ export async function artistSub(id, t) {
   });
   return data;
 }
+// 获取歌手详情
+// 说明 : 调用此接口 , 传入歌手 id, 可获得获取歌手详情
+// 必选参数 : id: 歌手 id
+// 接口地址 : /artist/detail
+// 调用例子 : /artist/detail?id=11972054
+/**
+ * @description 获取歌手详情
+ * @param {Number} id 歌手 id （必选参数）
+ */
+export async function artistDetail(id) {
+  const { data } = await request({
+    url: '/artist/detail',
+    method: 'get',
+    params: {
+      id,
+    },
+  });
+  return data;
+}
 // 歌手热门 50 首歌曲
 // 说明 : 调用此接口,可获取歌手热门 50 首歌曲
 // 必选参数 :
@@ -697,6 +716,54 @@ export async function artistSongs(id, { order = 'hot', limit = 50, offset = 1 })
     method: 'get',
     params: {
       order,
+      limit,
+      offset: (offset - 1) * limit,
+    },
+  });
+  return data;
+}
+// 获取歌手专辑
+// 说明 : 调用此接口 , 传入歌手 id, 可获得歌手专辑内容
+// 必选参数 : id: 歌手 id
+// 可选参数 : limit: 取出数量 , 默认为 30
+// offset: 偏移数量 , 用于分页 , 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认 为 0
+// 接口地址 : /artist/album
+// 调用例子 : /artist/album?id=6452&limit=5 ( 周杰伦 )
+/**
+ * @description 获取歌手专辑
+ * @param {Number} id 歌手 id （必选参数）
+ * @param {Number} limit 取出数量 , 默认为 30 （可选参数）
+ * @param {Number} offset 偏移数量 , 用于分页 , 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认 为 0 （可选参数）
+ */
+export async function artistAlbum(id, { limit = 30, offset = 1 }) {
+  const { data } = await request({
+    url: '/artist/album',
+    method: 'get',
+    params: {
+      id,
+      limit,
+      offset: (offset - 1) * limit,
+    },
+  });
+  return data;
+}
+// 获取歌手 mv
+// 说明 : 调用此接口 , 传入歌手 id, 可获得歌手 mv 信息 , 具体 mv 播放地址可调 用/mv传入此接口获得的 mvid 来拿到 , 如 : /artist/mv?id=6452,/mv?mvid=5461064
+// 必选参数 : id: 歌手 id, 可由搜索接口获得
+// 接口地址 : /artist/mv
+// 调用例子 : /artist/mv?id=6452
+/**
+ * @description 获取歌手 mv
+ * @param {Number} id 歌手 id （必选参数）
+ * @param {Number} limit 取出数量 , 默认为 30 （可选参数）
+ * @param {Number} offset 偏移数量 , 用于分页 , 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认 为 0 （可选参数）
+ */
+export async function artistMv(id, { limit = 30, offset = 1 }) {
+  const { data } = await request({
+    url: '/artist/mv',
+    method: 'get',
+    params: {
+      id,
       limit,
       offset: (offset - 1) * limit,
     },

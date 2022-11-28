@@ -6,7 +6,7 @@ export const useHideHeaderFooter = () => {
   const hideHeaderFooter = ref(false)
   const route = useRoute()
   // 定义要隐藏的路由name
-  const hideRoutes = ['search', 'songListDetail', 'albumListDetail', 'mvListDetail']
+  const hideRoutes = ['search', 'songListDetail', 'albumListDetail', 'mvListDetail', 'artistListDetail']
   // 判断路由是否为要隐藏的页面
   if (hideRoutes.includes(route.name)) {
     hideHeaderFooter.value = true

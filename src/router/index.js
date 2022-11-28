@@ -55,6 +55,12 @@ const router = createRouter({
           name: 'mvListDetail',
           component: () => import('@/views/mvListDetail/index.vue')
         },
+        // 歌手详情
+        {
+          path: '/artistListDetail',//vue-router 4.0,name+params形式传参需要添加冒号声明参数
+          name: 'artistListDetail',
+          component: () => import('@/views/artistListDetail/index.vue')
+        }, 
         // 搜索
         {
           path: '/search',

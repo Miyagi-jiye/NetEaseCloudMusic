@@ -147,13 +147,11 @@ export const useAudioStore = defineStore(
           await getSongUrl(audioData.song.id)// 获取歌曲url
           play(audioData.isPlay)
           audio.currentTime = 0// 从头开始播放
-          audioData.isTrial = false// 试听
         } else {
           audioData.song = audioData.songs[index + 1]// 播放下一首
           await getSongUrl(audioData.song.id)// 获取歌曲url
           play(audioData.isPlay)
           audio.currentTime = 0// 从头开始播放
-          audioData.isTrial = false// 试听
         }
         console.log("⏭播放下一首")
       }
@@ -192,7 +190,6 @@ export const useAudioStore = defineStore(
       await getSongDetail(id)// 获取歌曲详情
       await getSongUrl(id)// 获取歌曲url
       addSongToPlayList()// 添加到播放列表
-      audioData.isTrial = !audioData.isTrial// 取反
       play(true)
     }
     // 播放
@@ -205,11 +202,30 @@ export const useAudioStore = defineStore(
           audio.play().then(() => {
             // 判断歌曲总时长是否小于31秒，如果小于则为vip试听歌曲
             if (audio.duration < 31) {
-              audioData.isTrial = true
+              // 因为要监听isTrial的变化，所以要先取反,否则不会触发监听
+              audioData.isTrial = !audioData.isTrial
+              setTimeout(() => {
+                audioData.isTrial = true
+              }, 0);
             } else {
-              audioData.isTrial = false
+              // 因为要监听isTrial的变化，所以要先取反
+              audioData.isTrial = !audioData.isTrial
+              setTimeout(() => {
+                audioData.isTrial = false
+              }, 0);
             }
-            console.log("🎵继续播放", audioData.isTrial)
+            console.log("🎵audio.src存在，继续播放")
+          }).catch(async (err) => {
+            console.log("❗歌曲链接过期", err)
+            // 获取歌曲url
+            await getSongUrl(audioData.song.id)
+            // 继续播放
+            audio.play().then(() => {
+              console.log("🎵audio.src不存在，重新获取歌曲链接并播放")
+            }).catch((err) => {
+              console.log("❗播放失败", err)
+              showNotify({ type: 'danger', message: '播放失败' })
+            })
           })
         } else {
           // 不是同一首歌，判断url是否获取成功
@@ -218,11 +234,22 @@ export const useAudioStore = defineStore(
             audio.play().then(() => {
               // 判断歌曲总时长是否小于31秒，如果小于则为vip试听歌曲
               if (audio.duration < 31) {
-                audioData.isTrial = true
+                // 因为要监听isTrial的变化,所以要先取反,否则不会触发监听
+                audioData.isTrial = !audioData.isTrial
+                setTimeout(() => {
+                  audioData.isTrial = true
+                }, 0);
               } else {
-                audioData.isTrial = false
+                // 因为要监听isTrial的变化，所以要先取反
+                audioData.isTrial = !audioData.isTrial
+                setTimeout(() => {
+                  audioData.isTrial = false
+                }, 0);
               }
-              console.log("🎵重新获取url播放", audioData.isTrial)
+            }).catch(err => {
+              console.log("🎵url获取成功，但是播放失败", err)
+              audioData.isPlay = false
+              audio.pause()
             })
           } else {
             // 判断歌曲播放权限类型
@@ -230,9 +257,14 @@ export const useAudioStore = defineStore(
               audioData.isPlay = false// 播放失败
               audio.pause()// 暂停播放
               showNotify({ type: 'primary', message: "数字专辑歌曲请先购买后再播放" })
+            } else if (audioData.song.fee === 0) {
+              audioData.isPlay = false// 播放失败
+              audio.pause()// 暂停播放
+              showNotify({ type: 'warning', message: "暂无播放版权" })
             } else {
               audioData.isPlay = false// 播放失败
               audio.pause()// 暂停播放
+              console.log("🎵url获取失败，播放失败")
             }
           }
         }
@@ -240,14 +272,6 @@ export const useAudioStore = defineStore(
         audio.onended = () => {
           playNextSong()
           console.log("播放结束,自动播放下一首")
-        }
-        // 监听播放错误
-        audio.onerror = () => {
-          audioData.isPlay = false// 播放失败
-          audio.pause()// 暂停播放
-          console.log("播放错误")
-          // // 第一次播放失败，尝试重新获取url
-          // getSongUrl(audioData.song.id)
         }
         // 判断是否有歌词
         if (!audioData.lyric) getLyric(audioData.song.id) // 获取歌词
