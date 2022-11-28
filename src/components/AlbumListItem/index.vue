@@ -140,6 +140,7 @@ function routerPush(path, query) {
       margin-bottom: 5px;
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .AlbumListItem__right__artists {
@@ -151,6 +152,7 @@ function routerPush(path, query) {
       color: #999;
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
 
       span:not(:last-child):after {
         content: '/';

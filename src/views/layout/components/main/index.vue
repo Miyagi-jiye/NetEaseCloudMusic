@@ -4,21 +4,21 @@
     <RouterView v-slot="{ Component, route }">
       <template v-if="Component">
         <!-- <Transition name="slide-fade"> -->
-        <KeepAlive :exclude="['home']">
-          <Suspense timeout="0">
-            <template #default>
-              <!-- <Transition name="slide-fade"> -->
-              <component :is="Component" :key="route.path"></component>
-              <!-- </Transition> -->
-            </template>
-            <template #fallback>
-              <DiscoverSkeleton v-if="route.name == 'discover'" />
-              <SongListDetailSkeleton v-else-if="route.name == 'songListDetail'" />
-              <!-- <div v-else>没有骨架屏====>{{ route.name }}</div> -->
-              <LoadingPage v-else />
-            </template>
-          </Suspense>
-        </KeepAlive>
+        <!-- <KeepAlive :exclude="['home', 'artistListDetail']"> -->
+        <Suspense timeout="0">
+          <template #default>
+            <!-- <Transition name="slide-fade"> -->
+            <component :is="Component" :key="route.path"></component>
+            <!-- </Transition> -->
+          </template>
+          <template #fallback>
+            <DiscoverSkeleton v-if="route.name == 'discover'" />
+            <SongListDetailSkeleton v-else-if="route.name == 'songListDetail'" />
+            <!-- <div v-else>没有骨架屏====>{{ route.name }}</div> -->
+            <LoadingPage v-else />
+          </template>
+        </Suspense>
+        <!-- </KeepAlive> -->
         <!-- </Transition> -->
       </template>
     </RouterView>

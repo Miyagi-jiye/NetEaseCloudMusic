@@ -18,12 +18,12 @@ export const useArtistListDetailStore = defineStore(
         limit: 30,//每页数量
         offset: 1,//偏移数量，用于分页
       },
-      albumParams: {
-        limit: 30,//每页数量
+      albumsParams: {
+        limit: 10,//每页数量
         offset: 1,//偏移数量，用于分页
       },
       mvsParams: {
-        limit: 30,//每页数量
+        limit: 10,//每页数量
         offset: 1,//偏移数量，用于分页
       },
       songs: [],//歌手全部歌曲
@@ -46,12 +46,13 @@ export const useArtistListDetailStore = defineStore(
     // 获取歌手全部歌曲
     async function getArtistSongs(id) {
       const res = await artistSongs(id, artistListDetail.songsParams)
-      artistListDetail.songs = res.songs
+      // id 去重合并
+      artistListDetail.songs = [...new Map([...artistListDetail.songs, ...res.songs].map(item => [item.id, item])).values()]
       console.log('歌手全部歌曲', res)
     }
     // 获取歌手全部专辑
     async function getArtistAlbum(id) {
-      const res = await artistAlbum(id, artistListDetail.albumParams)
+      const res = await artistAlbum(id, artistListDetail.albumsParams)
       artistListDetail.albums = res.hotAlbums
       console.log('歌手全部专辑', res)
     }
