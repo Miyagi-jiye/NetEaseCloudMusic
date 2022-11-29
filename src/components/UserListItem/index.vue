@@ -1,11 +1,11 @@
 <template>
   <div class="UserListItem">
-    <div class="UserListItem__left">
+    <div class="UserListItem__left" @click="routerPush('/userListDetail', { id: config.userId })">
       <img class="UserListItem__left__avatar" v-lazy="config.avatarUrl + '?param=100y100'" />
       <img v-if="config.avatarDetail" class="UserListItem__left__avatarDetail"
         :src="config.avatarDetail.identityIconUrl" alt="">
     </div>
-    <div class="UserListItem__center">
+    <div class="UserListItem__center" @click="routerPush('/userListDetail', { id: config.userId })">
       <div class="UserListItem__center__name">
         <span>{{ config.nickname }}</span>
         <!-- 男 -->
@@ -36,7 +36,9 @@
 
 <script setup>
 import FollowButton from "@/components/FollowButton/index.vue"// 关注按钮组件
+import { useRouter } from "vue-router"
 
+const router = useRouter()//路由
 const props = defineProps({
   config: {
     userId: Number,//用户id
@@ -50,6 +52,11 @@ const props = defineProps({
   },
   keyword: String,// 搜索关键字
 })
+
+//跳转到用户详情页
+function routerPush(path, query) {
+  router.push({ path, query })
+}
 </script>
 
 <style scoped lang="less">

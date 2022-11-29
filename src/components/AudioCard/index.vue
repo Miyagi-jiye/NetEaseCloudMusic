@@ -1,6 +1,6 @@
 <template>
   <div class="Audio">
-    <div class="left">
+    <div class="left" @click="show = true">
       <div class="play" :style="{ animationPlayState: audioData.isPlay ? 'running' : 'paused' }">
         <img :src="disc" alt="唱片" class="discImg">
         <img v-lazy="audioData.song.al.picUrl + '?param=50y50'" alt="图片" class="songImg">

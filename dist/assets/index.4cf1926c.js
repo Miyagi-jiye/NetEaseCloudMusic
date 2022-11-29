@@ -1,0 +1,1 @@
+import{u as e}from"./Audio.daa3715b.js";import{_,Q as o,R as t}from"./index.179dd14c.js";import"./index.56c24fc3.js";const s={class:"follow"},c={__name:"index",setup(n){return e(),(a,r)=>(o(),t("div",s," 123 "))}},l=_(c,[["__scopeId","data-v-79e937cb"]]);export{l as default};

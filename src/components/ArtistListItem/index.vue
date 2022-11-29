@@ -1,9 +1,9 @@
 <template>
-  <div class="ArtistListItem" @click="routerPush('/artistListDetail', { id: config.id })">
-    <div class="ArtistListItem__left">
+  <div class="ArtistListItem">
+    <div class="ArtistListItem__left" @click="routerPush('/artistListDetail', { id: config.id })">
       <img v-lazy="config.picUrl + '?param=100y100'" alt="" />
     </div>
-    <div class="ArtistListItem__center">
+    <div class="ArtistListItem__center" @click="routerPush('/artistListDetail', { id: config.id })">
       <div class="ArtistListItem__center__top">
         <span class="ArtistListItem__center__top__name">{{ config.name }}</span>
         <span v-if="config.alias[0]" class="ArtistListItem__center__top__desc">({{ config.alias[0] }})</span>

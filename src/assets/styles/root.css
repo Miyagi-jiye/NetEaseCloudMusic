@@ -39,6 +39,8 @@
   --tags-text-color: #ff0000b3;
   /* menu每日推荐颜色 */
   --menu-color: #ffffffe8;
+  /* tag的边框 */
+  --tag-border: 1px;
 }
 
 .van-theme-dark body {
@@ -69,6 +71,8 @@
   filter: brightness(90%);
   /* menu每日推荐颜色 */
   --menu-color: #000000e8;
+  /* tag的边框 */
+  --tag-border: 0px;
 }
 
 /* 竖直分割线 */

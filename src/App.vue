@@ -7,7 +7,6 @@
 <script setup>
 import { ref, provide, onMounted } from 'vue';
 import { showConfirmDialog } from 'vant';
-import musicIcon from "@/assets/icons/c3u_3b.png"
 
 const theme = ref('light')
 provide('theme', theme)

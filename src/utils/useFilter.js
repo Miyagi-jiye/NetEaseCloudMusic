@@ -1,3 +1,5 @@
+import cityList from 'china-division/dist/pc-code.json';// 城市数据
+
 // 过滤歌单数据(参数是数组：Array)
 export function filterSongList(songList) {
   let songListArr = []
@@ -107,4 +109,51 @@ export function formatTime(time) {
   let min = Math.floor(time / 60);
   // 返回格式 00：00 不足两位的补零
   return `${min < 10 ? '0' + min : min}:${sec < 10 ? '0' + sec : sec}`;
+}
+
+// 接收城市代码码，和引入的json字典进行匹配，返回对应的城市信息
+export function filterCityName(code) {
+  code = Number(code.toString().slice(0, 2))
+  cityList.forEach(item => {
+    // 匹配父级和子级，无论哪一级匹配上了，都返回对应父级的城市名
+    if (item.code == code || item.children.some(child => child.code == code)) {
+      return item.name
+    }
+  })
+  return '未知'
+}
+
+// 过滤生日时间戳，判断是 几几后,什么星座
+export function filterBirthday(birthday) {
+  let date = new Date(birthday)
+  let month = date.getMonth() + 1
+  let day = date.getDate()
+  let age = new Date().getFullYear() - date.getFullYear()
+  let constellation = ''
+  if (month == 1 && day >= 20 || month == 2 && day <= 18) {
+    constellation = '水瓶座'
+  } else if (month == 2 && day >= 19 || month == 3 && day <= 20) {
+    constellation = '双鱼座'
+  } else if (month == 3 && day >= 21 || month == 4 && day <= 19) {
+    constellation = '白羊座'
+  } else if (month == 4 && day >= 20 || month == 5 && day <= 20) {
+    constellation = '金牛座'
+  } else if (month == 5 && day >= 21 || month == 6 && day <= 21) {
+    constellation = '双子座'
+  } else if (month == 6 && day >= 22 || month == 7 && day <= 22) {
+    constellation = '巨蟹座'
+  } else if (month == 7 && day >= 23 || month == 8 && day <= 22) {
+    constellation = '狮子座'
+  } else if (month == 8 && day >= 23 || month == 9 && day <= 22) {
+    constellation = '处女座'
+  } else if (month == 9 && day >= 23 || month == 10 && day <= 23) {
+    constellation = '天秤座'
+  } else if (month == 10 && day >= 24 || month == 11 && day <= 22) {
+    constellation = '天蝎座'
+  } else if (month == 11 && day >= 23 || month == 12 && day <= 21) {
+    constellation = '射手座'
+  } else if (month == 12 && day >= 22 || month == 1 && day <= 19) {
+    constellation = '摩羯座'
+  }
+  return `${age}岁 ${constellation}`
 }

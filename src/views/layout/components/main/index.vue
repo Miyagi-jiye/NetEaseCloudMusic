@@ -4,7 +4,7 @@
     <RouterView v-slot="{ Component, route }">
       <template v-if="Component">
         <!-- <Transition name="slide-fade"> -->
-        <KeepAlive :include="['discover', 'search']">
+        <KeepAlive :include="['discover']">
           <Suspense timeout="0">
             <template #default>
               <!-- <Transition name="slide-fade"> -->

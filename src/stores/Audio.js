@@ -219,12 +219,14 @@ export const useAudioStore = defineStore(
             console.log("❗歌曲链接过期", err)
             // 获取歌曲url
             await getSongUrl(audioData.song.id)
-            // 继续播放
+            audio.src = audioData.url
+            // 重新播放
             audio.play().then(() => {
               console.log("🎵audio.src不存在，重新获取歌曲链接并播放")
             }).catch((err) => {
               console.log("❗播放失败", err)
-              showNotify({ type: 'danger', message: '播放失败' })
+              audioData.isPlay = false
+              audio.pause()
             })
           })
         } else {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { showNotify } from 'vant';// 引入vant的提示框
+import { showNotify, showConfirmDialog } from 'vant';// 引入vant的提示框
 import { useLoginStore } from '@/stores/login.js'
 import { storeToRefs } from 'pinia'
 
@@ -25,6 +25,7 @@ request.interceptors.request.use(
     return config;
   },
   function (error) {
+    console.log('请求错误', error)
     // 对请求错误做些什么
     return Promise.reject(error);
   }
@@ -49,7 +50,23 @@ request.interceptors.response.use(
     // 1. 匹配常见错误，错误提示
     switch (error.response.status) {
       case 400:
-        showNotify({ type: 'danger', message: error.response.data.message ?? error.response.data.msg ?? "请求参数错误" });
+        if (error.response.data.code === -462) {
+          console.log(error.response.data.data.blockText, error.response.data.data.url)
+          showConfirmDialog({
+            title: '😭很抱歉，触发了网易云盾',
+            message: error.response.data.data.blockText ?? "触发网易云盾，请先前往验证手机号",
+            allowHtml: true,
+            confirmButtonText: '前往验证',
+            cancelButtonText: '不管它'
+          }).then(() => {
+            // on confirm 确认按钮，新开页面，跳转到验证手机号页面 error.response.data.data.url
+            window.open(error.response.data.data.url)
+          }).catch(() => {
+            // on cancel 取消按钮
+          });
+        } else {
+          showNotify({ type: 'danger', message: error.response.data.message ?? error.response.data.msg ?? "请求参数错误" });
+        }
         break;
       case 401:
         showNotify({ type: 'danger', message: error.response.data.message ?? error.response.data.msg ?? "无访问权限" });

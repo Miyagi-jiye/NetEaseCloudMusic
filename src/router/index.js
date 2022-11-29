@@ -60,7 +60,13 @@ const router = createRouter({
           path: '/artistListDetail',//vue-router 4.0,name+params形式传参需要添加冒号声明参数
           name: 'artistListDetail',
           component: () => import('@/views/artistListDetail/index.vue')
-        }, 
+        },
+        // 用户详情
+        {
+          path: '/userListDetail',//vue-router 4.0,name+params形式传参需要添加冒号声明参数
+          name: 'userListDetail',
+          component: () => import('@/views/userListDetail/index.vue')
+        },
         // 搜索
         {
           path: '/search',
