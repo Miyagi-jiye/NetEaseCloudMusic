@@ -20,14 +20,15 @@
         </div>
       </van-tab>
       <van-tab title="歌曲">
-        <div class="song" ref="songRef">
+        <div class="song">
           <!-- 播放全部 -->
           <PlayAllFunctionBar :songs="artistListDetail.songs" />
           <SongListItem v-for="(item, index) in artistListDetail.songs" :key="item.id" :config="item" :index="index" />
-          <!-- 无限加载更多 -->
-          <LoadMore v-if="artistListDetail.songs.length <= artistListDetail.artist.musicSize" :root="songRef"
-            :loading="loading" @loadMore="loadMore" />
         </div>
+        <!-- 分页加载更多 -->
+        <van-pagination v-model="artistListDetail.songsParams.offset" mode="simple"
+          :total-items="artistListDetail.artist.musicSize" :items-per-page="artistListDetail.songsParams.limit"
+          @change="songPageChange" />
       </van-tab>
       <van-tab title="专辑">
         <div class="album">
@@ -52,17 +53,14 @@
 </template>
 
 <script setup>
-import LoadMore from '@/components/LoadMore/index.vue'// 加载更多
 import PlayAllFunctionBar from "@/components/PlayAllFunctionBar/index.vue"//播放全部组件
 import MvListItem from "@/components/MvListItem/index.vue"// mv列表项
 import AlbumListItem from '@/components/albumListItem/index.vue'// 专辑列表组件
 import SongListItem from '@/components/SongListItem/index.vue'// 歌曲列表项组件
 import { useArtistListDetailStore } from '@/stores/artistListDetail.js'
 import { useRoute } from 'vue-router';
-import { watch, ref, onUnmounted } from 'vue'
+import { watch, ref } from 'vue'
 
-const songRef = ref(null)
-const loading = ref(false)
 const active = ref(0)
 const { artistListDetail, getArtistDetail, getArtistSongs, getArtistAlbum, getArtistMv } = useArtistListDetailStore()
 const route = useRoute()
@@ -78,17 +76,14 @@ await init()
 // 监听路由id变化，判断是否在当前页面
 watch(() => route.query.id, (newId) => {
   if (route.path === '/artistListDetail') {
-    artistListDetail.songs = []// 清空歌曲列表
     init()// 重新获取数据
   }
 });
 
-// 无限加载更多
-const loadMore = async () => {
-  loading.value = true
-  artistListDetail.songsParams.offset++
+// 歌曲分页加载更多
+const songPageChange = async (page) => {
+  artistListDetail.songsParams.offset = page
   await getArtistSongs(route.query.id)
-  loading.value = false
 }
 // mv分页加载更多
 const mvPageChange = async (page) => {
@@ -100,18 +95,10 @@ const albumPageChange = async (page) => {
   artistListDetail.mvsParams.offset = page
   await getArtistAlbum(route.query.id)
 }
+</script>
 
-// 销毁页面时，清空数据
-onUnmounted(() => {
-  // artistListDetail.songsParams.offset = 1
-  // artistListDetail.albumsParams.offset = 1
-  // artistListDetail.mvsParams.offset = 1
-  // artistListDetail.artist = {}
-  artistListDetail.songs = []
-  // artistListDetail.albums = []
-  // artistListDetail.mvs = []
-  console.log('销毁页面');
-})
+<script>
+export default { name: "artistListDetail" }
 </script>
 
 <style scoped lang="less">
@@ -206,7 +193,6 @@ onUnmounted(() => {
       box-sizing: border-box;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 16px;
     }
 
     .mv {

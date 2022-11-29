@@ -46,8 +46,7 @@ export const useArtistListDetailStore = defineStore(
     // 获取歌手全部歌曲
     async function getArtistSongs(id) {
       const res = await artistSongs(id, artistListDetail.songsParams)
-      // id 去重合并
-      artistListDetail.songs = [...new Map([...artistListDetail.songs, ...res.songs].map(item => [item.id, item])).values()]
+      artistListDetail.songs = res.songs
       console.log('歌手全部歌曲', res)
     }
     // 获取歌手全部专辑

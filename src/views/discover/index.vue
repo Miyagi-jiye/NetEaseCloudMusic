@@ -24,6 +24,10 @@ const RecommendSongList = defineAsyncComponent(() => import('./components/recomm
 const RecommentNewAlbum = defineAsyncComponent(() => import('./components/recommentNewAlbum/index.vue'))//推荐最新专辑
 </script>
 
+<script>
+export default { name: "discover" }
+</script>
+
 <style scoped>
 .discover {
   height: 100%;

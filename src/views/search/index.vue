@@ -247,6 +247,10 @@ watch(
 )
 </script>
 
+<script>
+export default { name: "search" }
+</script>
+
 <style scoped lang="less">
 .loadMore {
   display: flex;
