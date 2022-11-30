@@ -2,11 +2,12 @@
   <div class="userListDetail">
     <!-- 导航栏 -->
     <div class="header">
-      <van-icon class="header__left" name="arrow-left" size='23' @click="$router.back()" />
-      <div class="header__right">
+      <van-icon name="arrow-left" size='23' @click="$router.back()" />
+      <div class="title">
+        <img class="title__avatar" v-lazy="userListDetail.userDetail.profile.avatarUrl + '?param=40y40'" alt="" />
         <span>{{ userListDetail.userDetail.profile.nickname }}</span>
-        <van-icon name="ellipsis" size='23' />
       </div>
+      <van-icon name="ellipsis" size='23' />
     </div>
     <!-- 背景图片 -->
     <div class="background">
@@ -19,12 +20,13 @@
         <div class="card">
           <!-- 头像 -->
           <img class="avatar" v-lazy="userListDetail.userDetail.profile.avatarUrl + '?param=200y200'" alt="" />
-          <img class="avatar__identify" v-if="userListDetail.userDetail.identify.imageUrl"
-            v-lazy="userListDetail.userDetail.identify.imageUrl + '?param=20y20'" alt="">
+          <!-- 身份徽标 -->
+          <img class="avatar__identify" v-if="userListDetail.userDetail.identify"
+            :src="userListDetail.userDetail.identify.imageUrl + '?param=20y20'" alt="">
           <!-- 昵称 -->
           <div class="nickname">{{ userListDetail.userDetail.profile.nickname }}</div>
           <!-- 身份 -->
-          <div class="identify" v-if="userListDetail.userDetail.identify.imageDesc">
+          <div class="identify" v-if="userListDetail.userDetail.identify">
             <span>{{ userListDetail.userDetail.identify.imageDesc }}</span>
           </div>
           <!-- 关注，粉丝，等级 -->
@@ -65,9 +67,13 @@
               <van-icon name="chat-o" size="16" />私信
             </div>
             <!-- 展开按钮 -->
-            <div class="expand">
+            <div class="expand" @click="showMoreCard = !showMoreCard">
               <van-icon name="arrow-down" />
             </div>
+          </div>
+          <!-- 更多内容 -->
+          <div class="more" v-show="showMoreCard == true">
+            <div class="more__card" v-for="item in 4">{{ item }}</div>
           </div>
         </div>
       </div>
@@ -93,17 +99,52 @@ import GenderIcon from '@/components/GenderIcon/index.vue'// 性别图标
 import { filterCityName, filterBirthday } from '@/utils/useFilter.js'
 import { useUserListDetailStore } from '@/stores/userListDetail.js'
 import { useRoute } from 'vue-router';
-import { watch, ref, onMounted } from 'vue'
+import { watch, ref, onMounted, onUnmounted } from 'vue'
 
 const { getUserListDetail, userListDetail } = useUserListDetailStore()
 const route = useRoute()
 const active = ref(0)
+const showMoreCard = ref(false)// 是否展开更多内容
 
 const init = async () => {
   await getUserListDetail(route.query.id)// 获取歌单详情
 }
 await init()
 
+
+
+// 监听滚动
+onMounted(() => {
+  // 监听的元素
+  const userListDetail = document.querySelector('.userListDetail')
+  // 滚动事件
+  const scroll = () => {
+    const scrollTop = userListDetail.scrollTop
+    const header = document.querySelector('.header')
+    const title = document.querySelector('.title')
+    const background = document.querySelector('.background')
+    const card = document.querySelector('.userinfoCard')
+    if (scrollTop > 0) {
+      // header.style.backgroundColor = 'rgba(255, 255, 255, 0.9)'
+      background.style.filter = `saturate(150%) contrast(100%) brightness(90%) blur(${scrollTop / 10}px)`
+      card.style.opacity = 1 - scrollTop / card.offsetHeight
+      title.style.opacity = scrollTop / 200
+    } else {
+      // header.style.backgroundColor = 'rgba(255, 255, 255, 0)'
+      background.style.filter = 'blur(0px)'
+      card.style.opacity = 1
+      title.style.opacity = 0
+    }
+    console.log(scrollTop)
+  }
+  userListDetail.addEventListener('scroll', scroll)
+})
+// // 销毁监听
+// onUnmounted(() => {
+//   // 销毁监听的元素
+//   const userListDetail = document.querySelector('.userListDetail')
+//   userListDetail.removeEventListener('scroll', scroll)
+// })
 </script>
 
 <style scoped lang="less">
@@ -137,6 +178,7 @@ await init()
     color: #ffffff;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 16px;
     // 绝对定位
     position: fixed;
@@ -146,11 +188,24 @@ await init()
     transition: all .3s;
     z-index: 10;
 
-    .header__right {
+    .title {
       flex: 1;
       display: flex;
-      justify-content: space-between;
-      gap: 16px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: nowrap;
+      gap: 8px;
+      line-height: 1;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      opacity: 0;
+
+      .title__avatar {
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+      }
     }
   }
 
@@ -195,6 +250,7 @@ await init()
       gap: 16px;
       padding: 16px;
       box-sizing: border-box;
+      transition: all .5s; // 过渡动画(展开显示更多详情或者相似推荐)
 
       .avatar {
         width: 80px;
@@ -233,6 +289,7 @@ await init()
       .identify {
         font-size: 14px;
         text-align: center;
+        color: var(--font-color-dark)
       }
 
       .desc {
@@ -326,6 +383,25 @@ await init()
           align-items: center;
           gap: 4px;
           white-space: nowrap;
+        }
+      }
+
+      .more {
+        width: 100%;
+        height: auto;
+        overflow: hidden;
+        white-space: nowrap;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 16px;
+
+        .more__card {
+          // height: 100px;
+          // width: 100px;
+          aspect-ratio: 1;
+          background-color: rgb(73, 67, 67);
+          border-radius: 8px;
+          box-shadow: rgb(0 0 0 / 5%) 0px 0px 20px;
         }
       }
     }

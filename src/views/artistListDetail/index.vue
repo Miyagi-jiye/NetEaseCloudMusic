@@ -59,7 +59,7 @@ import AlbumListItem from '@/components/albumListItem/index.vue'// 专辑列表�
 import SongListItem from '@/components/SongListItem/index.vue'// 歌曲列表项组件
 import { useArtistListDetailStore } from '@/stores/artistListDetail.js'
 import { useRoute } from 'vue-router';
-import { watch, ref } from 'vue'
+import { watch, ref, onMounted } from 'vue'
 
 const active = ref(0)
 const { artistListDetail, getArtistDetail, getArtistSongs, getArtistAlbum, getArtistMv } = useArtistListDetailStore()
@@ -95,6 +95,24 @@ const albumPageChange = async (page) => {
   artistListDetail.mvsParams.offset = page
   await getArtistAlbum(route.query.id)
 }
+
+// 监听滚动
+onMounted(() => {
+  // 监听的元素
+  const artistListDetail = document.querySelector('.artistListDetail')
+  // 滚动事件
+  const scroll = () => {
+    const scrollTop = artistListDetail.scrollTop
+    const header = document.querySelector('.header')
+    if (scrollTop > 0) {
+      header.style.backdropFilter = `saturate(150%) contrast(100%) brightness(90%) blur(18px)`;// ${scrollTop / 10}动态模糊
+    } else {
+      header.style.backdropFilter = 'none'
+    }
+    console.log(scrollTop)
+  }
+  artistListDetail.addEventListener('scroll', scroll)
+})
 </script>
 
 <script>
@@ -145,7 +163,6 @@ export default { name: "artistListDetail" }
     top: 0;
     // 透明背景
     background: transparent;
-    transition: all .3s;
     z-index: 2;
 
     .header__right {
@@ -183,6 +200,7 @@ export default { name: "artistListDetail" }
       padding: 16px;
       box-sizing: border-box;
       font-size: 14px;
+      min-height: calc(100vh - 344px);
     }
 
     .song {
