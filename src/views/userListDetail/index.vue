@@ -125,26 +125,20 @@ onMounted(() => {
     const background = document.querySelector('.background')
     const card = document.querySelector('.userinfoCard')
     if (scrollTop > 0) {
-      // header.style.backgroundColor = 'rgba(255, 255, 255, 0.9)'
+      // header.style.backdropFilter = `saturate(150%) contrast(100%) brightness(90%) blur(18px)`;// ${scrollTop / 10}动态模糊
       background.style.filter = `saturate(150%) contrast(100%) brightness(90%) blur(${scrollTop / 10}px)`
       card.style.opacity = 1 - scrollTop / card.offsetHeight
       title.style.opacity = scrollTop / 200
     } else {
-      // header.style.backgroundColor = 'rgba(255, 255, 255, 0)'
+      // header.style.backdropFilter = 'none'
       background.style.filter = 'blur(0px)'
       card.style.opacity = 1
       title.style.opacity = 0
     }
-    console.log(scrollTop)
+    // console.log(scrollTop)
   }
   userListDetail.addEventListener('scroll', scroll)
 })
-// // 销毁监听
-// onUnmounted(() => {
-//   // 销毁监听的元素
-//   const userListDetail = document.querySelector('.userListDetail')
-//   userListDetail.removeEventListener('scroll', scroll)
-// })
 </script>
 
 <style scoped lang="less">
@@ -270,7 +264,6 @@ onMounted(() => {
         left: calc(50% + 20px);
         height: 20px;
         width: 20px;
-        border-radius: 50%;
       }
 
       .nickname {

@@ -109,7 +109,7 @@ onMounted(() => {
     } else {
       header.style.backdropFilter = 'none'
     }
-    console.log(scrollTop)
+    // console.log(scrollTop)
   }
   artistListDetail.addEventListener('scroll', scroll)
 })

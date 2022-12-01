@@ -9,6 +9,7 @@
           <van-icon name="play-circle-o" class="playIcon" />{{ filterPlayCount(config.playCount) }}次播放
         </span>
       </div>
+      <van-icon name="play-circle-o" class="MvListItem__top__playIcon" size="40" />
     </div>
     <div class="MvListItem__bottom">
       <div class="MvListItem__bottom__name nowrap">{{ config.name }}</div>
@@ -58,10 +59,14 @@ function routerPush(path, query) {
     transition: all 0.5s;
 
     &:hover {
-      box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+      // box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 
       .MvListItem__top__desc {
         transform: translateY(100%);
+      }
+
+      .MvListItem__top__playIcon {
+        opacity: 1;
       }
     }
 
@@ -89,6 +94,20 @@ function routerPush(path, query) {
 
       .playIcon {
         margin-right: 4px;
+      }
+    }
+
+    .MvListItem__top__playIcon {
+      opacity: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      transition: all .4s;
+
+      &:hover {
+        color: #ff3232;
       }
     }
   }

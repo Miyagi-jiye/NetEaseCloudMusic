@@ -77,6 +77,7 @@ function routerPush(path, query) {
       color: var(--font-color-5);
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .PlayListItem__center__bottom {
@@ -85,6 +86,7 @@ function routerPush(path, query) {
       color: #999;
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 

@@ -72,6 +72,12 @@ const router = createRouter({
           path: '/search',
           name: 'search',
           component: () => import('@/views/search/index.vue'),
+        },
+        // 搜索详情
+        {
+          path: '/searchDetail',
+          name: 'searchDetail',
+          component: () => import('@/views/searchDetail/index.vue')
         }
       ]
     },

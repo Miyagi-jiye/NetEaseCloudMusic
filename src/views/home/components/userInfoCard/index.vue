@@ -1,8 +1,8 @@
 <template>
   <!-- 接受到数据并且已经登录 -->
   <div class="userInfoCard" v-if="config && isLogin">
-    <div class="userInfoCard__avatar">
-      <img :src="config.profile.avatarUrl" alt="avatar" />
+    <div class="userInfoCard__avatar" @click="routerPush('/userListDetail', { id: config.profile.userId })">
+      <img v-lazy="config.profile.avatarUrl + '?param=200y200'" alt="avatar" />
     </div>
     <div class="userInfoCard__info nowrap">
       <div class="userInfoCard__info__name">
@@ -42,12 +42,19 @@
 import DefaultImg from "@/assets/icons/fbs.png"// 默认头像
 import { storeToRefs } from "pinia"
 import { useLoginStore } from '@/stores/login.js'
+import { useRouter } from "vue-router"
 
+const router = useRouter()//路由
 const { isLogin } = storeToRefs(useLoginStore())//登录状态
 
 const props = defineProps({
   config: Object,
 })
+
+//跳转到用户详情页
+function routerPush(path, query) {
+  router.push({ path, query })
+}
 </script>
 
 <style scoped lang="less">

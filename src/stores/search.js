@@ -17,11 +17,17 @@ export const useSearchStore = defineStore(
       },
       searchResult: {
         songs: [],// 单曲
+        songCount: 0,// 单曲数量
         albums: [],// 专辑
+        albumCount: 0,// 专辑数量
         artists: [],// 歌手
+        artistCount: 0,// 歌手数量
         playlists: [],// 歌单
+        playlistCount: 0,// 歌单数量
         userprofiles: [],// 用户
+        userprofileCount: 0,// 用户数量
         mvs: [],// MV
+        mvCount: 0,// MV数量
       },// 搜索结果
     })
 
@@ -47,20 +53,26 @@ export const useSearchStore = defineStore(
       const res = await search(searchData.keyword, searchData.searchParams)
       // 判断是否第一页数据
       if (searchData.searchParams.offset == 1) {
-        console.log("🔍搜索", res.result)
+        console.log("🔍首次搜索", res.result)
         // 匹配搜索类型(if else)
         if (searchData.searchParams.type == 1 && res.result.songs) {
           searchData.searchResult.songs = res.result.songs
+          searchData.searchResult.songCount = res.result.songCount
         } else if (searchData.searchParams.type == 10 && res.result.albums) {
           searchData.searchResult.albums = res.result.albums
+          searchData.searchResult.albumCount = res.result.albumCount
         } else if (searchData.searchParams.type == 100 && res.result.artists) {
           searchData.searchResult.artists = res.result.artists
+          searchData.searchResult.artistCount = res.result.artistCount
         } else if (searchData.searchParams.type == 1000 && res.result.playlists) {
           searchData.searchResult.playlists = res.result.playlists
+          searchData.searchResult.playlistCount = res.result.playlistCount
         } else if (searchData.searchParams.type == 1002 && res.result.userprofiles) {
           searchData.searchResult.userprofiles = res.result.userprofiles
+          searchData.searchResult.userprofileCount = res.result.userprofileCount
         } else if (searchData.searchParams.type == 1004 && res.result.mvs) {
           searchData.searchResult.mvs = res.result.mvs
+          searchData.searchResult.mvCount = res.result.mvCount
         } else {
           console.log("偏移量错误")
         }

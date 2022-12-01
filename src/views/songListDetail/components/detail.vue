@@ -8,7 +8,7 @@
           {{ item }}
         </van-tag>
       </div>
-      <div class="creator">
+      <div class="creator" @click="routerPush('/userListDetail', { id: songListDetail.playlist.creator.userId })">
         <img class="creator__avatarUrl" v-lazy="songListDetail.playlist.creator.avatarUrl + '?param=20y20'" alt="创建者">
         <div class="creator__nickname">{{ songListDetail.playlist.creator.nickname }}</div>
         <van-icon name="arrow" size="12" />
@@ -23,9 +23,15 @@
 import ImgCard from '@/components/imgCard/index.vue'// 引入图片组件
 import Description from '@/views/songListDetail/components/description.vue'// 描述组件
 import { useSongListDetailStore } from '@/stores/songListDetail.js'
+import { useRouter } from 'vue-router'
 
+const router = useRouter();
 const { songListDetail, getPlaylistDetail } = useSongListDetailStore();
 
+//跳转到用户详情页
+function routerPush(path, query) {
+  router.push({ path, query })
+}
 </script>
 
 <style scoped lang="less">
@@ -72,6 +78,7 @@ const { songListDetail, getPlaylistDetail } = useSongListDetailStore();
       gap: 6px;
       color: #ffffffb5;
       font-size: 12px;
+      width: fit-content; // 宽度自适应
 
       .creator__avatarUrl {
         width: 20px;

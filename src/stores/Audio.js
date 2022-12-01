@@ -197,7 +197,7 @@ export const useAudioStore = defineStore(
       audioData.isPlay = value// 播放状态
       if (audioData.isPlay) {
         // 判断正在播放的是不是同一首歌
-        if (audio.src === audioData.url) {
+        if (audio.src && audio.src === audioData.url) {
           // 继续播放
           audio.play().then(() => {
             // 判断歌曲总时长是否小于31秒，如果小于则为vip试听歌曲

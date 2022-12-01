@@ -101,6 +101,7 @@ function routerPush(path, query) {
       color: var(--font-color-5);
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
 
       span {
         margin-right: 10px;
@@ -113,6 +114,7 @@ function routerPush(path, query) {
       color: #999;
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 }

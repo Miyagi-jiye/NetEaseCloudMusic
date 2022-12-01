@@ -14,7 +14,7 @@
       <van-skeleton :row="1" class="subCard" />
       <van-skeleton :row="1" class="songListTitle" />
       <div class="songListItem">
-        <van-skeleton :row="1" class="item" v-for="item in 5" />
+        <van-skeleton :row="1" class="item" v-for="item in 10" />
       </div>
     </div>
   </div>
@@ -100,7 +100,7 @@
     }
 
     .songListTitle {
-      height: 27px;
+      height: 41px;
       width: 100%;
     }
 
@@ -111,7 +111,7 @@
       padding: 16px;
 
       .item {
-        height: 58px;
+        height: 39px;
         border-radius: 4px;
         overflow: hidden;
       }

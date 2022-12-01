@@ -1054,14 +1054,17 @@ export async function songUrl(id, br = 999000) {
  * 1. code：状态码
  * 2. data：音乐数据
  */
-export async function songUrlV1(id, level) {
+export async function songUrlV1(id, level = 'standard') {
   const { cookie } = storeToRefs(useLoginStore());// 获取cookie
   const { data } = await request({
     url: `/song/url/v1?id=${id}&level=${level}`,
-    method: 'get',
-    params: {
+    method: 'post',
+    data: {
       cookie: encodeURIComponent(JSON.stringify(cookie.value)),//cookie请求头
-    }
+    },
+    // params: {
+    //   cookie: encodeURIComponent(JSON.stringify(cookie.value)),//cookie请求头
+    // }
   });
   return data;
 }
