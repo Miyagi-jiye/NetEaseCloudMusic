@@ -98,6 +98,7 @@ function routerPush(path, query) {
     }
 
     .MvListItem__top__playIcon {
+      font-size: 10vw;
       opacity: 0;
       position: absolute;
       top: 50%;

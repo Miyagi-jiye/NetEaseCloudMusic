@@ -26,7 +26,11 @@ const router = createRouter({
         {
           path: '/follow',
           name: 'follow',
-          component: () => import('@/views/follow/index.vue')
+          component: () => import('@/views/follow/index.vue'),
+          meta: {
+            title: '关注页',
+            keepAlive: true
+          }
         },
         {
           path: '/home',
@@ -34,6 +38,15 @@ const router = createRouter({
           component: () => import('@/views/home/index.vue'),
           meta: {
             title: '首页',
+            keepAlive: true
+          }
+        },
+        {
+          path: '/about',
+          name: 'about',
+          component: () => import('@/views/about/index.vue'),
+          meta: {
+            title: '关于页',
             keepAlive: true
           }
         },

@@ -2,6 +2,7 @@
   <!-- <div class="follow"> -->
   <!-- <iframe src="https://kaifa.baidu.com/" frameborder="0" style="width: 100%;;height: 100%;"></iframe> -->
   <songListDetailSkeleton />
+  <!-- <van-back-top target=".follow" /> -->
   <!-- </div> -->
 </template>
 

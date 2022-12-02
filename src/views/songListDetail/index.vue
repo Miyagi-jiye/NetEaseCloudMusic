@@ -8,6 +8,8 @@
         <Content />
       </div>
     </div>
+    <!-- 返回顶部 -->
+    <van-back-top right="32px" bottom="76px" target=".songListDetail" />
   </div>
 </template>
 

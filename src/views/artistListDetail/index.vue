@@ -49,6 +49,8 @@
           @change="mvPageChange" />
       </van-tab>
     </van-tabs>
+    <!-- 返回顶部 -->
+    <van-back-top right="32px" bottom="76px" target=".artistListDetail" />
   </div>
 </template>
 
@@ -200,7 +202,7 @@ export default { name: "artistListDetail" }
       padding: 16px;
       box-sizing: border-box;
       font-size: 14px;
-      min-height: calc(100vh - 344px);
+      min-height: 100vh;
     }
 
     .song {

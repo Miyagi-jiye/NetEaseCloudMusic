@@ -14,6 +14,7 @@
             <template #fallback>
               <DiscoverSkeleton v-if="route.name == 'discover'" />
               <SongListDetailSkeleton v-else-if="route.name == 'songListDetail'" />
+              <SongListDetailSkeleton v-else-if="route.name == 'albumListDetail'" />
               <!-- <div v-else>没有骨架屏====>{{ route.name }}</div> -->
               <LoadingPage v-else />
             </template>

@@ -41,7 +41,12 @@
                 {{ audioData.song.name }}
                 <span v-if="audioData.song.alia[0]">（{{ audioData.song.alia[0] }}）</span>
               </span>
-              <span class="artist">{{ audioData.song.ar[0].name }}
+              <span class="artist">
+                <span class="artist__item">
+                  <span v-for="item in audioData.song.ar" @click="routerPush('artistListDetail', { id: item.id })">
+                    {{ item.name }}
+                  </span>
+                </span>
                 <van-icon name="arrow" />
               </span>
             </div>
@@ -232,7 +237,9 @@ import pointer from "@/assets/icons/fd6.png";// 指针
 import { useAudioStore } from '@/stores/Audio.js';
 import { ref, watch } from 'vue';
 import { showNotify, showDialog } from 'vant';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const { audioData, play, audio, playPrevSong, playNextSong, changeQuality } = useAudioStore();
 const show = ref(false)// 是否显示播放弹窗
 const showLyric = ref(false)// 是否显示歌词
@@ -356,12 +363,18 @@ const test = () => {
 
   // 设置滚动到顶部的距离，让它居中显示  - (lyricContentHeight - lyricItemsHeight[currentIndex.value]) / 2
   const lyricList = document.querySelector(".lyric")
-  lyricList.scrollTop = lyricScrollTop
+  lyricList.scrollTop = lyricScrollTop + lyricItemsHeight[currentIndex.value] / 2
 }
 
 // 切换播放音质
 const switchQuality = (e) => {
   changeQuality(e)
+}
+
+// 跳转到歌手详情
+function routerPush(path, query) {
+  show.value = false// 隐藏播放器
+  router.push({ path, query })
 }
 </script>
 
@@ -465,10 +478,12 @@ const switchQuality = (e) => {
       // align-items: center;
       gap: 4px;
       overflow: hidden;
+      line-height: 1;
 
       .title {
         font-size: 16px;
-        margin: 0 auto; // 水平居中
+        // margin: 0 auto; // 水平居中
+        text-align: center;
         // TODO：文本无缝滚动动画,当左边消失50%的时候，左边消失的内容从右边出现
         // animation: scroll 20s linear infinite;
         // 只执行1次
@@ -489,7 +504,26 @@ const switchQuality = (e) => {
       .artist {
         font-size: 14px;
         color: #ffffff88;
-        margin: 0 auto; // 水平居中
+        // margin: 0 auto; // 水平居中
+        text-align: center;
+
+        .artist__item {
+
+          span:hover {
+            color: #fff;
+            cursor: pointer;
+          }
+
+          span:not(:last-child)::after {
+            content: '/';
+            margin: 0 6px;
+            color: #ffffff88;
+          }
+        }
+
+        i {
+          margin-left: 8px;
+        }
       }
 
       span {

@@ -55,6 +55,11 @@
   padding: 0 !important;
 }
 
+:deep(.van-skeleton-paragraph) {
+  width: 100% !important;
+  height: 100% !important;
+}
+
 .title {
   margin: 16px 0;
   height: 21px;

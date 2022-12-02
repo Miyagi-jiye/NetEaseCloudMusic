@@ -18,7 +18,7 @@
           <img :src="mvListDetail.mv.artists[0].img1v1Url + '?param=50y50'" alt="">
           <span>{{ mvListDetail.mv.artists[0].name }}</span>
         </div>
-        <FollowButton :followed="mvListDetail.mv.artists[0].followed" />
+        <FollowButton :id="mvListDetail.mv.artists[0].id" :followed="mvListDetail.mv.artists[0].followed" />
       </div>
       <!-- 歌曲信息 -->
       <div class="mvListDetail__info__bottom">
@@ -112,7 +112,7 @@ await init()
 
 // 播放器事件
 function onPlay() {
-  console.log("视频播放暂停音乐播放");
+  console.log("视频播放时暂停音乐播放");
   play(false)// 暂停音乐播放
 };
 

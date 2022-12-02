@@ -23,10 +23,15 @@
                 {{ item }}
               </van-tag>
             </div>
-            <div class="creator">
-              <div class="creator__nickname">歌手：{{ albumListDetail.album.artists[0].name }}</div>
+            <span class="creator">
+              歌手：
+              <span class="nowrap">
+                <span v-for="item in albumListDetail.album.artists">
+                  {{ item.name }}
+                </span>
+              </span>
               <van-icon name="arrow" size="12" />
-            </div>
+            </span>
             <div class="publishTime">发行时间：{{ formatDate(albumListDetail.album.publishTime) }}</div>
             <Description class="description" :desc="albumListDetail.album.description"
               v-if="albumListDetail.album.description" :end="24" />
@@ -45,6 +50,8 @@
         </div>
       </div>
     </div>
+    <!-- 返回顶部 -->
+    <van-back-top right="32px" bottom="76px" target=".albumListDetail" />
   </div>
 </template>
 
@@ -173,6 +180,7 @@ watch(() => route.query.id, (newId) => {
       gap: 6px;
       color: #ffffffb5;
       font-size: 12px;
+      line-height: 1;
     }
 
     .publishTime {

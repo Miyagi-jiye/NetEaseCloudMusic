@@ -33,6 +33,11 @@
   padding: 0 !important;
 }
 
+:deep(.van-skeleton-paragraph) {
+  width: 100% !important;
+  height: 100% !important;
+}
+
 .songListDetail-skeleton {
   display: flex;
   flex-direction: column;

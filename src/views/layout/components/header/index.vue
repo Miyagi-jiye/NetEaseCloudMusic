@@ -45,18 +45,9 @@ function settingClick() {
 function menuClick() {
   leftShow.value = !leftShow.value
 }
-// 点击搜索按钮
-function searchClick() {
-  rightShow.value = !rightShow.value
-}
-// 输入框清空事件
-function inputClear() {
-  searchKey.value = ''
-}
 // 跳转到搜索页面
-function routerPush(path, query) {
-  console.log('跳转到搜索页面', path, query)
-  router.push({ path, query })
+function routerPush(path) {
+  router.push({ path })
 }
 </script>
 

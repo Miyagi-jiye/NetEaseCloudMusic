@@ -9,64 +9,70 @@
     <div class="searchResult">
       <van-tabs v-model:active="searchData.searchParams.type" line-width="30px" class="searchResult__top">
         <van-tab title="单曲" :name="1">
-          <div class="searchResult__songs">
 
-            <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad('songs')">
-              <SongListItem v-for="(item, index) in searchData.searchResult.songs" :key="item.id" :config="item"
-                :index="index" :keyword="searchData.keyword" />
-            </van-list>
+          <LoadingPage v-show="loadingPage == true" style="margin-top:20vh" />
 
-          </div>
+          <van-list class="searchResult__songs" v-show="loadingPage == false" v-model:loading="loading"
+            :finished="finished" finished-text="没有更多了" @load="onLoad('songs')">
+            <SongListItem v-for="(item, index) in searchData.searchResult.songs" :key="item.id" :config="item"
+              :index="index" :keyword="searchData.keyword" />
+          </van-list>
+
         </van-tab>
         <van-tab title="专辑" :name="10">
-          <div class="searchResult__albums">
 
-            <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad('albums')">
-              <AlbumListItem v-for="(item, index) in searchData.searchResult.albums" :key="item.id" :config="item"
-                :keyword="searchData.keyword" />
-            </van-list>
+          <LoadingPage v-show="loadingPage == true" style="margin-top:20vh" />
 
-          </div>
+          <van-list class="searchResult__albums" v-show="loadingPage == false" v-model:loading="loading"
+            :finished="finished" finished-text="没有更多了" @load="onLoad('albums')">
+            <AlbumListItem v-for="(item, index) in searchData.searchResult.albums" :key="item.id" :config="item"
+              :keyword="searchData.keyword" />
+          </van-list>
+
         </van-tab>
         <van-tab title="歌手" :name="100">
-          <div class="searchResult__artists">
 
-            <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad('artists')">
-              <ArtistListItem v-for="(item, index) in searchData.searchResult.artists" :key="item.id" :config="item"
-                :keyword="searchData.keyword" />
-            </van-list>
+          <LoadingPage v-show="loadingPage == true" style="margin-top:20vh" />
 
-          </div>
+          <van-list class="searchResult__artists" v-show="loadingPage == false" v-model:loading="loading"
+            :finished="finished" finished-text="没有更多了" @load="onLoad('artists')">
+            <ArtistListItem v-for="(item, index) in searchData.searchResult.artists" :key="item.id" :config="item"
+              :keyword="searchData.keyword" />
+          </van-list>
+
         </van-tab>
         <van-tab title="歌单" :name="1000">
-          <div class="searchResult__playlists">
 
-            <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad('playlists')">
-              <PlayListItem v-for="(item, index) in searchData.searchResult.playlists" :key="item.id" :config="item"
-                :keyword="searchData.keyword" />
-            </van-list>
+          <LoadingPage v-show="loadingPage == true" style="margin-top:20vh" />
 
-          </div>
+          <van-list class="searchResult__playlists" v-show="loadingPage == false" v-model:loading="loading"
+            :finished="finished" finished-text="没有更多了" @load="onLoad('playlists')">
+            <PlayListItem v-for="(item, index) in searchData.searchResult.playlists" :key="item.id" :config="item"
+              :keyword="searchData.keyword" />
+          </van-list>
+
         </van-tab>
         <van-tab title="用户" :name="1002">
-          <div class="searchResult__users">
 
-            <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad('userlist')">
-              <UserListItem v-for="(item, index) in searchData.searchResult.userprofiles" :key="item.id" :config="item"
-                :keyword="searchData.keyword" />
-            </van-list>
+          <LoadingPage v-show="loadingPage == true" style="margin-top:20vh" />
 
-          </div>
+          <van-list class="searchResult__users" v-show="loadingPage == false" v-model:loading="loading"
+            :finished="finished" finished-text="没有更多了" @load="onLoad('userlist')">
+            <UserListItem v-for="(item, index) in searchData.searchResult.userprofiles" :key="item.id" :config="item"
+              :keyword="searchData.keyword" />
+          </van-list>
+
         </van-tab>
         <van-tab title="MV" :name="1004">
-          <div class="searchResult__mvs">
 
-            <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad('mvs')">
-              <MvListItem v-for="(item, index) in searchData.searchResult.mvs" :key="item.id" :config="item"
-                :keyword="searchData.keyword" />
-            </van-list>
+          <LoadingPage v-show="loadingPage == true" style="margin-top:20vh" />
 
-          </div>
+          <van-list class="searchResult__mvs" v-show="loadingPage == false" v-model:loading="loading"
+            :finished="finished" finished-text="没有更多了" @load="onLoad('mvs')">
+            <MvListItem v-for="(item, index) in searchData.searchResult.mvs" :key="item.id" :config="item"
+              :keyword="searchData.keyword" />
+          </van-list>
+
         </van-tab>
       </van-tabs>
     </div>
@@ -74,6 +80,7 @@
 </template>
 
 <script setup>
+import LoadingPage from '@/components/loadingPage/block.vue';// 加载中
 import MvListItem from '@/components/MvListItem/index.vue'// mv列表
 import UserListItem from '@/components/UserListItem/index.vue'// 用户列表
 import PlayListItem from '@/components/PlayListItem/index.vue'// 歌单列表
@@ -81,10 +88,11 @@ import ArtistListItem from '@/components/ArtistListItem/index.vue'// 歌手列�
 import SongListItem from '@/components/SongListItem/index.vue'//单曲
 import AlbumListItem from '@/components/AlbumListItem/index.vue'//专辑
 import { useSearchStore } from '@/stores/search.js'
-import { watch, ref } from 'vue'
+import { watch, ref, onUpdated, onBeforeUpdate, nextTick } from 'vue'
 
 const loading = ref(false)
 const finished = ref(false)
+const loadingPage = ref(false)
 const { searchData, getSearch } = useSearchStore()
 
 await getSearch()
@@ -124,7 +132,10 @@ const searchClick = () => {
   if (searchDetail) searchDetail.scrollTop = 0// 返回顶部
   searchData.searchParams.offset = 1// 重置页面
   finished.value = false// 重置加载状态
-  getSearch()
+  loadingPage.value = true// 加载中
+  setTimeout(() => {
+    getSearch()
+  }, 0);
 }
 
 // 监听tab栏切换
@@ -137,6 +148,14 @@ window.onbeforeunload = () => {
   searchData.searchParams.offset = 1
   finished.value = false// 重置加载状态
 }
+
+// 在页面重新渲染完成后隐藏加载中
+onUpdated(() => {
+  setTimeout(() => {
+    loadingPage.value = false
+    console.log("页面重新渲染完成")
+  }, 600);
+})
 </script>
 
 <style scoped lang="less">
@@ -194,37 +213,37 @@ window.onbeforeunload = () => {
   flex: 1;
   // overflow-y: scroll;
 
-  &__songs {
+  .searchResult__songs {
     display: flex;
     flex-direction: column;
     background: var(--van-search-background)
   }
 
-  &__albums {
+  .searchResult__albums {
     display: flex;
     flex-direction: column;
     background: var(--van-search-background)
   }
 
-  &__artists {
+  .searchResult__artists {
     display: flex;
     flex-direction: column;
     background: var(--van-search-background)
   }
 
-  &__playlists {
+  .searchResult__playlists {
     display: flex;
     flex-direction: column;
     background: var(--van-search-background)
   }
 
-  &__users {
+  .searchResult__users {
     display: flex;
     flex-direction: column;
     background: var(--van-search-background)
   }
 
-  &__mvs {
+  .searchResult__mvs {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 16px;
