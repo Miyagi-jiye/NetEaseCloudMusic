@@ -1,1 +1,0 @@
-import{u as e}from"./Audio.08071943.js";import{s as o}from"./songListDetail.5349d248.js";import{_ as t,R as _,a0 as s}from"./index.8dc45d83.js";import"./index.3be26816.js";const a={__name:"index",setup(r){return e(),(c,n)=>(_(),s(o))}},u=t(a,[["__scopeId","data-v-67957cdf"]]);export{u as default};

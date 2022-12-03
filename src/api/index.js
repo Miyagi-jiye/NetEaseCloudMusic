@@ -1965,3 +1965,31 @@ export async function uselyric(id) {
   });
   return data;
 }
+// 获取每日推荐歌曲
+// 说明 : 调用此接口 , 可获得每日推荐歌曲 ( 需要登录 )
+// 接口地址 : /recommend/songs
+// 调用例子 : /recommend/songs
+/**
+ * @description 获取每日推荐歌曲
+ */
+export async function recommendSongs() {
+  const { data } = await request({
+    url: '/recommend/songs',
+    method: 'get',
+  });
+  return data;
+}
+// 获取每日推荐歌单
+// 说明 : 调用此接口 , 可获得每日推荐歌单 ( 需要登录 )
+// 接口地址 : /recommend/resource
+// 调用例子 : /recommend/resource
+/**
+ * @description 获取每日推荐歌单
+ */
+export async function recommendResource() {
+  const { data } = await request({
+    url: '/recommend/resource',
+    method: 'get',
+  });
+  return data;
+}

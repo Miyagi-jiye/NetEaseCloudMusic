@@ -14,7 +14,7 @@
           <div class="name">
             <span>{{ item.actor.name }}</span>
             <span>{{ item.type }}</span>
-            <a :href="item.actor.html_url">
+            <a :href="item.actor.html_url" target="_blank">
               <svg t="1669984047339" class="icon" viewBox="0 0 1024 1024" version="1.1"
                 xmlns="http://www.w3.org/2000/svg" p-id="4511" width="14" height="14">
                 <path
@@ -24,14 +24,16 @@
             </a>
           </div>
           <div class="time">
-            {{ formatDate(item.created_at) }}
+            {{ compareTime(item.created_at) }}
           </div>
         </div>
         <div class="dynamic__bottom" v-if="item.payload.commits">
           {{ item.payload.commits[0].message }}
         </div>
       </div>
+      <div class="badge" v-show="(isShowBadge(item.created_at) == true)">New</div>
     </div>
+    <van-back-top target=".about" right="32px" bottom="120px" />
   </div>
 </template>
 
@@ -59,15 +61,15 @@ async function getData(url = '', data = {}) {
 // 列出仓库的所有动态
 // GET https://gitee.com/api/v5/repos/{owner}/{repo}/events
 // 必选参数：
-// access_token：通过OAuth授权获得的access_token (e55b25dbf59e2e2088f1e14a6f142ecf)
+// access_token：通过OAuth授权获得的access_token (a695a49a95f8eab098ea0446068d4457)
 // owner：仓库所属空间地址(企业、组织或个人的地址path),
 // repo：仓库路径(path)
 // 可选参数：
 // limit：每页的动态数量，默认为20,最大为100
 // prev_id：上一页最后一条动态的id，用于获取下一页动态
 const owner = 'miyagi-jiye'
-const repo = 'Vue3.2-admin'
-const access_token = 'e55b25dbf59e2e2088f1e14a6f142ecf'
+const repo = 'net-ease-cloud-music'
+const access_token = 'a695a49a95f8eab098ea0446068d4457'
 const limit = 100
 const prev_id = 0
 const url = `https://gitee.com/api/v5/repos/${owner}/${repo}/events?access_token=${access_token}&limit=${limit}`
@@ -75,6 +77,12 @@ const url = `https://gitee.com/api/v5/repos/${owner}/${repo}/events?access_token
 res.value = await getData(url)
 console.log("gitee仓库动态", res.value)
 
+// 点击倒序
+function reverse() {
+  res.value.reverse()
+  show.value = !show.value
+}
+// 格式化时间
 function formatDate(time) {
   let date = new Date(time)//时间戳为10位需*1000，时间戳为13位的话不需乘1000
   let year = date.getFullYear()//年
@@ -103,10 +111,27 @@ function formatDate(time) {
   let timeStr = year + '年' + month + '月' + day + '日  ' + hour + ':' + minute + ':' + second
   return timeStr
 }
-// 点击倒序
-function reverse() {
-  res.value.reverse()
-  show.value = !show.value
+// 比较时间大小，如果距离今天不超过一天，则显示几小时前，否则显示具体时间
+function compareTime(time) {
+  let date = new Date(time)//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+  let now = new Date()
+  let diff = now.getTime() - date.getTime()
+  if (diff < 24 * 60 * 60 * 1000) {
+    return Math.floor(diff / (60 * 60 * 1000)) + '小时前'
+  } else {
+    return formatDate(time)
+  }
+}
+// 判断是否显示new徽标
+function isShowBadge(time) {
+  let date = new Date(time)//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+  let now = new Date()
+  let diff = now.getTime() - date.getTime()
+  if (diff < 24 * 60 * 60 * 1000) {
+    return true
+  } else {
+    return false
+  }
 }
 </script>
 
@@ -128,6 +153,7 @@ function reverse() {
   align-items: center;
   height: 26px;
   width: 100%;
+  color: var(--font-color-dark);
 }
 
 .dynamic {
@@ -137,8 +163,10 @@ function reverse() {
   padding: 16px;
   // border: 1px solid;
   border-radius: 8px;
-  background: #fff;
+  background: var(--card-background-color);
+  color: var(--font-color-dark);
   box-shadow: rgb(0 0 0 / 5%) 0px 0px 20px;
+  position: relative;
 
   .left {
     display: flex;
@@ -154,13 +182,20 @@ function reverse() {
     }
   }
 
-
-
   .right {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 16px;
     overflow: hidden;
+  }
+
+  .badge {
+    position: absolute;
+    right: 8px;
+    top: -8px;
+    font-size: 16px;
+    font-weight: bold;
+    color: red;
   }
 
   .dynamic__top {

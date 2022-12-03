@@ -5,7 +5,8 @@
       <p style="font-size: 12px" class="title">{{ item.name }}</p>
     </div> -->
     <swiper slidesPerView="auto" :spaceBetween="0" :freeMode="true" :modules="modules" class="mySwiper">
-      <swiper-slide v-for="item in dragonBall" class="menu-item" :data-foo="today">
+      <swiper-slide v-for="(item, index) in dragonBall" :key="item.id" class="menu-item" :data-foo="today"
+        @click="routerPush(item.name)">
         <i class="icon" :style="`-webkit-mask-image: url(${item.iconUrl})`" />
         <p class="title">{{ item.name }}</p>
       </swiper-slide>
@@ -23,8 +24,10 @@ import { FreeMode } from "swiper";
 // Import Swiper Vue.js components
 import { storeToRefs } from 'pinia';// 解决响应式丢失问题
 import { useDiscoverStore } from "@/stores/discover.js"
+import { useRouter } from "vue-router";
 
 const modules = [FreeMode]// swiper功能模块
+const router = useRouter();
 const { dragonBall } = storeToRefs(useDiscoverStore())
 const { getdragonBall } = useDiscoverStore()
 
@@ -32,6 +35,18 @@ await getdragonBall()
 
 // 每日推荐的日期
 const today = new Date().getDate();
+
+// 路由跳转
+const routerPush = (name) => {
+  console.log(name)
+  switch (name) {
+    case '每日推荐':
+      router.push('/recommend')
+      break;
+    default:
+      break;
+  }
+}
 </script>
 
 <style scoped lang="less">

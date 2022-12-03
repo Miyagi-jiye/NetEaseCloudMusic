@@ -27,7 +27,7 @@ import { watch } from "vue";// #backTop 滚动条回到顶部
 import { useRoute } from "vue-router"
 
 const route = useRoute()
-const { audioData } = useAudioStore()
+const { audioData, play } = useAudioStore()
 // 判断是否隐藏头部和底部
 const isHide = useHideHeaderFooter()
 
@@ -37,7 +37,7 @@ watch(route, () => {
 })
 // 监听浏览器页面刷新，如果刷新就让播放状态为false
 window.onbeforeunload = () => {
-  audioData.isPlay = false
+  play(false)// 暂停播放
 }
 </script>
 

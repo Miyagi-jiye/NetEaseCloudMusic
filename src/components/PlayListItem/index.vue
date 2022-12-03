@@ -1,7 +1,7 @@
 <template>
   <div class="PlayListItem" @click="routerPush('/songListDetail', { id: config.id })">
     <div class="PlayListItem__left">
-      <ImgCard :imgUrl="config.coverImgUrl" />
+      <ImgCard :imgUrl="(config.coverImgUrl ?? config.picUrl)" />
     </div>
     <div class="PlayListItem__center">
       <div class="PlayListItem__center__top">{{ config.name }}</div>
@@ -29,6 +29,7 @@ const props = defineProps({
   config: {
     id: Number,//歌单id
     coverImgUrl: String,//歌单封面
+    picUrl: String,//歌单封面
     name: String,//歌单名
     trackCount: Number,//歌曲数量
     playCount: Number,//播放次数

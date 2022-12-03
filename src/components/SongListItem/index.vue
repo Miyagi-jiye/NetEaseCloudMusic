@@ -12,6 +12,9 @@
         </span>
       </div>
       <div class="bottom">
+        <van-tag v-if="config.recommendReason" class="tag">
+          {{ config.recommendReason }}
+        </van-tag>
         <Tags :config="config" style="float: left;" />
         <span class="bottom__ar">
           <span v-for="ar in config.ar" class="bottom__ar__item">
@@ -28,6 +31,9 @@
         {{ config.name }}<span v-for="alia in config.alia" class="top__alia">({{ alia }})</span>
       </div>
       <div class="bottom">
+        <van-tag v-if="config.recommendReason" class="tag">
+          {{ config.recommendReason }}
+        </van-tag>
         <Tags :config="config" style="float: left;" />
         <span class="bottom__ar">
           <span v-for="ar in config.ar" class="bottom__ar__item">{{ ar.name }}</span>
@@ -60,6 +66,7 @@ const props = defineProps({
     ar: Array,// 歌手
     al: Object,// 专辑
     mv: Number,// mv id
+    recommendReason: String,// 推荐理由(每日推荐有)
   },
   index: Number,// 歌曲序号
   keyword: String,// 搜索关键字
@@ -132,6 +139,12 @@ function highlightAlia(str) {
       font-size: 12px;
       color: #999999;
       line-height: 16px;
+
+      .tag {
+        color: var(--tag-background-color-1);
+        background-color: var(--tag-color-1);
+        margin-right: 4px;
+      }
 
       // flex布局文本溢出省略号会失效
       // display: flex;

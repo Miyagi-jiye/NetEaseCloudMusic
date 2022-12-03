@@ -91,7 +91,13 @@ const router = createRouter({
           path: '/searchDetail',
           name: 'searchDetail',
           component: () => import('@/views/searchDetail/index.vue')
-        }
+        },
+        // 每日推荐
+        {
+          path: '/recommend',
+          name: 'recommend',
+          component: () => import('@/views/recommend/index.vue')
+        },
       ]
     },
     // 登录页
@@ -128,6 +134,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
+  if (to.meta.title) document.title = to.meta.title// 动态设置页面标题
   next()
 })
 

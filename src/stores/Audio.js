@@ -1,7 +1,7 @@
 import { ref, reactive, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
 import { songUrlV1, songDetail, uselyric } from "@/api/index.js"
-import { showNotify } from 'vant'
+import { showNotify, showFailToast } from 'vant'
 
 export const useAudioStore = defineStore(
   'Audio',
@@ -88,6 +88,7 @@ export const useAudioStore = defineStore(
     // 获取歌曲url-新版
     async function getSongUrl(id) {
       const res = await songUrlV1(id, audioData.level)
+      // 判断返回的code码和fee码,以及url是否为空
       audioData.url = res.data[0].url// 设置歌曲url
       await getLyric(audioData.song.id) // 获取歌词
       // console.log("新版歌曲url", res.data[0])
@@ -267,6 +268,7 @@ export const useAudioStore = defineStore(
               audioData.isPlay = false// 播放失败
               audio.pause()// 暂停播放
               console.log("🎵url获取失败，播放失败")
+              showFailToast("VIP歌曲")
             }
           }
         }
