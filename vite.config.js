@@ -27,7 +27,12 @@ export default defineConfig({
         target: 'http://guowei.fun:3000',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""), // 将路径/api替换为空
-      }
+      },
+      '/bilibili': {
+        target: 'https://api.bilibili.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/bilibili/, ""), // 将路径/api替换为空
+      },
     }
   },
   // 打包配置

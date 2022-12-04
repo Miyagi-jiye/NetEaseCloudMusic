@@ -4,7 +4,7 @@
     <RouterView v-slot="{ Component, route }">
       <template v-if="Component">
         <!-- <Transition name="slide-fade"> -->
-        <KeepAlive :include="['discover']">
+        <KeepAlive :include="include">
           <Suspense timeout="0">
             <template #default>
               <!-- <Transition name="slide-fade"> -->
@@ -30,6 +30,11 @@
 import LoadingPage from '@/components/loadingPage/index.vue';
 import DiscoverSkeleton from "./skeleton/discover.vue";// 发现页骨架屏
 import SongListDetailSkeleton from "./skeleton/songListDetail.vue";// 歌单详情页骨架屏
+import { ref } from 'vue'
+
+// 定义需要缓存的路由
+// 注意：这里的路由名字要和组件的name一致,且setup语法糖形式需要导出组件名 export default { name: 'about' }
+const include = ref(['discover', 'about', 'home', 'recommend'])
 </script>
 
 <style scoped lang="less">

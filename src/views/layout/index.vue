@@ -77,6 +77,7 @@ window.onbeforeunload = () => {
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+  background: var(--van-nav-bar-background); // 避免导航栏和底栏动画消失时背景色不一致
 
   .header {
     height: 46px;

@@ -1,26 +1,24 @@
 <template>
-  <div class="follow">
-    <swiper :effect="'cards'" :grabCursor="true" :modules="modules" class="mySwiper">
-      <swiper-slide v-for="item in songs" :key="item.id"
-        :style="{ backgroundImage: 'url(' + item.al.picUrl + '?param=200y200)' }">
-        <div class="title">
-          <div class="left">
-            <span class="ar">
-              <span v-for="ar in item.ar">
-                {{ ar.name }}
-              </span>
+  <swiper :effect="'cards'" :grabCursor="true" :modules="modules" class="mySwiper">
+    <swiper-slide v-for="item in songs" :key="item.id"
+      :style="{backgroundImage:'url('+item.al.picUrl+'?param=200y200)'}">
+      <div class="title">
+        <div class="left">
+          <span class="ar">
+            <span v-for="ar in item.ar">
+              {{ar.name}}
             </span>
-            <span class="name">
-              {{ item.name }}<span v-if="item.alia[0]">（{{ item.alia[0] }}）</span>
-            </span>
-          </div>
-          <div class="right">
-            <van-icon name="music-o" />
-          </div>
+          </span>
+          <span class="name">
+            {{item.name}}<span v-if="item.alia[0]">（{{item.alia[0]}}）</span>
+          </span>
         </div>
-      </swiper-slide>
-    </swiper>
-  </div>
+        <div class="right">
+          <van-icon name="music-o" />
+        </div>
+      </div>
+    </swiper-slide>
+  </swiper>
 </template>
 
 <script setup>
@@ -39,21 +37,7 @@ defineProps({
     type: Array,
     default: () => ([
       {
-        id: 1,
-        ar: [{ name: 'So Far Away (Acoustic)' }],
-        al: { picUrl: 'http://p3.music.126.net/imqSqgUzzZFComnZ_9XZzg==/109951163574982396.jpg' },
-        name: 'So Far Away (Acoustic)',
-        alia: [],
-      },
-      {
-        id: 2,
-        ar: [{ name: 'So Far Away (Acoustic)' }],
-        al: { picUrl: 'http://p3.music.126.net/imqSqgUzzZFComnZ_9XZzg==/109951163574982396.jpg' },
-        name: 'So Far Away (Acoustic)',
-        alia: [],
-      },
-      {
-        id: 3,
+        id: 123,
         ar: [{ name: 'So Far Away (Acoustic)' }],
         al: { picUrl: 'http://p3.music.126.net/imqSqgUzzZFComnZ_9XZzg==/109951163574982396.jpg' },
         name: 'So Far Away (Acoustic)',
@@ -66,22 +50,9 @@ defineProps({
     default: 200
   }
 })
-
-const type = 1, follow_status = 0, pn = 1, ps = 20, vmid = 24772083, ts = Date.now()
-fetch(`http://guowei.fun:9999/api/bangumi?type=${type}&follow_status=${follow_status}&pn=${pn}&ps=${ps}&vmid=${vmid}&ts=${ts}`)
-  .then(response => response.json())
-  .then(data => console.log(data));
 </script>
 
 <style scoped lang="less">
-.follow {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .swiper {
   width: 200px;
   height: 200px;

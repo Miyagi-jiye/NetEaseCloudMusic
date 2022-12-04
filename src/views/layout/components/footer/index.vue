@@ -35,7 +35,7 @@
         <div class="bottom">关注</div>
       </span>
 
-      <span class="tabbar__item" :class="{ item__active: active == 3 }" @click="activeToRouter(3)">
+      <!-- <span class="tabbar__item" :class="{ item__active: active == 3 }" @click="activeToRouter(3)">
         <svg t="1669972349681" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
           p-id="9204" :class="{ icon__active: active == 3 }" width="24" height="24">
           <path
@@ -46,7 +46,7 @@
             fill="currentColor" p-id="9206"></path>
         </svg>
         <div class="bottom">关于</div>
-      </span>
+      </span> -->
 
     </div>
   </div>

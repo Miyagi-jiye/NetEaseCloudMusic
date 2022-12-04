@@ -134,7 +134,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  if (to.meta.title) document.title = to.meta.title// 动态设置页面标题
+  if (to.name) document.title = to.name// 动态设置页面标题
   next()
 })
 

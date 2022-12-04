@@ -1,6 +1,7 @@
 <template>
   <div class="recommend">
     <!-- 导航栏 -->
+    <!-- :style="{ background: 'url(' + recommendData.recommendDailySongs[0].al.picUrl + ')' }" -->
     <div class="header">
       <van-icon name="arrow-left" size='23' @click="$router.back()" />
       <div class="center">
@@ -11,8 +12,6 @@
       </div>
       <van-icon name="ellipsis" size='23' />
     </div>
-    <!-- 背景图片 -->
-    <!-- <div class="background"></div> -->
     <!-- 推荐歌曲 -->
     <div class="songs" v-show="show == true">
       <PlayAllFunctionBar :songs="recommendData.recommendDailySongs" style="top: 46px" />
@@ -40,23 +39,15 @@ await getRecommendSongs()
 await getRecommendSongList()
 </script>
 
+<script>
+export default { name: 'recommend' }
+</script>
+
 <style scoped lang="less">
 .recommend {
-  background-color: #000;
   height: 100%;
   width: 100%;
   overflow-y: scroll;
-}
-
-.background {
-  height: 300px;
-  width: 100%;
-  transition: all .3s; // 过渡动画
-  position: sticky;
-  top: calc(-300px + 46px);
-  z-index: 9;
-  overflow: hidden;
-  background: linear-gradient(to right, #4e54c8, #8f94fb);
 }
 
 .songs {
@@ -74,7 +65,7 @@ await getRecommendSongList()
   box-sizing: border-box;
   font-size: 16px;
   font-weight: bold;
-  color: #ffffff;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -82,9 +73,27 @@ await getRecommendSongList()
   // 定位
   position: sticky;
   top: 0;
-  // 透明背景
-  // background: transparent;
-  background: linear-gradient(to right, #4e54c8, #8f94fb);
+  // color: var(--song-list-color);
+  // background: var(--card-background-color);
+  color: #fff;
+  background: linear-gradient(135deg,
+      hsl(170deg, 80%, 70%),
+      hsl(190deg, 80%, 70%),
+      hsl(250deg, 80%, 70%),
+      hsl(320deg, 80%, 70%));
+  background-size: 200% 200%; // 背景大小，这里是两倍，也就是背景图的宽高都是原来的两倍
+  animation: gradient-move 10s ease alternate infinite;
+
+  @keyframes gradient-move {
+    0% {
+      background-position: 0% 0%;
+    }
+
+    100% {
+      background-position: 100% 100%;
+    }
+  }
+
   transition: all .3s;
   z-index: 10;
 

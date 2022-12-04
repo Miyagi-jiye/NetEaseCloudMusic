@@ -99,7 +99,7 @@
           <van-cell title="个人信息搜集与使用清单" is-link icon="description" />
           <van-cell title="个人信息第三方共享清单" is-link icon="exchange" />
           <van-cell title="个人信息与隐私保护" is-link icon="eye-o" />
-          <van-cell title="关于" is-link icon="warning-o" />
+          <van-cell title="关于" is-link icon="warning-o" @click="$router.push('/about')" />
         </van-cell-group>
       </div>
     </div>

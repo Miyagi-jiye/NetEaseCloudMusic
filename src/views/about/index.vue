@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <div class="about" v-if="res">
     <div class="setting">
       <span>最近100条记录</span>
       <van-icon v-show="show == true" name="descending" size="26" @click="reverse()" />
@@ -33,12 +33,11 @@
       </div>
       <div class="badge" v-show="(isShowBadge(item.created_at) == true)">New</div>
     </div>
-    <van-back-top target=".about" right="32px" bottom="120px" />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onActivated, onDeactivated } from 'vue'
 
 const res = ref([])// 用于存储请求的数据
 const show = ref(false)// 用于控制排序图标的显示
@@ -69,7 +68,7 @@ async function getData(url = '', data = {}) {
 // prev_id：上一页最后一条动态的id，用于获取下一页动态
 const owner = 'miyagi-jiye'
 const repo = 'net-ease-cloud-music'
-const access_token = 'a695a49a95f8eab098ea0446068d4457'
+const access_token = 'af7f83ea3dcd99c1a7cab7b454e3d215'
 const limit = 100
 const prev_id = 0
 const url = `https://gitee.com/api/v5/repos/${owner}/${repo}/events?access_token=${access_token}&limit=${limit}`
@@ -111,13 +110,22 @@ function formatDate(time) {
   let timeStr = year + '年' + month + '月' + day + '日  ' + hour + ':' + minute + ':' + second
   return timeStr
 }
-// 比较时间大小，如果距离今天不超过一天，则显示几小时前，否则显示具体时间
+// 比较时间大小，如果距离今天不超过一天，则显示几小时前（精确到秒），否则显示具体时间
 function compareTime(time) {
   let date = new Date(time)//时间戳为10位需*1000，时间戳为13位的话不需乘1000
   let now = new Date()
   let diff = now.getTime() - date.getTime()
   if (diff < 24 * 60 * 60 * 1000) {
-    return Math.floor(diff / (60 * 60 * 1000)) + '小时前'
+    let hour = Math.floor(diff / (60 * 60 * 1000))
+    let minute = Math.floor(diff / (60 * 1000))
+    let second = Math.floor(diff / 1000)
+    if (hour > 0) {
+      return hour + '小时前'
+    } else if (minute > 0) {
+      return minute + '分钟前'
+    } else {
+      return second + '秒前'
+    }
   } else {
     return formatDate(time)
   }
@@ -133,6 +141,17 @@ function isShowBadge(time) {
     return false
   }
 }
+
+onActivated(() => {
+  console.log('activated')
+})
+onDeactivated(() => {
+  console.log('deactivated')
+})
+</script>
+
+<script>
+export default { name: 'about' }
 </script>
 
 <style scoped lang="less">
@@ -237,6 +256,12 @@ function isShowBadge(time) {
         color: #999;
       }
     }
+  }
+
+  .dynamic__bottom {
+    white-space: break-spaces;
+    line-height: 1.5;
+    font-size: 16px;
   }
 }
 </style>
