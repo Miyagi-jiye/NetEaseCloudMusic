@@ -10,17 +10,17 @@ import axios from 'axios';
  * @param {Number} type 1为追番
  * @param {Number} ts 时间戳：发起请求时的时间戳，单位为毫秒
  */
-export function bangumiFollowList(type = 1, follow_status = 0, pn = 1, ps = 20, vmid = 24772083, ts = Date.now()) {
+export function bangumiFollowList({type = 1, follow_status = 0, pn = 1, ps = 20, vmid = 24772083, ts = Date.now()}) {
   return axios({
     url: 'http://guowei.fun:9999/api/bangumi',
     method: 'get',
     params: {
-      type,
-      follow_status,
-      pn,
-      ps,
-      vmid,
-      ts
+      type: type,
+      follow_status: follow_status,
+      pn: pn,
+      ps: ps,
+      vmid: vmid,
+      ts: ts
     },
   });
 }
