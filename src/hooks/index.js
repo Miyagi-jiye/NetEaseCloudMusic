@@ -12,7 +12,8 @@ export const useHideHeaderFooter = () => {
     'artistListDetail',
     'userListDetail',
     'searchDetail',
-    'recommend'
+    'recommend',
+    'follow',
   ]
   const hidden = ref(false)
   const route = useRoute()

@@ -17,24 +17,17 @@
         <MenuPopup />
       </slot>
     </van-popup>
-    <van-popup v-model:show="rightShow" teleport="body" position="right" :style="{ height: '100%', width: '80vw' }">
-      <slot name="default">
-        <SearchPopup />
-      </slot>
-    </van-popup>
   </div>
 </template>
 
 <script setup>
 import { ref, inject } from "vue"
-import SearchPopup from "./components/searchPopup.vue";
 import MenuPopup from "./components/menuPopup.vue"
 import { useRouter } from "vue-router"
 
 const router = useRouter()
 const searchKey = ref('')
 const leftShow = ref(false)// 左边popup显示状态
-const rightShow = ref(false)// 右边popup显示状态
 const theme = inject('theme')// 获取根节点组件传递的值
 
 // 点击设置黑夜按钮
