@@ -33,3 +33,15 @@ export const useHideHeaderFooter = () => {
   })
   return hidden// 返回是否隐藏的响应式状态
 }
+
+// 是否隐藏header和footer
+export const useHiddenHeaderFooter = () => {
+  const showHeader = ref(true)
+  const showFooter = ref(true)
+
+  // 添加
+  return {
+    showHeader,
+    showFooter
+  }
+}

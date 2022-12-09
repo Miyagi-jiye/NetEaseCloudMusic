@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <!-- <Transition name="slide-fade-up" appear> -->
-    <Header v-if="isHide == false" />
+    <Header v-if="route.meta.showHeader == true" />
     <!-- </Transition> -->
 
     <Main id="backTop" />
@@ -11,7 +11,7 @@
     </Transition>
 
     <Transition name="slide-fade" appear>
-      <Footer v-if="isHide == false" />
+      <Footer v-if="route.meta.showFooter == true" />
     </Transition>
   </div>
 </template>
@@ -21,19 +21,17 @@ import AudioCard from '@/components/AudioCard/index.vue'
 import Main from '@/views//layout/components/main/index.vue'
 import Header from '@/views//layout/components/header/index.vue'
 import Footer from "@/views//layout/components/footer/index.vue"
-import { useHideHeaderFooter } from "@/hooks/index.js"
 import { useAudioStore } from "@/stores/Audio.js"
 import { watch } from "vue";// #backTop 滚动条回到顶部
 import { useRoute } from "vue-router"
 
 const route = useRoute()
 const { audioData, play } = useAudioStore()
-// 判断是否隐藏头部和底部
-const isHide = useHideHeaderFooter()
 
 // 监听路由更新，切换页面滚动条自动回到顶部
 watch(route, () => {
   document.getElementById('backTop').scrollTop = 0
+  // console.log('路由更新', route.meta.showHeader)
 })
 // 监听浏览器页面刷新，如果刷新就让播放状态为false
 window.onbeforeunload = () => {

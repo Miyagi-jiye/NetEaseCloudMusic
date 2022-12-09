@@ -20,7 +20,9 @@ const router = createRouter({
           component: () => import('@/views/discover/index.vue'),
           meta: {
             title: '发现页',
-            keepAlive: true
+            keepAlive: true,// 是否缓存
+            showHeader: true,// 是否显示头部
+            showFooter: true// 是否显示底部
           }
         },
         {
@@ -29,8 +31,23 @@ const router = createRouter({
           component: () => import('@/views/follow/index.vue'),
           meta: {
             title: '关注页',
-            keepAlive: true
-          }
+            keepAlive: true,// 是否缓存
+            showHeader: true,// 是否显示头部
+            showFooter: true// 是否显示底部
+          },
+          children: [
+            {
+              path: '/follow/bilibili',
+              name: 'bilibili',
+              component: () => import('@/views/follow/bilibili/index.vue'),
+              meta: {
+                title: 'bilibili',
+                keepAlive: true,// 是否缓存
+                showHeader: false,// 是否显示头部
+                showFooter: false// 是否显示底部
+              }
+            }
+          ]
         },
         {
           path: '/home',
@@ -38,7 +55,9 @@ const router = createRouter({
           component: () => import('@/views/home/index.vue'),
           meta: {
             title: '首页',
-            keepAlive: true
+            keepAlive: true,// 是否缓存
+            showHeader: true,// 是否显示头部
+            showFooter: true// 是否显示底部
           }
         },
         {
@@ -47,56 +66,106 @@ const router = createRouter({
           component: () => import('@/views/about/index.vue'),
           meta: {
             title: '关于页',
-            keepAlive: true
+            keepAlive: true,// 是否缓存
+            showHeader: false,// 是否显示头部
+            showFooter: false// 是否显示底部
           }
         },
         // 歌单详情
         {
           path: '/songListDetail',//vue-router 4.0,name+params形式传参需要添加冒号声明参数
           name: 'songListDetail',
-          component: () => import('@/views/songListDetail/index.vue')
+          component: () => import('@/views/songListDetail/index.vue'),
+          meta: {
+            title: '歌单详情',
+            keepAlive: true,// 是否缓存
+            showHeader: false,// 是否显示头部
+            showFooter: false// 是否显示底部
+          }
         },
         // 专辑详情
         {
           path: '/albumListDetail',//vue-router 4.0,name+params形式传参需要添加冒号声明参数
           name: 'albumListDetail',
-          component: () => import('@/views/albumListDetail/index.vue')
+          component: () => import('@/views/albumListDetail/index.vue'),
+          meta: {
+            title: '专辑详情',
+            keepAlive: true,// 是否缓存
+            showHeader: false,// 是否显示头部
+            showFooter: false// 是否显示底部
+          }
         },
         // mv详情
         {
           path: '/mvListDetail',//vue-router 4.0,name+params形式传参需要添加冒号声明参数
           name: 'mvListDetail',
-          component: () => import('@/views/mvListDetail/index.vue')
+          component: () => import('@/views/mvListDetail/index.vue'),
+          meta: {
+            title: 'mv详情',
+            keepAlive: true,// 是否缓存
+            showHeader: false,// 是否显示头部
+            showFooter: false// 是否显示底部
+          }
         },
         // 歌手详情
         {
           path: '/artistListDetail',//vue-router 4.0,name+params形式传参需要添加冒号声明参数
           name: 'artistListDetail',
-          component: () => import('@/views/artistListDetail/index.vue')
+          component: () => import('@/views/artistListDetail/index.vue'),
+          meta: {
+            title: '歌手详情',
+            keepAlive: true,// 是否缓存
+            showHeader: false,// 是否显示头部
+            showFooter: false// 是否显示底部
+          }
         },
         // 用户详情
         {
           path: '/userListDetail',//vue-router 4.0,name+params形式传参需要添加冒号声明参数
           name: 'userListDetail',
-          component: () => import('@/views/userListDetail/index.vue')
+          component: () => import('@/views/userListDetail/index.vue'),
+          meta: {
+            title: '用户详情',
+            keepAlive: true,// 是否缓存
+            showHeader: false,// 是否显示头部
+            showFooter: false// 是否显示底部
+          }
         },
         // 搜索
         {
           path: '/search',
           name: 'search',
           component: () => import('@/views/search/index.vue'),
+          meta: {
+            title: '搜索',
+            keepAlive: true,// 是否缓存
+            showHeader: false,// 是否显示头部
+            showFooter: false// 是否显示底部
+          }
         },
         // 搜索详情
         {
           path: '/searchDetail',
           name: 'searchDetail',
-          component: () => import('@/views/searchDetail/index.vue')
+          component: () => import('@/views/searchDetail/index.vue'),
+          meta: {
+            title: '搜索详情',
+            keepAlive: true,// 是否缓存
+            showHeader: false,// 是否显示头部
+            showFooter: false// 是否显示底部
+          }
         },
         // 每日推荐
         {
           path: '/recommend',
           name: 'recommend',
-          component: () => import('@/views/recommend/index.vue')
+          component: () => import('@/views/recommend/index.vue'),
+          meta: {
+            title: '每日推荐',
+            keepAlive: true,// 是否缓存
+            showHeader: false,// 是否显示头部
+            showFooter: false// 是否显示底部
+          }
         },
       ]
     },

@@ -1,5 +1,6 @@
 <template>
   <div class="header">
+
     <van-nav-bar>
       <template #left>
         <van-icon name="wap-nav" size="24" @click="menuClick" />
@@ -12,11 +13,13 @@
         <van-icon name="setting" size="24" @click="settingClick" />
       </template>
     </van-nav-bar>
+
     <van-popup v-model:show="leftShow" teleport="body" position="left" :style="{ height: '100%', width: '80vw' }">
       <slot name="default">
         <MenuPopup />
       </slot>
     </van-popup>
+
   </div>
 </template>
 
