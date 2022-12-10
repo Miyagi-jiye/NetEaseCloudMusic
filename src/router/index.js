@@ -46,6 +46,17 @@ const router = createRouter({
                 showHeader: false,// 是否显示头部
                 showFooter: false// 是否显示底部
               }
+            },
+            {
+              path: '/follow/bangumi',
+              name: 'bangumi',
+              component: () => import('@/views/follow/bangumi/index.vue'),
+              meta: {
+                title: 'bangumi',
+                keepAlive: true,// 是否缓存
+                showHeader: false,// 是否显示头部
+                showFooter: false,// 是否显示底部
+              }
             }
           ]
         },

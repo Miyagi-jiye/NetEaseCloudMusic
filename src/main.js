@@ -23,6 +23,7 @@ import 'vant/es/notify/style';
 import 'vant/es/image-preview/style';
 
 import loadingImg from '@/assets/images/loading.gif'// 加载图片
+import directives from "@/directives/index";// 自定义指令
 
 // console.log("环境变量", import.meta.env)
 
@@ -32,6 +33,7 @@ const pinia = createPinia();//创建pinia实例
 pinia.use(piniaPluginPersistedstate)//给pinia实例挂载持久化插件
 app.use(pinia)
 app.use(router)
+app.use(directives)// 注册所有自定义指令
 app.use(Lazyload, {
   lazyComponent: false,
   loading: loadingImg,//加载图片
