@@ -1,7 +1,8 @@
 <template>
   <div class="bangumi-item">
     <div class="img">
-      <img v-if="data.images" v-lazy="data.images.common" alt="" referrerpolicy="no-referrer">
+      <img v-if="data.images" v-lazy="data.images.common" v-preview="data.images.large" :alt="data.name"
+        referrerpolicy="no-referrer">
       <van-empty v-else image-size="100" image="error" />
     </div>
     <div class="info">

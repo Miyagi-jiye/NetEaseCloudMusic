@@ -1,25 +1,23 @@
 <template>
   <div class="bangumi">
     <van-tabs v-model:active="active" swipeable sticky>
-      <van-tab v-for="(item, index) in bangumiData.calendar" :title="`${item.weekday.en} ✦ ${item.weekday.cn}`">
+      <van-tab v-for="(item, index) in bangumiData.calendar" :key="index" :title="item.weekday.cn">
         <div class="bangumi-items">
           <BangumiItem v-for="item in item.items" :key="item.id" :data="item" />
         </div>
       </van-tab>
     </van-tabs>
-    <div class="back" v-draggable @click.prevent="$router.back()">
-      <div class="back-inner"></div>
-    </div>
+    <BackButton />
   </div>
 </template>
 
 <script setup>
-import BangumiItem from './components/item.vue'
+import BackButton from './components/back.vue'// 返回按钮
+import BangumiItem from './components/item.vue'// 番剧列表
 import { useBangumiStore } from './store/index.js'
 import { ref } from 'vue'
 
-const active = ref(0)
-
+const active = ref(0)// 选中的tab索引
 const { bangumiData, getCalendar } = useBangumiStore()
 
 await getCalendar()
@@ -41,66 +39,19 @@ getToday()
 
 <style scoped lang="less">
 :deep(.van-tabs__line) {
-  bottom: 20px !important;
+  bottom: 22px !important;
+  // width: 54px !important;
+  // height: 30px !important;
+}
+
+:deep(.van-tab__text) {
+  z-index: 2;
 }
 
 .bangumi {
   height: 100%;
   width: 100%;
   overflow-y: scroll;
-
-  // 返回按钮
-  .back {
-    position: fixed;
-    top: 40vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    z-index: 555;
-
-    // 选中时放大0.1倍
-    &:active,
-    :hover {
-      transform: scale(1.1);
-
-      .back-inner {
-        background: rgba(0, 0, 0, 0.5);
-      }
-    }
-
-    .back-inner {
-      position: relative;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, .1);
-      z-index: 1111;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      touch-action: none;
-      margin: auto;
-
-      &::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        display: block;
-        width: 100%;
-        height: 100%;
-        z-index: 3;
-        background: #fff;
-        border-radius: 50%;
-        transform: scale(.65);
-        box-shadow: 0 0 10px rgb(0 0 0 / 20%);
-        transition: all .2s ease-in-out
-      }
-    }
-  }
 
   .bangumi-items {
     // display: flex;

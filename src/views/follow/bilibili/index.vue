@@ -53,11 +53,11 @@ import { ref, reactive } from 'vue'
 import { bangumiFollowList, searchUser } from './api/index.js'
 import { showNotify, showDialog } from 'vant'
 
-const value1 = ref(0);
+const value1 = ref(0);// 0 默认排序 1 粉丝数排序 2 等级排序
 const option1 = [
   { text: '默认排序', value: 0 },
-  { text: '粉丝数排序', value: 1 },
-  { text: '等级排序', value: 2 },
+  { text: '粉丝数排序', value: 1 },// fans
+  { text: '等级排序', value: 2 },// level
 ];
 const showType = ref('card')// card:卡片 list：列表
 const showTypeOption = [

@@ -43,6 +43,7 @@
   --tag-border: 1px;
 }
 
+/* vant组件切换深色模式 */
 .van-theme-dark body {
   --font-color-dark: #eeeeee;
   --font-color-4: #b7b7b7;
@@ -73,6 +74,41 @@
   --menu-color: #000000e8;
   /* tag的边框 */
   --tag-border: 0px;
+}
+
+/* 跟随系统深色模式自动转换 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --font-color-dark: #eeeeee;
+    --font-color-4: #b7b7b7;
+    --font-color-5: #ffffff;
+    --card-color: rgb(255 255 255 / 50%);
+    /* vant组件库颜色 */
+    --van-nav-bar-icon-color: #ffffff;
+    --van-tabbar-item-text-color: #606060;
+    /* tag颜色 */
+    --tag-color-1: rgb(255 255 255 / 70%);
+    --tag-background-color-1: #000000;
+    /* 卡片颜色 */
+    --card-background-color: #1c1c1e;
+    /* 收藏，评论，分享 */
+    --subCard-background-color: #3a393e;
+    --subCard--color: #ebebec;
+    /* 歌曲列表颜色 */
+    --song-list-background-color: #000000;
+    --song-list-color: #ffffff;
+    --song-list-box-shadow: none;
+    --song-list-hover: #3a3a3a;
+    /* tags颜色 */
+    --tags-border-color: #ff00007a;
+    --tags-text-color: #ff0000;
+    /* 整体变暗滤镜 */
+    filter: brightness(90%);
+    /* menu每日推荐颜色 */
+    --menu-color: #000000e8;
+    /* tag的边框 */
+    --tag-border: 0px;
+  }
 }
 
 /* 竖直分割线 */
@@ -114,9 +150,6 @@ svg.icon {
   display: none;
 } */
 
-/* .van-tab {
-  font-size: 14px !important;
-} */
 
 /* 高亮搜索关键字 */
 .highlight {
