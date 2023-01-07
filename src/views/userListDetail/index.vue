@@ -13,83 +13,66 @@
     <div class="background">
       <img v-lazy="userListDetail.userDetail.profile.backgroundUrl + '?param=600y400)'" alt="">
     </div>
-    <!-- 合为一体 -->
-    <div style="margin-top: -100px;">
-      <!-- 用户卡片 -->
-      <div class="userinfoCard" style="opacity:1">
-        <div class="card">
-          <!-- 头像 -->
-          <img class="avatar" v-lazy="userListDetail.userDetail.profile.avatarUrl + '?param=200y200'" alt="" />
-          <!-- 身份徽标 -->
-          <img class="avatar__identify" v-if="userListDetail.userDetail.identify"
-            :src="userListDetail.userDetail.identify.imageUrl + '?param=20y20'" alt="">
-          <!-- 昵称 -->
-          <div class="nickname">{{ userListDetail.userDetail.profile.nickname }}</div>
-          <!-- 身份 -->
-          <div class="identify" v-if="userListDetail.userDetail.identify">
-            <span>{{ userListDetail.userDetail.identify.imageDesc }}</span>
+    <!-- 用户卡片 -->
+    <div class="userinfoCard" style="opacity:1;margin-top: -100px;">
+      <div class="card">
+        <!-- 头像 -->
+        <img class="avatar" v-lazy="userListDetail.userDetail.profile.avatarUrl + '?param=200y200'" alt="" />
+        <!-- 身份徽标 -->
+        <img class="avatar__identify" v-if="userListDetail.userDetail.identify"
+          :src="userListDetail.userDetail.identify.imageUrl + '?param=20y20'" alt="">
+        <!-- 昵称 -->
+        <div class="nickname">{{ userListDetail.userDetail.profile.nickname }}</div>
+        <!-- 身份 -->
+        <div class="identify" v-if="userListDetail.userDetail.identify">
+          <span>{{ userListDetail.userDetail.identify.imageDesc }}</span>
+        </div>
+        <!-- 关注，粉丝，等级 -->
+        <div class="desc">
+          <div class="desc__item">
+            <span class="desc__item__value">{{ userListDetail.userDetail.profile.follows }}</span>
+            <span class="desc__item__title">关注</span>
           </div>
-          <!-- 关注，粉丝，等级 -->
-          <div class="desc">
-            <div class="desc__item">
-              <span class="desc__item__value">{{ userListDetail.userDetail.profile.follows }}</span>
-              <span class="desc__item__title">关注</span>
-            </div>
-            <div class="desc__line"></div>
-            <div class="desc__item">
-              <span class="desc__item__value">{{ userListDetail.userDetail.profile.followeds }}</span>
-              <span class="desc__item__title">粉丝</span>
-            </div>
-            <div class="desc__line"></div>
-            <div class="desc__item">
-              <span class="desc__item__title">Lv.</span>
-              <span class="desc__item__value">{{ userListDetail.userDetail.level }}</span>
-            </div>
+          <div class="desc__line"></div>
+          <div class="desc__item">
+            <span class="desc__item__value">{{ userListDetail.userDetail.profile.followeds }}</span>
+            <span class="desc__item__title">粉丝</span>
           </div>
-          <!-- tags -->
-          <div class="tags">
-            <div class="tag">IP属地：{{ filterCityName(userListDetail.userDetail.profile.city) }}</div>
-            <div class="tag">
-              <GenderIcon :config="userListDetail.userDetail.profile.gender" :size="12" />
-              {{ filterBirthday(userListDetail.userDetail.profile.birthday) }}
-            </div>
-            <div class="tag">用户ID：{{ userListDetail.userDetail.profile.userId }}</div>
-            <div class="tag">
-              <van-icon name="arrow" />
-            </div>
+          <div class="desc__line"></div>
+          <div class="desc__item">
+            <span class="desc__item__title">Lv.</span>
+            <span class="desc__item__value">{{ userListDetail.userDetail.level }}</span>
           </div>
-          <!-- 关注，私信 -->
-          <div class="btns">
-            <FollowButton :followed="userListDetail.userDetail.profile.followed"
-              :id="userListDetail.userDetail.profile.userId" />
-            <!-- 私信按钮 -->
-            <div class="chat">
-              <van-icon name="chat-o" size="16" />私信
-            </div>
-            <!-- 展开按钮 -->
-            <div class="expand" @click="showMoreCard = !showMoreCard">
-              <van-icon name="arrow-down" />
-            </div>
+        </div>
+        <!-- tags -->
+        <div class="tags">
+          <div class="tag">IP属地：{{ filterCityName(userListDetail.userDetail.profile.city) }}</div>
+          <div class="tag">
+            <GenderIcon :config="userListDetail.userDetail.profile.gender" :size="12" />
+            {{ filterBirthday(userListDetail.userDetail.profile.birthday) }}
           </div>
-          <!-- 更多内容 -->
-          <div class="more" v-show="showMoreCard == true">
-            <div class="more__card" v-for="item in 4">{{ item }}</div>
+          <div class="tag">用户ID：{{ userListDetail.userDetail.profile.userId }}</div>
+          <div class="tag">
+            <van-icon name="arrow" />
+          </div>
+        </div>
+        <!-- 关注，私信 -->
+        <div class="btns">
+          <FollowButton :followed="userListDetail.userDetail.profile.followed"
+            :id="userListDetail.userDetail.profile.userId" />
+          <!-- 私信按钮 -->
+          <div class="chat">
+            <van-icon name="chat-o" size="16" />私信
+          </div>
+          <!-- 展开按钮 -->
+          <div class="expand" @click="showMoreCard = !showMoreCard">
+            <van-icon name="arrow-down" />
           </div>
         </div>
       </div>
-      <!-- tab切换栏 -->
-      <van-tabs v-model:active="active" swipeable class="vantTabs" sticky>
-        <van-tab title="主页">
-          <div class="test"></div>
-        </van-tab>
-        <van-tab title="听歌排行">
-          <div class="test"></div>
-        </van-tab>
-        <van-tab title="歌单">
-          <div class="test"></div>
-        </van-tab>
-      </van-tabs>
     </div>
+    <!-- 更多信息 -->
+    <div style="height:1500px;width:100%;background:#34d399;"></div>
   </div>
 </template>
 
@@ -99,13 +82,10 @@ import GenderIcon from '@/components/GenderIcon/index.vue'// 性别图标
 import { filterCityName, filterBirthday } from '@/utils/useFilter.js'
 import { useUserListDetailStore } from '@/stores/userListDetail.js'
 import { useRoute } from 'vue-router';
-import { watch, ref, onMounted, onUnmounted } from 'vue'
+import { onMounted } from 'vue'
 
 const { getUserListDetail, userListDetail } = useUserListDetailStore()
 const route = useRoute()
-const active = ref(0)
-const showMoreCard = ref(false)// 是否展开更多内容
-
 const init = async () => {
   await getUserListDetail(route.query.id)// 获取歌单详情
 }
@@ -121,17 +101,19 @@ onMounted(() => {
   const scroll = () => {
     const scrollTop = userListDetail.scrollTop
     const header = document.querySelector('.header')
-    const title = document.querySelector('.title')
+    const title = document.querySelector('.title')//居中用户名和头像
     const background = document.querySelector('.background')
     const card = document.querySelector('.userinfoCard')
     if (scrollTop > 0) {
-      // header.style.backdropFilter = `saturate(150%) contrast(100%) brightness(90%) blur(18px)`;// ${scrollTop / 10}动态模糊
-      background.style.filter = `saturate(150%) contrast(100%) brightness(90%) blur(${scrollTop / 10}px)`
+      header.style.background = `rgb(255 255 255 / ${scrollTop}%)`;// 透明度
+      header.style.color = '#000';// 字体颜色
+      // background.style.filter = `saturate(150%) contrast(100%) brightness(90%) blur(${scrollTop / 10}px)`
       card.style.opacity = 1 - scrollTop / card.offsetHeight
-      title.style.opacity = scrollTop / 200
+      title.style.opacity = scrollTop / card.offsetHeight
     } else {
-      // header.style.backdropFilter = 'none'
-      background.style.filter = 'blur(0px)'
+      header.style.background = `rgb(255 255 255 / ${0}%)`;// 透明度
+      header.style.color = '#fff';// 字体颜色
+      // background.style.filter = 'blur(0px)'
       card.style.opacity = 1
       title.style.opacity = 0
     }
@@ -208,6 +190,7 @@ onMounted(() => {
     width: 100%;
     transition: all .3s; // 过渡动画
     position: sticky;
+    // top: 0;
     top: calc(-300px + 46px);
     // z-index: 1;
     // margin-bottom: 60px;
@@ -268,7 +251,7 @@ onMounted(() => {
 
       .nickname {
         margin-top: 32px;
-        font-size: 16px;
+        font-size: 18px;
         font-weight: bold;
         color: var(--font-color-dark);
         width: 100%;
@@ -378,32 +361,6 @@ onMounted(() => {
           white-space: nowrap;
         }
       }
-
-      .more {
-        width: 100%;
-        height: auto;
-        overflow: hidden;
-        white-space: nowrap;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-        gap: 16px;
-
-        .more__card {
-          // height: 100px;
-          // width: 100px;
-          aspect-ratio: 1;
-          background-color: rgb(73, 67, 67);
-          border-radius: 8px;
-          box-shadow: rgb(0 0 0 / 5%) 0px 0px 20px;
-        }
-      }
-    }
-  }
-
-  .vantTabs {
-    .test {
-      height: 1000px;
-      // background-color: #5e3c0a;
     }
   }
 }

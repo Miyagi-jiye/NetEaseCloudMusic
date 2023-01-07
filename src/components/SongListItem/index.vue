@@ -71,11 +71,11 @@ const props = defineProps({
   index: Number,// 歌曲序号
   keyword: String,// 搜索关键字
 })
+
 // 匹配所有关键字，高亮
 const reg = new RegExp(props.keyword, 'g')
 // 让搜索关键字失去响应式
 const keyword = toRaw(props.keyword)
-
 // 高亮关键字(css样式已在全局定义)
 function highlightName(str) {
   return str.replace(reg, `<span class="${audioData.song.id == props.config.id ? 'active' : 'highlight'}">${keyword}</span>`)

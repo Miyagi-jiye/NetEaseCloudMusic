@@ -1114,7 +1114,7 @@ export async function checkMusic(id, br) {
  */
 export async function search(keywords, { limit, offset, type }) {
   const { data } = await request({
-    url: `/search?keywords=${keywords}`,
+    url: `/cloudsearch?keywords=${keywords}`,
     method: 'get',
     params: {
       limit,
