@@ -1,0 +1,162 @@
+:root {
+  --font-color-light: #ffffff;
+  --font-color-1: #f5f5f5;
+  --font-color-2: #cecece;
+  --font-color-3: #9e9e9e;
+  --font-color-4: #6e6e6e;
+  --font-color-5: #3e3e3e;
+  --font-color-6: #0e0e0e;
+  --font-color-black: #000000;
+  /* 歌单背景卡片颜色 */
+  --card-color: rgba(0, 0, 0, 0.3);
+  /* vant组件库颜色 */
+  --van-nav-bar-icon-color: #000000 !important;
+  --van-tabbar-item-active-color: #F9343D !important;
+  --van-tabs-bottom-bar-color: #F9343D !important;
+  --van-skeleton-row-background: #d5d5d5 !important;
+  /* tag颜色 */
+  --tag-color-1: #ffe1e1;
+  --tag-background-color-1: #ff4d4f;
+  /* 卡片颜色 */
+  --card-background-color: #ffffff;
+  /* 边框颜色 */
+  --border-color: var(--font-color-1);
+  /* 头部navbar高度(--van-nav-bar-height) */
+  --navbar-height: 44px;
+  /* 底部tabbar高度(--van-tabbar-height) */
+  --tabbar-height: 50px;
+  --background-color: var(--van-search-content-background);
+  /* 收藏，评论，分享 */
+  --subCard-background-color: #ffffff;
+  --subCard--color: #000000;
+  /* 歌曲列表颜色 */
+  --song-list-background-color: #ffffff;
+  --song-list-color: #000000;
+  --song-list-box-shadow: rgb(149 157 165 / 20%) 0px 3px 12px 2px;
+  --song-list-hover: #f1f1f1;
+  /* tags颜色 */
+  --tags-border-color: #ff00004d;
+  --tags-text-color: #ff0000b3;
+  /* menu每日推荐颜色 */
+  --menu-color: #ffffffe8;
+  /* tag的边框 */
+  --tag-border: 1px;
+}
+
+/* vant组件切换深色模式 */
+.van-theme-dark body {
+  --font-color-dark: #eeeeee;
+  --font-color-4: #b7b7b7;
+  --font-color-5: #ffffff;
+  --card-color: rgb(255 255 255 / 50%);
+  /* vant组件库颜色 */
+  --van-nav-bar-icon-color: #ffffff;
+  --van-tabbar-item-text-color: #606060;
+  /* tag颜色 */
+  --tag-color-1: rgb(255 255 255 / 70%);
+  --tag-background-color-1: #000000;
+  /* 卡片颜色 */
+  --card-background-color: #1c1c1e;
+  /* 收藏，评论，分享 */
+  --subCard-background-color: #3a393e;
+  --subCard--color: #ebebec;
+  /* 歌曲列表颜色 */
+  --song-list-background-color: #000000;
+  --song-list-color: #ffffff;
+  --song-list-box-shadow: none;
+  --song-list-hover: #3a3a3a;
+  /* tags颜色 */
+  --tags-border-color: #ff00007a;
+  --tags-text-color: #ff0000;
+  /* 整体变暗滤镜 */
+  filter: brightness(90%);
+  /* menu每日推荐颜色 */
+  --menu-color: #000000e8;
+  /* tag的边框 */
+  --tag-border: 0px;
+}
+
+/* 跟随系统深色模式自动转换 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --font-color-dark: #eeeeee;
+    --font-color-4: #b7b7b7;
+    --font-color-5: #ffffff;
+    --card-color: rgb(255 255 255 / 50%);
+    /* vant组件库颜色 */
+    --van-nav-bar-icon-color: #ffffff;
+    --van-tabbar-item-text-color: #606060;
+    /* tag颜色 */
+    --tag-color-1: rgb(255 255 255 / 70%);
+    --tag-background-color-1: #000000;
+    /* 卡片颜色 */
+    --card-background-color: #1c1c1e;
+    /* 收藏，评论，分享 */
+    --subCard-background-color: #3a393e;
+    --subCard--color: #ebebec;
+    /* 歌曲列表颜色 */
+    --song-list-background-color: #000000;
+    --song-list-color: #ffffff;
+    --song-list-box-shadow: none;
+    --song-list-hover: #3a3a3a;
+    /* tags颜色 */
+    --tags-border-color: #ff00007a;
+    --tags-text-color: #ff0000;
+    /* 整体变暗滤镜 */
+    filter: brightness(90%);
+    /* menu每日推荐颜色 */
+    --menu-color: #000000e8;
+    /* tag的边框 */
+    --tag-border: 0px;
+  }
+}
+
+/* 竖直分割线 */
+.my-line {
+  width: 1px;
+  height: 1rem;
+  background-color: #e5e5e5;
+}
+
+/* 不换行溢出显示省略号 */
+.nowrap {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 全局vant省略号图标旋转90度 */
+i.van-badge__wrapper.van-icon.van-icon-ellipsis {
+  transform: rotate(90deg);
+}
+
+/* 全局图标小手 */
+.van-icon {
+  cursor: pointer;
+}
+
+/* 空心tag背景透明 */
+.van-tag--plain {
+  background: transparent !important;
+}
+
+/* svg图标默认小手 */
+svg.icon {
+  cursor: pointer;
+}
+
+/* 隐藏进度条圈圈 */
+/* #nprogress .spinner {
+  display: none;
+} */
+
+
+/* 高亮搜索关键字 */
+.highlight {
+  color: #105db4;
+}
+
+/* 高亮激活歌曲 */
+.active {
+  color: #ff0000b3 !important;
+}
