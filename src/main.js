@@ -26,6 +26,14 @@ import loadingImg from '@/assets/images/loading.gif'// 加载图片
 import directives from "@/directives/index";// 自定义指令
 
 // console.log("环境变量", import.meta.env)
+/**
+ * 环境变量<import.meta.env>打印结果
+ * BASE_URL: "/"
+ * DEV: true
+ * MODE: "development"
+ * PROD: false
+ * SSR: false
+ */
 
 const app = createApp(App)
 const pinia = createPinia();//创建pinia实例

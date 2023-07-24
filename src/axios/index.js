@@ -3,28 +3,15 @@ import { showNotify, showConfirmDialog } from 'vant';// 引入vant的提示框
 import { useLoginStore } from '@/stores/login.js';
 import { storeToRefs } from 'pinia';
 
-// 判断localStorage中是否有api，有则使用localStorage中的api，没有则使用默认api
-const api = localStorage.getItem('api') ? localStorage.getItem('api') : 'https://www.guowei.fun'
-
 const request = axios.create({
   // baseURL: import.meta.env.DEV ? '/api' : 'https://www.guowei.fun',
-  baseURL: api,
+  baseURL:'https://www.guowei.fun',
   withCredentials: true,// 允许携带cookie
 });
 
 // 添加请求拦截器
 request.interceptors.request.use(
   function (config) {
-    // 在发送请求之前做些什么
-    // console.log(
-    //   `%c${config.baseURL}%c${config.url}`,
-    //   'color: #eaeaea;background: #000;padding: 4px 0 4px 8px;border-radius:4px 0 0 4px;font-weight:bold;',
-    //   'color: #08d9d6;background: #000;padding: 4px 8px 4px 0;border-radius:0 4px 4px 0;font-weight: bold;',
-    // );
-    // const { cookie } = useLoginStore()
-    // if (cookie) {
-    //   config.url = config.url + '?cookie=' + encodeURIComponent(JSON.stringify(cookie))
-    // }
     return config;
   },
   function (error) {
@@ -49,7 +36,6 @@ request.interceptors.response.use(
     // 超出 2xx 范围的状态码都会触发该函数。
     // 对响应错误做点什么
     const { isLogin, cookie } = storeToRefs(useLoginStore())//登录状态
-
     // 1. 匹配常见错误，错误提示
     switch (error.response.status) {
       case 400:
